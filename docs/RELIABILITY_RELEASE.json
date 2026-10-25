@@ -22,7 +22,12 @@
   },
   "productionFinalTests": "Not run at user request.",
   "realExternalAIOrNewProviderCalls": "Not run; automated external calls mocked. Existing EPO adapter reused.",
-  "deployment": "pending",
+  "deployment": {
+    "id": "dpl_58jghY7uWZfuKUvddqY16wErxiag",
+    "state": "READY",
+    "url": "https://patentradar-puce.vercel.app",
+    "aliasAssigned": true
+  },
   "scope": [
     "Shared bounded PDF ingestion and browser-rendered consented PDF vision",
     "Per-dimension evidence and source provenance",
@@ -38,5 +43,6 @@
     "Private saved CAD parameters do not automatically persist original imported files.",
     "No scheduled email monitoring.",
     "Competitor service access401 prevents verified superiority comparison."
-  ]
+  ],
+  "implementationCommit": "d392f9a86531847a7e86a2f2ce0e02b4f7e22da7"
 }
