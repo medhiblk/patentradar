@@ -11,6 +11,7 @@ import * as store from "@/lib/platform/store";
 import { privateBackend, Conflict } from "@/lib/platform/private-store";
 import { deleteProjectAttachments } from "@/lib/platform/attachments";
 import { guard } from "@/lib/security";
+import { withResearchAlerts } from "@/lib/intelligence/alerts";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -223,7 +224,13 @@ export async function POST(req: Request) {
       if (old && old.kind !== kind) throw Error("Item type cannot change");
       await store.saveItem(
         u.id,
-        { id, kind, title, data, updated: new Date().toISOString() },
+        {
+          id,
+          kind,
+          title,
+          data: kind === "project" ? withResearchAlerts(data, old?.data) : data,
+          updated: new Date().toISOString(),
+        },
         existing,
       );
     }

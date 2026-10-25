@@ -49,6 +49,9 @@ export default function Workspace() {
           </div>
           <ArrowUpRight size={16} />
         </a>
+        <a className="workspace-alert-entry" href="/alerts">
+          Review patent similarity alerts ↗
+        </a>
         <div className="workspace-hub-help">
           <a href="/demo">New here? Try the guided demo ↗</a>
           <a href="/connect">

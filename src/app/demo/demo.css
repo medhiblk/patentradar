@@ -13,7 +13,7 @@
   align-items: center;
   gap: 15px;
   padding: 0 24px;
-  color: #93a17f;
+  color: #506078;
   font-size: 9px;
   background: #f6f9f0;
 }
@@ -31,7 +31,7 @@
   margin-left: auto;
   font-size: 7px;
   letter-spacing: 0.1em;
-  color: #a3b18e;
+  color: #506078;
 }
 .tour-screen {
   display: grid;
@@ -48,7 +48,7 @@
   font-size: 32px;
   line-height: 1.15;
   letter-spacing: -1.1px;
-  color: #536d3c;
+  color: #506078;
   max-width: 250px;
   margin: 20px 0 15px;
 }
@@ -56,7 +56,7 @@
   font-size: 12px;
   line-height: 1.9;
   max-width: 240px;
-  color: #91a177;
+  color: #506078;
 }
 .tour-visual {
   min-width: 0;
@@ -78,7 +78,7 @@
   padding: 24px;
   transform: rotate(-5deg);
   box-shadow: 0 20px 30px #758c5812;
-  color: #8c9f74;
+  color: #506078;
 }
 .tour-document > strong,
 .tour-document > span {
@@ -87,12 +87,12 @@
 .tour-document > strong {
   font-size: 15px;
   margin: 14px 0 6px;
-  color: #6e8753;
+  color: #506078;
   font-weight: 500;
 }
 .tour-document > span {
   font-size: 9px;
-  color: #b0ba9c;
+  color: #506078;
 }
 .tour-document-lines {
   margin: 18px 0 0;
@@ -121,7 +121,7 @@
 .tour-document > small {
   display: block;
   font-size: 7px;
-  color: #acb798;
+  color: #506078;
 }
 .tour-features {
   width: 290px;
@@ -136,7 +136,7 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: #718c51;
+  color: #506078;
   margin-bottom: 20px;
 }
 .tour-feature-heading > strong {
@@ -144,7 +144,7 @@
 }
 .tour-feature-heading > span {
   font-size: 7px;
-  color: #a7b58f;
+  color: #506078;
   margin-left: auto;
 }
 .tour-measurement {
@@ -153,17 +153,17 @@
   border-bottom: 1px solid #e9efd9;
   padding: 13px 0;
   font-size: 12px;
-  color: #a1b48c;
+  color: #506078;
 }
 .tour-measurement > strong {
   font-weight: 500;
-  color: #78965a;
+  color: #506078;
 }
 .tour-features > small {
   display: block;
   margin-top: 18px;
   font-size: 8px;
-  color: #a9ba95;
+  color: #506078;
 }
 .tour-model {
   position: relative;
@@ -203,11 +203,11 @@
   padding: 9px 12px;
   border-radius: 7px;
   font-size: 9px;
-  color: #a1b68a;
+  color: #506078;
 }
 .tour-dimension > strong {
   font-weight: 500;
-  color: #7c9c5e;
+  color: #506078;
   margin-left: 10px;
 }
 .tour-export {
@@ -219,7 +219,7 @@
   justify-content: space-between;
   gap: 15px;
   font-size: 8px;
-  color: #8ba774;
+  color: #506078;
 }
 .tour-export > span:last-child {
   display: flex;
@@ -232,7 +232,7 @@
   border-radius: 15px;
   background: #fffef4;
   border: 1px solid #e1ebcf;
-  color: #8ba66d;
+  color: #506078;
   box-shadow: 0 15px 25px #6f8c4910;
 }
 .tour-evidence > div {
@@ -243,11 +243,11 @@
 .tour-evidence strong {
   font-size: 11px;
   font-weight: 500;
-  color: #7c9c5b;
+  color: #506078;
 }
 .tour-evidence > p {
   font-size: 10px;
-  color: #b3c39e;
+  color: #506078;
   margin-top: 20px;
 }
 .tour-evidence ul {
@@ -257,17 +257,17 @@
   display: grid;
   gap: 12px;
   font-size: 11px;
-  color: #8ca76d;
+  color: #506078;
 }
 .tour-evidence li:before {
   content: "↗";
   margin-right: 8px;
-  color: #b2c49a;
+  color: #506078;
 }
 .tour-evidence small {
   display: block;
   font-size: 8px;
-  color: #adbf97;
+  color: #506078;
   margin-top: 22px;
 }
 .tour-controls {
@@ -286,7 +286,7 @@
   height: 32px;
   width: 32px;
   background: #fffef2;
-  color: #89a66a;
+  color: #506078;
 }
 .tour-controls nav {
   display: flex;
@@ -301,7 +301,7 @@
   background: none;
   border: 0;
   padding: 6px 3px;
-  color: #b0c29a;
+  color: #506078;
   font-size: 8px;
 }
 .tour-controls nav > button > span {
@@ -316,11 +316,11 @@
 }
 .tour-controls > span {
   font-size: 9px;
-  color: #9cb784;
+  color: #506078;
 }
 .tour-disclosure {
   font-size: 9px !important;
-  color: #a3b690 !important;
+  color: #506078 !important;
   line-height: 1.8;
   margin: 0 !important;
   padding: 0 24px 15px;
@@ -328,7 +328,7 @@
 }
 .demo-preload-status {
   font-size: 10px;
-  color: #94ab7b;
+  color: #506078;
   text-align: center;
   margin: 15px 0 20px;
 }

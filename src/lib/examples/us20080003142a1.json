@@ -1,0 +1,77 @@
+{
+  "patent": {
+    "id": "US20080003142A1",
+    "publicationNumber": "US20080003142A1",
+    "applicationNumber": "US11/803,104",
+    "title": "Microfluidic devices",
+    "abstract": "Published application describing integrated microfluidic channel modules for handling immiscible fluids and droplets in biological, chemical and diagnostic assays.",
+    "applicants": [],
+    "inventors": [
+      "Darren R. Link",
+      "Michael Weiner",
+      "David Marran",
+      "Jonathan M. Rothberg"
+    ],
+    "priorityDate": "2006-05-11",
+    "publicationDate": "2008-01-03",
+    "jurisdiction": "US",
+    "claimsScope": "excerpts",
+    "claims": [
+      "Claim 1 excerpt: at least one inlet module having at least one inlet channel adapted to carry at least one dispersed phase fluid",
+      "Claim 1 excerpt: said junction comprises a fluidic nozzle designed for flow focusing",
+      "Claim 1 excerpt: forms a plurality of highly uniform, monodisperse droplets in said continuous phase fluid",
+      "Claim 5: The microfluidic substrate of claim 4, wherein the coalescence apparatus comprises one or more electrodes that generate an electric field.",
+      "Claim 9 excerpt: said detection module comprising a detection apparatus for evaluating the contents or characteristics of the droplet or nanoreactor.",
+      "Claim 10: The microfluidic substrate of claim 9, wherein said detection apparatus comprises an optical or electrical detector."
+    ],
+    "source": "User-selected US publication PDF, linked from Google Patents; selected claim excerpts",
+    "sourceUrl": "https://patents.google.com/patent/US20080003142A1/en",
+    "pdfUrl": "https://patentimages.storage.googleapis.com/89/d6/88/68356f0ae820d5/US20080003142A1.pdf",
+    "retrievedAt": "2026-10-25T15:58:34.956Z",
+    "legalStatus": {
+      "label": "Abandoned",
+      "source": "Google Patents",
+      "sourceUrl": "https://patents.google.com/patent/US20080003142A1/en",
+      "retrievedAt": "2026-10-25T15:58:34.956Z",
+      "verification": "publisher-reported"
+    },
+    "evidence": [
+      {
+        "source": "Original publication PDF, selected excerpts of claims 1, 5, 9 and 10",
+        "sourceUrl": "https://patentimages.storage.googleapis.com/89/d6/88/68356f0ae820d5/US20080003142A1.pdf#page=81",
+        "retrievedAt": "2026-10-25T15:58:34.956Z",
+        "fields": {
+          "originalPage": 81,
+          "sourceSha256": "7f2fdf36b240bc60d0fb6745369acdbe11198910595f9690037b69214dca661c",
+          "claimsScope": "excerpts",
+          "reportedCurrentAssignee": "Bio-Rad Laboratories, Inc. (Google-reported, not independently verified)"
+        }
+      }
+    ]
+  },
+  "sourceDocument": {
+    "url": "/examples/US20080003142A1-excerpt.pdf",
+    "name": "US20080003142A1-excerpt.pdf",
+    "bytes": 248150,
+    "sha256": "188c6038db121976a6a19bf52babe4f3d2e540c1d2dcfd700d056a1a4c4998f5",
+    "selectedOriginalPages": [
+      1,
+      2,
+      81
+    ],
+    "excerptPageCount": 4,
+    "originalPageCount": 83,
+    "originalBytes": 8544706,
+    "originalSha256": "7f2fdf36b240bc60d0fb6745369acdbe11198910595f9690037b69214dca661c"
+  },
+  "verification": {
+    "url": "https://patentimages.storage.googleapis.com/89/d6/88/68356f0ae820d5/US20080003142A1.pdf",
+    "status": 200,
+    "contentType": "application/pdf",
+    "bytes": 8544706,
+    "sha256": "7f2fdf36b240bc60d0fb6745369acdbe11198910595f9690037b69214dca661c",
+    "retrievedAt": "2026-10-25T15:58:34.956Z",
+    "latencyMs": 3729
+  },
+  "method": "One user-selected publication, manually verified from its public PDF; cached source snapshot, not a Google Patents search API."
+}

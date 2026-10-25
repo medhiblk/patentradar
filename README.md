@@ -4,7 +4,7 @@
 
 Bring a technical manual, drawing or specification. Choose what to represent, check the measurements, build an assembly and investigate related patents. General patent research remains available for non-physical inventions.
 
-[Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [Use in ChatGPT](https://patentradar-puce.vercel.app/connect) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
+[Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [Real patent case](https://patentradar-puce.vercel.app/demo/patent) · [Use in ChatGPT](https://patentradar-puce.vercel.app/connect) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
 
 ## Work from any environment
 
@@ -49,6 +49,12 @@ https://patentradar-puce.vercel.app/api/mcp
 ```
 
 [Official OpenAI connection instructions](https://developers.openai.com/api/docs/guides/custom-mcp-server) · [Architecture](docs/UX_ARCHITECTURE.md)
+
+## Patent similarity alerts
+
+Research results now flag explainable multi-feature overlap and keep the source links visible. Save the research to a private project to retain the alerts, then review them at [/alerts](https://patentradar-puce.vercel.app/alerts). Watch checks refresh alerts when requested; background/email delivery is not enabled.
+
+Try [the real US20080003142A1 case](https://patentradar-puce.vercel.app/demo/patent): ingest a verified excerpt, edit the example design, save the project/PDF and inspect the resulting sourced signal. The application is reported as abandoned by Google; the exercise establishes a prior publication and technical overlap, not an active blocking right. [Behavior, provenance and limitations](docs/PATENT_SIMILARITY_ALERTS.md).
 
 ## What works
 

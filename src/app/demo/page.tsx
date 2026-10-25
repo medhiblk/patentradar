@@ -110,6 +110,15 @@ export default function Demo() {
             ? "Example PDF preloaded · Ready to open"
             : "Preparing the example document…"}
         </p>
+        <a className="real-patent-demo-link" href="/demo/patent">
+          <span>REAL PATENT EXAMPLE</span>
+          <strong>What if a similar publication already exists?</strong>
+          <p>
+            Ingest US20080003142A1, save it to your private portfolio and
+            inspect the evidence-linked alert.
+          </p>
+          <span>Try the microfluidic patent case ↗</span>
+        </a>
         <section className="demo-guide" aria-label="Demo instructions">
           <article>
             <span>01</span>

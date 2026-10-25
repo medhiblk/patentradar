@@ -45,12 +45,16 @@ export const tokens = (input: string) => {
 export function compare(profile: Profile, patent: PatentRecord) {
   const claims = patent.claims?.filter(Boolean) || [];
   const evidence = claims.length ? claims : [patent.abstract || patent.title];
+  const indexedEvidence = evidence.map((excerpt) => ({
+    excerpt,
+    terms: new Set(tokens(excerpt)),
+  }));
   const matches = profile.technicalFeatures.map((f) => {
     const words = tokens(f.name + " " + f.description);
-    const best = evidence
-      .map((excerpt) => ({
+    const best = indexedEvidence
+      .map(({ excerpt, terms }) => ({
         excerpt,
-        hits: words.filter((w) => tokens(excerpt).includes(w)),
+        hits: words.filter((w) => terms.has(w)),
       }))
       .sort((a, b) => b.hits.length - a.hits.length)[0];
     return {

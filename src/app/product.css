@@ -38,7 +38,7 @@
   font-size: 10px;
   letter-spacing: 0;
   font-weight: 400;
-  color: #91978e;
+  color: #506078;
   margin-left: 7px;
   padding-left: 16px;
   border-left: 1px solid #dcdfd7;
@@ -55,7 +55,7 @@
   background: none;
   padding: 10px 12px;
   font-size: 12px;
-  color: #717970;
+  color: #506078;
   border-radius: 8px;
   white-space: nowrap;
 }
@@ -128,7 +128,7 @@
 .nav-group-label {
   font-size: 8px;
   letter-spacing: 0.12em;
-  color: #92988e;
+  color: #506078;
   padding: 12px 12px 5px;
 }
 .app-menu-toggle {
@@ -143,7 +143,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  color: #687365;
+  color: #506078;
 }
 .home-content {
   max-width: 1440px;
@@ -163,7 +163,7 @@
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.15em;
-  color: #71816e;
+  color: #506078;
 }
 .hero-story h1 {
   font-size: clamp(38px, 4.1vw, 62px);
@@ -176,12 +176,12 @@
 .hero-story h1 em {
   font-family: Georgia, serif;
   font-weight: 400;
-  color: #728c73;
+  color: #506078;
 }
 .hero-story > p {
   font-size: 15px;
   line-height: 1.85;
-  color: #788075;
+  color: #506078;
   max-width: 445px;
   margin-bottom: 28px;
 }
@@ -206,7 +206,7 @@
   background: none;
   border: 0;
   font-size: 12px;
-  color: #5c6b58;
+  color: #506078;
   padding: 12px 0;
 }
 .hero-note {
@@ -214,7 +214,7 @@
   margin-top: 18px;
   font-size: 10px;
   line-height: 1.6;
-  color: #959c90;
+  color: #506078;
 }
 .design-scene {
   height: 450px;
@@ -242,7 +242,7 @@
   justify-content: space-between;
   font-size: 7px;
   letter-spacing: 0.13em;
-  color: #778773;
+  color: #506078;
 }
 .scene-document {
   position: absolute;
@@ -255,13 +255,13 @@
   transform: rotate(-9deg);
   padding: 20px 17px;
   box-shadow: 0 15px 25px #536d4c13;
-  color: #73836b;
+  color: #506078;
 }
 .scene-document > span {
   display: block;
   font-size: 9px;
   margin: 10px 0 17px;
-  color: #5b6e55;
+  color: #506078;
 }
 .scene-document > div {
   height: 3px;
@@ -352,7 +352,7 @@
   border: 1px solid #ffffffab;
   border-radius: 20px;
   font-size: 8px;
-  color: #5e7356;
+  color: #506078;
   padding: 9px 12px;
   display: flex;
   align-items: center;
@@ -384,11 +384,11 @@
 .scene-caption > span {
   font-size: 7px;
   letter-spacing: 0.15em;
-  color: #6c8264;
+  color: #506078;
 }
 .scene-caption > small {
   font-size: 7px;
-  color: #87967b;
+  color: #506078;
 }
 .journey-section {
   border-top: 1px solid #e3e8dc;
@@ -411,7 +411,7 @@
 }
 .journey-heading > p {
   font-size: 13px;
-  color: #81897d;
+  color: #506078;
   max-width: 340px;
   margin: 0 0 10px;
 }
@@ -425,7 +425,7 @@
   display: block;
   font-size: 10px;
   letter-spacing: 0.1em;
-  color: #8f9f84;
+  color: #506078;
   border-bottom: 1px solid #dfe5d6;
   padding-bottom: 16px;
   margin-bottom: 19px;
@@ -436,7 +436,7 @@
 }
 .journey-steps p {
   font-size: 12px;
-  color: #858c7f;
+  color: #506078;
   line-height: 1.8;
 }
 .workspace-shortcuts {
@@ -452,7 +452,7 @@
   border: 0;
   border-radius: 16px;
   padding: 27px;
-  color: #63795b;
+  color: #506078;
   transition:
     background 0.2s,
     transform 0.2s;
@@ -470,7 +470,7 @@
 }
 .workspace-shortcuts p {
   font-size: 12px;
-  color: #89917f;
+  color: #506078;
   line-height: 1.8;
 }
 .workspace-shortcuts span {
@@ -479,7 +479,7 @@
   justify-content: space-between;
   margin-top: 22px;
   font-size: 10px;
-  color: #66795e;
+  color: #506078;
 }
 .product-footer {
   display: flex;
@@ -492,7 +492,7 @@
 }
 .product-footer > span {
   font-size: 11px;
-  color: #6c7b62;
+  color: #506078;
 }
 .product-footer > div {
   display: flex;
@@ -505,12 +505,12 @@
   background: none;
   border: 0;
   padding: 0;
-  color: #8b9483;
+  color: #506078;
 }
 .product-footer > p {
   width: 100%;
   font-size: 9px;
-  color: #a0a797;
+  color: #506078;
   margin: 0;
 }
 .research-tabs {
@@ -526,7 +526,7 @@
   background: none;
   border: 0;
   padding: 10px 14px;
-  color: #818b77;
+  color: #506078;
   font-size: 12px;
   cursor: pointer;
 }
@@ -570,14 +570,14 @@
   gap: 10px;
   align-items: center;
   font-size: 12px;
-  color: #6d7e61;
+  color: #506078;
 }
 .studio-journey span {
   font-size: 9px;
   border-radius: 50%;
   background: #e9efe2;
   padding: 8px;
-  color: #718565;
+  color: #506078;
 }
 .studio-journey small {
   margin-left: auto;
@@ -591,7 +591,7 @@
   margin: 12px 0;
 }
 .section-heading > p {
-  color: #919987;
+  color: #506078;
   font-size: 12px;
 }
 .studio-source input[type="file"] {
@@ -609,19 +609,19 @@
   max-width: 650px;
   font-size: 14px;
   line-height: 1.9;
-  color: #86917c;
+  color: #506078;
 }
 .cad-empty {
   flex-direction: column;
   text-align: center;
   padding: 25px;
   background: radial-gradient(ellipse at 50% 30%, #f5f7f1, #e7eee0);
-  color: #7c8c71;
+  color: #506078;
 }
 .cad-empty h3 {
   font-size: 18px;
   letter-spacing: -0.4px;
-  color: #5d7252;
+  color: #506078;
 }
 .cad-empty p {
   font-size: 12px;
@@ -630,7 +630,7 @@
   font-size: 75px;
   font-weight: 200;
   line-height: 1;
-  color: #a6b69a;
+  color: #506078;
   margin-bottom: 30px;
 }
 .studio-source,
@@ -949,21 +949,21 @@
 .journey-heading > p,
 .journey-steps p,
 .workspace-shortcuts p {
-  color: #6e7866;
+  color: #506078;
 }
 .hero-note {
-  color: #7d8874;
+  color: #506078;
 }
 .product-footer > p {
   font-size: 10px;
-  color: #87917c;
+  color: #506078;
 }
 .hero-demo-link {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   font-size: 11px;
-  color: #607257;
+  color: #506078;
   margin-top: 14px;
   border-bottom: 1px solid #d7dfcf;
   padding-bottom: 4px;
@@ -981,7 +981,7 @@
 }
 .demo-intro > p {
   font-size: 15px;
-  color: #718168;
+  color: #506078;
   max-width: 620px;
 }
 .demo-intro .hint {
@@ -997,7 +997,7 @@
 }
 .demo-guide article > span {
   font-size: 10px;
-  color: #889b7b;
+  color: #506078;
 }
 .demo-guide h2 {
   font-size: 17px;
@@ -1006,7 +1006,7 @@
 }
 .demo-guide p {
   font-size: 12px;
-  color: #78896e;
+  color: #506078;
 }
 .demo-context {
   display: flex;
@@ -1016,7 +1016,7 @@
   border: 1px solid #dce6d1;
   border-radius: 12px;
   padding: 15px 18px;
-  color: #687e5a;
+  color: #506078;
   font-size: 12px;
   margin-top: 25px;
 }
@@ -1029,7 +1029,7 @@
   text-align: center;
   background: #eef3e8;
   border-radius: 20px;
-  color: #748c64;
+  color: #506078;
 }
 .demo-preview > svg {
   margin: 0 auto 20px;

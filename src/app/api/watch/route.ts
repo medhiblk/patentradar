@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/platform/auth";
 import { getItem, saveItem } from "@/lib/platform/store";
 import { execute } from "@/lib/search/orchestrator";
 import { ResearchSchema } from "@/lib/model";
+import { similarityAlerts, savedAlerts } from "@/lib/intelligence/alerts";
 export const maxDuration = 60;
 export async function POST(req: Request) {
   try {
@@ -37,6 +38,11 @@ export async function POST(req: Request) {
           ...stored,
           publications: result.patents.map((p) => p.publicationNumber),
           lastResult: result,
+          similarityAlerts: similarityAlerts(
+            result.profile,
+            result.patents,
+            savedAlerts(stored),
+          ),
           lastChecked: new Date().toISOString(),
           discoveries: discoveries.map((p) => p.publicationNumber),
         },

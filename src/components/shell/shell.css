@@ -19,7 +19,7 @@
   display: block;
   font-size: 8px;
   letter-spacing: 0.14em;
-  color: #8c9882;
+  color: #506078;
   margin: 4px 12px 24px;
 }
 .workspace-sidebar nav {
@@ -35,7 +35,7 @@
   background: none;
   text-align: left;
   border-radius: 9px;
-  color: #748367;
+  color: #506078;
   padding: 13px 12px;
   font-size: 12px;
 }
@@ -59,13 +59,13 @@
   border: 0;
   background: none;
   text-align: left;
-  color: #89947b;
+  color: #506078;
   font-size: 11px;
   padding: 10px 12px;
 }
 .workspace-utilities summary {
   font-size: 11px;
-  color: #89947b;
+  color: #506078;
   cursor: pointer;
   padding: 8px 12px;
 }
@@ -82,7 +82,7 @@
   background: none;
   border: 0;
   text-align: left;
-  color: #7b8a6b;
+  color: #506078;
   font-size: 10px;
   padding: 10px;
   border-radius: 7px;
@@ -111,7 +111,7 @@
   margin: 24px 0;
 }
 .workspace-hub > p {
-  color: #809071;
+  color: #506078;
   font-size: 14px;
   max-width: 550px;
 }
@@ -126,7 +126,7 @@
   border: 1px solid #e1e8d8;
   background: #f1f5e9;
   border-radius: 18px;
-  color: #789061;
+  color: #506078;
   transition: background 0.2s;
 }
 .workspace-hub-cards > a:hover {
@@ -140,7 +140,7 @@
 }
 .workspace-hub-cards p {
   font-size: 13px;
-  color: #829370;
+  color: #506078;
 }
 .workspace-hub-cards span {
   display: flex;
@@ -148,7 +148,7 @@
   justify-content: space-between;
   margin-top: 28px;
   font-size: 11px;
-  color: #617a4d;
+  color: #506078;
 }
 .workspace-resume {
   display: flex;
@@ -157,11 +157,11 @@
   padding: 23px 28px;
   border: 1px solid #e4e9dc;
   border-radius: 14px;
-  color: #7d8e6c;
+  color: #506078;
 }
 .workspace-resume strong {
   font-weight: 500;
-  color: #5d7549;
+  color: #506078;
 }
 .workspace-resume p {
   font-size: 12px;
@@ -177,7 +177,7 @@
   justify-content: space-between;
   gap: 20px;
   font-size: 10px;
-  color: #8a9878;
+  color: #506078;
   margin-top: 30px;
 }
 .public-navigation {
@@ -222,7 +222,7 @@
   height: 49px;
   border: 1px solid #d6dfca;
   border-radius: 14px;
-  color: #71885d;
+  color: #506078;
   background: #f6f8f0;
 }
 .chatgpt-invitation h2 {
@@ -233,7 +233,7 @@
 }
 .chatgpt-invitation p {
   font-size: 12px;
-  color: #839171;
+  color: #506078;
   margin: 0;
 }
 .chatgpt-invitation > a {
@@ -243,7 +243,7 @@
   white-space: nowrap;
   margin-left: auto;
   font-size: 11px;
-  color: #61774f;
+  color: #506078;
   padding: 12px 0;
   border-bottom: 1px solid #c9d5ba;
 }

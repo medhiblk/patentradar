@@ -17,17 +17,17 @@
 .connect-intro h1 em {
   font-family: Georgia, serif;
   font-weight: 400;
-  color: #7b9270;
+  color: #506078;
 }
 .connect-intro > p {
   font-size: 15px;
-  color: #7c8c6e;
+  color: #506078;
   max-width: 600px;
 }
 .connect-alias {
   display: block;
   font-size: 10px;
-  color: #a0ab93;
+  color: #506078;
   margin-top: 18px;
 }
 .connect-layout {
@@ -57,7 +57,7 @@
   background: #f9fbf4;
   border: 1px solid #dbe3d0;
   border-radius: 12px;
-  color: #718a5c;
+  color: #506078;
 }
 .mcp-install-heading h2 {
   font-size: 20px;
@@ -68,11 +68,11 @@
 .mcp-install-heading p {
   font-size: 10px;
   margin: 0;
-  color: #91a07e;
+  color: #506078;
 }
 .mcp-install-panel > label {
   font-size: 10px;
-  color: #7a8e64;
+  color: #506078;
 }
 .mcp-endpoint-input {
   font-family: ui-monospace, monospace;
@@ -80,7 +80,7 @@
   background: #fffef9 !important;
   border: 1px solid #d9e2cc !important;
   border-radius: 9px !important;
-  color: #5c7648 !important;
+  color: #506078 !important;
   margin-top: 10px;
 }
 .mcp-primary-actions {
@@ -102,7 +102,7 @@
   display: grid;
   gap: 12px;
   margin: 25px 0;
-  color: #7c9065;
+  color: #506078;
 }
 .mcp-settings > div {
   display: flex;
@@ -111,7 +111,7 @@
   font-size: 10px;
 }
 .mcp-settings dt {
-  color: #98a587;
+  color: #506078;
 }
 .mcp-settings dd {
   margin: 0;
@@ -133,13 +133,13 @@
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: #6d8853;
+  color: #506078;
   line-height: 1.8;
   margin: 18px 0 0;
 }
 .mcp-install-note {
   font-size: 9px !important;
-  color: #9caa8b;
+  color: #506078;
   margin: 20px 0 0;
   line-height: 1.8;
 }
@@ -158,18 +158,18 @@
 }
 .connect-steps li > span {
   font-size: 10px;
-  color: #9daf88;
+  color: #506078;
   padding-top: 3px;
 }
 .connect-steps h2 {
   font-size: 16px;
-  color: #5a7248;
+  color: #506078;
   letter-spacing: -0.3px;
   margin: 0 0 8px;
 }
 .connect-steps p {
   font-size: 12px;
-  color: #889b76;
+  color: #506078;
   margin: 0;
 }
 .connect-steps > .quiet-button {
@@ -177,7 +177,7 @@
 }
 .connect-steps details {
   margin-top: 22px;
-  color: #95a684;
+  color: #506078;
   font-size: 10px;
 }
 .connect-steps summary {
@@ -199,12 +199,12 @@
   font-size: 27px;
   letter-spacing: -0.8px;
   line-height: 1.25;
-  color: #506b3e;
+  color: #506078;
   margin: 20px 0 15px;
 }
 .connect-use-cases p {
   font-size: 12px;
-  color: #8c9e79;
+  color: #506078;
   max-width: 380px;
 }
 .connect-use-cases blockquote {
@@ -214,13 +214,13 @@
   padding: 30px;
   font-size: 15px;
   line-height: 1.9;
-  color: #718b57;
+  color: #506078;
   align-self: center;
 }
 .connect-tools {
   border-top: 1px solid #e3e9d9;
   padding-top: 23px;
-  color: #7a9063;
+  color: #506078;
 }
 .connect-tools > summary {
   cursor: pointer;
@@ -239,11 +239,11 @@
 }
 .connect-tools h3 {
   font-size: 14px;
-  color: #627c4c;
+  color: #506078;
 }
 .connect-tools article p {
   font-size: 11px;
-  color: #91a47d;
+  color: #506078;
 }
 .connect-tools code {
   font-size: 9px;
@@ -259,13 +259,13 @@
 }
 .connect-footer > p {
   font-size: 10px;
-  color: #a0ad91;
+  color: #506078;
   width: 100%;
   max-width: 850px;
 }
 .connect-footer > a {
   font-size: 10px;
-  color: #8b9d78;
+  color: #506078;
 }
 @media (max-width: 850px) {
   .connect-page {

@@ -5,8 +5,10 @@ import {
   FolderOpen,
   FileText,
   UserRound,
+  BellRing,
   ArrowUpRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { workspaceHref } from "@/lib/navigation";
 const sections = [
   {
@@ -27,6 +29,7 @@ const sections = [
     href: workspaceHref("My Inventions"),
     icon: FolderOpen,
   },
+  { page: "Alerts", label: "Patent alerts", href: "/alerts", icon: BellRing },
   {
     page: "Reports",
     label: "Reports",
@@ -41,6 +44,7 @@ export function WorkspaceNavigation({
   page: string;
   onNavigate?: (page: string) => void;
 }) {
+  const router = useRouter();
   const active = [
     "New Analysis",
     "Patent Results",
@@ -68,7 +72,11 @@ export function WorkspaceNavigation({
               key={item.page}
               type="button"
               {...attributes}
-              onClick={() => onNavigate(item.page)}
+              onClick={() =>
+                item.page === "Alerts"
+                  ? router.push("/alerts")
+                  : onNavigate(item.page)
+              }
             >
               <Icon size={16} strokeWidth={1.5} />
               {item.label}

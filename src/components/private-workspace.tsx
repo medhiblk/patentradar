@@ -12,6 +12,7 @@ type Project = {
     description?: string;
     seedPublications?: { publicationNumber: string }[];
     _deleting?: boolean;
+    similarityAlerts?: { publicationNumber: string; acknowledged: boolean }[];
   };
 };
 type FileRow = {
@@ -150,7 +151,14 @@ export function PrivateWorkspace({
           ["project", "assembly"].includes(p.kind),
         );
         setProjects(rows);
-        setSelected(rows[0]?.id || "");
+        const preferred = new URL(window.location.href).searchParams.get(
+          "projectId",
+        );
+        setSelected(
+          rows.some((row: Project) => row.id === preferred)
+            ? preferred!
+            : rows[0]?.id || "",
+        );
       })
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
@@ -326,6 +334,15 @@ export function PrivateWorkspace({
               ))}
             </select>
           </label>
+          {project?.data.similarityAlerts?.length ? (
+            <div className="project-alert-link">
+              <strong>
+                {project.data.similarityAlerts.length} similarity alert(s)
+                attached to this project
+              </strong>
+              <a href="/alerts">Review patent alerts ↗</a>
+            </div>
+          ) : null}
           {project && (
             <div className="row wrap">
               {onAnalyze && project.data.description && (

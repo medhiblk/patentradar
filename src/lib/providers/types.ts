@@ -27,6 +27,16 @@ export const PatentSchema = z.object({
   cpcCodes: z.array(z.string()).optional(),
   familyId: z.string().optional(),
   claims: z.array(z.string()).optional(),
+  claimsScope: z.enum(["full", "excerpts"]).optional(),
+  legalStatus: z
+    .object({
+      label: z.string(),
+      source: z.string(),
+      sourceUrl: z.string().url(),
+      retrievedAt: z.string(),
+      verification: z.literal("publisher-reported"),
+    })
+    .optional(),
   familyNamespace: z.string().optional(),
   citations: z
     .array(

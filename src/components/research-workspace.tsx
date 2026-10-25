@@ -10,6 +10,7 @@ import {
   useRef,
   useCallback,
   useEffectEvent,
+  useMemo,
 } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { readSearchStream } from "@/lib/search/read-stream";
@@ -42,6 +43,9 @@ const SourceExplorer = dynamic(
   { loading: () => <p role="status">Opening workspace…</p> },
 );
 import { Home } from "@/components/home";
+import { similarityAlerts } from "@/lib/intelligence/alerts";
+import { SimilarityAlerts } from "./intelligence/similarity-alerts";
+import { ResearchPortfolioSave } from "./intelligence/research-portfolio-save";
 import {
   Radar,
   Plus,
@@ -91,6 +95,10 @@ export default function Dashboard({
   );
   const [profile, setProfile] = useState<Profile>(realProfile);
   const [result, setResult] = useState<Research | null>(null);
+  const currentAlerts = useMemo(
+    () => (result ? similarityAlerts(result.profile, result.patents) : []),
+    [result],
+  );
   const [providers, setProviders] = useState<Provider[]>([]);
   const [mode, setMode] = useState<"LIVE" | "DEMO">("LIVE");
   const [busy, setBusy] = useState("");
@@ -1208,6 +1216,32 @@ export default function Dashboard({
                       Compare features <GitCompareArrows size={16} />
                     </Button>
                   </div>
+                  {result && (
+                    <SimilarityAlerts
+                      alerts={currentAlerts}
+                      onInspect={(publication) => {
+                        setSelected(
+                          result.patents.find(
+                            (patent) =>
+                              patent.publicationNumber === publication,
+                          ) || null,
+                        );
+                        go("Claim Comparison");
+                      }}
+                    />
+                  )}
+                  {result && !busy && result.patents.length > 0 && (
+                    <ResearchPortfolioSave
+                      key={result.patents
+                        .map(
+                          (patent) =>
+                            patent.publicationNumber + patent.retrievedAt,
+                        )
+                        .join(",")}
+                      research={result}
+                      description={text || result.profile.operatingPrinciple}
+                    />
+                  )}
                   <div className="results-grid">{patents.map(card)}</div>
                   {!patents.length && (
                     <div className="panel empty">
