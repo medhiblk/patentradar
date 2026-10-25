@@ -88,6 +88,7 @@ export default function Dashboard() {
   const [mobile, setMobile] = useState(false);
   const [competitor, setCompetitor] = useState("");
   const [dragging, setDragging] = useState(false);
+  const [designReturn, setDesignReturn] = useState(false);
   const reduceMotion = useReducedMotion();
   useEffect(() => {
     fetch("/api/health/providers")
@@ -102,6 +103,7 @@ export default function Dashboard() {
         if (handoff) {
           sessionStorage.removeItem("patentradar-engineering-handoff");
           setText(handoff);
+          setDesignReturn(true);
           setReviewed(false);
           setPage("New Analysis");
         }
@@ -118,6 +120,7 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, []);
   const go = (p: string) => {
+    if (p === "Engineering Studio") setDesignReturn(false);
     if (p === "Physical Analysis") {
       setAnalysisModule("physical");
       setReviewed(false);
@@ -556,6 +559,7 @@ export default function Dashboard() {
             <EngineeringStudio
               onPatentResearch={(description) => {
                 setText(description);
+                setDesignReturn(true);
                 setReviewed(false);
                 go("New Analysis");
               }}
@@ -616,6 +620,20 @@ export default function Dashboard() {
             <div role="alert" className="notice error">
               {error}
             </div>
+          )}
+          {designReturn && page !== "Engineering Studio" && (
+            <section className="notice" aria-label="Design iteration">
+              <strong>Investigate, then iterate.</strong>
+              <p>
+                Review the technical concepts before sharing search queries.
+                Your assembly parameters are retained in this tab so you can
+                explore another design. Original files and imported geometry
+                are not retained.
+              </p>
+              <Button variant="outline" onClick={() => go("Engineering Studio")}>
+                Return to design iteration
+              </Button>
+            </section>
           )}
           <AnimatePresence>
             {busy && (

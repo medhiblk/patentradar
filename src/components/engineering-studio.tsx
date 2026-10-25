@@ -1,6 +1,6 @@
 "use client";
 import { browserCAD } from "@/lib/cad/browser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
 import {
@@ -82,6 +82,35 @@ export function EngineeringStudio({
     [dirty, setDirty] = useState(false);
   const component = spec.components.find((c) => c.id === selected);
   const meshInfo = geometry?.parts.find((p) => p.id === selected);
+  // An explicit research handoff retains parameters, never the original file.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        const draft = sessionStorage.getItem("patentradar-design-return-v1");
+        if (!draft) return;
+        const parsed = JSON.parse(draft);
+        const restored = AssemblySchema.safeParse(parsed.spec);
+        if (parsed.version !== 1 || !restored.success) {
+          sessionStorage.removeItem("patentradar-design-return-v1");
+          return;
+        }
+        setSpec(restored.data);
+        setSelected(restored.data.components[0]?.id || "");
+        if (
+          typeof parsed.source?.name === "string" &&
+          typeof parsed.source?.hash === "string"
+        ) setSource({ name: parsed.source.name, hash: parsed.source.hash });
+        setDirty(true);
+        setNotice(
+          "Design restored in this tab. Review your changes and rebuild CAD. Imported STEP/STL geometry requires reimporting the original file. No original document was retained.",
+        );
+        sessionStorage.removeItem("patentradar-design-return-v1");
+      } catch {
+        setError("The saved design could not be restored. Reopen your source or use your exported parameters to re-enter measurements.");
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
   async function request(url: string, body: object | FormData) {
     const r = await fetch(url, {
       method: "POST",
@@ -313,8 +342,9 @@ export function EngineeringStudio({
           to an editable assembly.
         </h1>
         <p>
-          Measured geometry. Traceable evidence. Editable parts. CAD runs on
-          your device; no Python installation required.
+          Start with your PDF, drawing or manual. Review the system, build
+          measured parts, investigate patent evidence and return to refine your
+          design. CAD runs on your device.
         </p>
       </header>
       <section className="panel">
@@ -672,16 +702,25 @@ export function EngineeringStudio({
           <Button
             variant="outline"
             disabled={!spec.components.length}
-            onClick={() =>
+            onClick={() => {
+              try {
+                sessionStorage.setItem(
+                  "patentradar-design-return-v1",
+                  JSON.stringify({ version: 1, spec, source }),
+                );
+              } catch {
+                setError("This browser cannot retain your design for the return journey. Export editable parameters before leaving.");
+                return;
+              }
               onPatentResearch(
-                spec.components
+                `${spec.title}\n` + spec.components
                   .map(
                     (c) =>
-                      `${c.name}: ${c.description}; ${c.connections.join(", ")}`,
+                      `${c.name}: ${c.description}\nCurrent design geometry (reviewed parameters): ${c.shape}; ${Object.entries(c.dimensions).filter(([, value]) => value !== null).map(([name, value]) => `${name} ${value} mm`).join(", ")}; material: ${c.material}. Connections: ${c.connections.join(", ") || "Not specified"}.`,
                   )
                   .join("\n"),
-              )
-            }
+              );
+            }}
           >
             Review features for patent research
           </Button>
@@ -729,6 +768,12 @@ export function EngineeringStudio({
             Save part to catalog
           </Button>
         </div>
+        <p className="hint">
+          Patent research starts with your review, not an automatic external
+          search. Continuing retains editable parameters in this tab, without
+          the original file. Return to the design to change parts and analyze
+          again. Similarity findings are research leads, not a legal opinion.
+        </p>
         <ul>
           {spec.limitations.map((l, i) => (
             <li key={i}>{l}</li>

@@ -1,11 +1,12 @@
 "use client";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { BRAND } from "@/lib/brand";
 const experiences = [
   {
     number: "01",
     title: "Analyze an invention",
-    description: "From a technical document to a new perspective.",
+    description: "Start with your manual, technical description or engineering brief.",
     action: "Start an analysis",
     page: "New Analysis",
     theme: "cobalt",
@@ -14,7 +15,7 @@ const experiences = [
   {
     number: "02",
     title: "Explore patents",
-    description: "Find the ideas that came before your next one.",
+    description: "Compare your design with existing technologies and trace the evidence.",
     action: "Explore the evidence",
     page: "Patent Search",
     theme: "emerald",
@@ -23,7 +24,7 @@ const experiences = [
   {
     number: "03",
     title: "Competitor intelligence",
-    description: "See who’s working at the edge of your field.",
+    description: "Investigate relevant applicants and the technologies they publish.",
     action: "Discover the landscape",
     page: "Competitor Intelligence",
     theme: "amber",
@@ -32,7 +33,7 @@ const experiences = [
   {
     number: "04",
     title: "Physical inventions",
-    description: "Machine parts, mechanisms and assemblies.",
+    description: "Describe parts and relationships, or reconstruct measured geometry in the studio.",
     action: "Open the physical module",
     page: "Physical Analysis",
     theme: "violet",
@@ -84,39 +85,36 @@ export function Home({
           transition={{ duration: 0.7 }}
         >
           <div className="intro-label">
-            <span className="live-dot" /> A NEW PERSPECTIVE ON PATENT
-            INTELLIGENCE
+            <span className="live-dot" /> DOCUMENT → SYSTEM → DESIGN → EVIDENCE
           </div>
           <h1>
-            Understand the evidence.
+            Start with what you have.
             <br />
-            <span>Build what comes next.</span>
+            <span>Explore what you could build.</span>
           </h1>
           <p>
-            Patent evidence for software, processes, biotech and physical
-            inventions.
-            <br className="mobile-break" /> More clarity for your next
-            breakthrough — with measured 3D reconstruction when geometry is
-            provided.
+            Bring your technical PDF, drawing or manual. Review the system,
+            explore measured 3D parts and investigate patent evidence.
+            <br className="mobile-break" /> Modify your design, then investigate again.
           </p>
           <div className="intro-actions">
             <a className="quiet-button" href="/engineering">
-              Try 3D Studio <ArrowUpRight size={14} />
+              Upload a technical document <ArrowUpRight size={14} />
             </a>
             <button className="quiet-button" disabled={busy} onClick={demo}>
               Research a real patent <ArrowUpRight size={14} />
             </button>
             <span>
-              Live EPO + literature search · Shares public technical keywords
+              Measured CAD on your device · External research only after consent
             </span>
           </div>
         </motion.div>
       </section>
       <section className="experience-section" aria-label="Explore FormaProof">
         <div className="gallery-heading">
-          <span>FOUR WAYS TO SEE FURTHER</span>
+          <span>YOUR DOCUMENTS. YOUR NEXT DESIGN.</span>
           <span>
-            Built for curious minds <span className="tiny-arrow">↘</span>
+            Engineering, connected <span className="tiny-arrow">↘</span>
           </span>
         </div>
         <div className="experience-gallery">
@@ -133,7 +131,7 @@ export function Home({
             >
               <div className="card-grain" />
               <div className="experience-top">
-                <span>{item.number} / PATENTRADAR</span>
+                <span>{item.number} / {BRAND.name.toUpperCase()}</span>
                 <span className="card-arrow">
                   <ArrowUpRight size={17} strokeWidth={1.4} />
                 </span>
@@ -151,48 +149,55 @@ export function Home({
           ))}
         </div>
         <div className="gallery-foot">
-          <span>Purpose-built for the people building what’s next.</span>
+          <span>From the document you already have to the design you can question.</span>
           <span>Evidence-led. Human-reviewed.</span>
         </div>
       </section>
       <section className="perspective">
         <div className="perspective-copy">
-          <span className="section-kicker">LESS NOISE. MORE PERSPECTIVE.</span>
+          <span className="section-kicker">UNDERSTAND. MODEL. INVESTIGATE. ITERATE.</span>
           <h2>
-            Every breakthrough
+            One system.
             <br />
-            starts with a connection.
+            New possibilities.
           </h2>
           <p>
-            A feature. A claim. An unexpected overlap.
-            <br />
-            Bring your technical thinking into focus with
-            <br className="desktop-break" /> evidence you can trace back to its
-            source.
+            Start with the documents on your desk. Review the components,
+            functions and available dimensions. Explore an editable assembly,
+            investigate relevant patents, then return to the design.
+            Each step keeps the evidence and uncertainty visible.
           </p>
-          <button className="quiet-button" onClick={() => go("New Analysis")}>
-            Follow your next idea <ArrowUpRight size={15} />
-          </button>
+          <a className="quiet-button" href="/engineering">
+            Open your engineering workspace <ArrowUpRight size={15} />
+          </a>
         </div>
         <div className="evidence-flow">
           <span className="section-kicker">ONE RESEARCH WORKFLOW</span>
           {[
             {
               n: "01",
-              title: "Describe the invention",
-              detail:
-                "Software, a process, a formulation or a physical system.",
+              title: "Bring your existing documents",
+              detail: "A PDF, technical drawing, manual or measured specification.",
             },
             {
               n: "02",
-              title: "Find patent evidence",
-              detail: "Search public records and inspect available claims.",
+              title: "Understand the system",
+              detail: "Review components, functions, geometry and connections. Confirm what is known and what is missing.",
             },
             {
               n: "03",
-              title: "Compare and investigate",
-              detail:
-                "Review technical overlap, applicants and original sources.",
+              title: "Explore an editable 3D model",
+              detail: "Build from available measurements. Inspect, arrange and modify supported parts.",
+            },
+            {
+              n: "04",
+              title: "Investigate patent evidence",
+              detail: "Review search concepts, find similar technologies and inspect source passages and available claims.",
+            },
+            {
+              n: "05",
+              title: "Iterate the design",
+              detail: "Return to your assembly, explore a different design and launch a fresh analysis.",
             },
           ].map((step) => (
             <div key={step.n}>

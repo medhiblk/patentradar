@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "FormaProof — Evidence for what you build",
+  title: "FormaProof — From technical documents to informed design",
   description:
-    "Patent evidence, technical document analysis and measured browser CAD. Research existing technologies and build with traceable sources.",
+    "Understand technical PDFs and manuals, reconstruct measured 3D parts, investigate patent evidence and iterate your design.",
 };
 export default function RootLayout({
   children,

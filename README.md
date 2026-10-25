@@ -2,7 +2,9 @@
 
 Working identity; existing PatentRadar API/MCP identifiers and repository slug remain compatible.
 
-From technical documentation to sourced patent intelligence and measured 3D assemblies.
+Understand the system. Explore the design. Investigate the evidence.
+
+Technical PDF, drawing or manual → reviewed system understanding → interactive measured 3D → patent evidence → design iteration. See [product positioning and capability boundaries](docs/product/POSITIONING.md).
 
 **[Application](https://patentradar-puce.vercel.app) · [Developer portal](https://patentradar-puce.vercel.app/developers) · [OpenAPI](https://patentradar-puce.vercel.app/api/v1/openapi.json) · [API/MCP integration guide](docs/API_MCP.md)**
 
@@ -22,7 +24,7 @@ For CAD runtime installation, private storage, input limits and tested capabilit
 
 **Understand what already exists. Invent what comes next.**
 
-A working Next.js patent-research application for general inventions, with a separate physical-invention module for machine parts, materials, mechanisms and assemblies. CAD/3D-model analysis is future work.
+A working Next.js application connecting technical documents, measured browser CAD and patent research. General patent analysis remains available for software, processes, biotech and other inventions; the engineering studio adds measured parts and editable assemblies.
 
 ## Run
 
