@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-10-25T20:40:17.928726+00:00",
+  "baseCommit": "1229f8cd14206902f0fe526bcf6aa83f97bb9053",
+  "functionalEntry": "/spot",
+  "demoPageAdded": false,
+  "localChecks": {
+    "applicationTests": 223,
+    "sdkTests": 5,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "privateBuildManifests": 43,
+    "privateEntries": 0,
+    "blindHttpAcceptance": {
+      "passed": 9,
+      "failed": 0,
+      "evidence": "docs/evaluation/local-blind-verification.json"
+    },
+    "browserAcceptance": {
+      "passed": 4,
+      "failed": 0,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "externalMatchingMocked": false,
+      "pdfExportVerified": true
+    }
+  },
+  "data": {
+    "realIndexedMedicalPublications": 18,
+    "officialXmlSourcesRetrieved": 18,
+    "officialPdfSourcesRetrieved": 3,
+    "outsideIndexEpoLookup": {
+      "publication": "EP1000000A1",
+      "httpStatus": 200,
+      "claimsReturned": 11
+    }
+  },
+  "productionVerification": "pending",
+  "deployment": "pending",
+  "limits": [
+    "Bounded reference index, not worldwide keyword discovery.",
+    "Publication identity, reproduced text and lexical technical overlap are distinct.",
+    "Eligible EP exact lookup requires actual publication number/date and user authorization.",
+    "Scanned/image-only PDFs require OCR; no false-clearance result.",
+    "No claim of novelty, infringement, legal status or freedom to operate."
+  ]
+}

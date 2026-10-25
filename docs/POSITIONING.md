@@ -2,6 +2,8 @@
 
 ## Product promise
 
+The functional PDF entry starts at `/spot`. Users upload their own technical documents and inspect actual sourced evidence. Public reference documents support the bounded search index and automated verification; they are not a new demo page or a preloaded presentation flow. The existing project and measured-parts tools remain available.
+
 **From a technical document to editable components and patent evidence.**
 
 FormaProof helps an engineer review what a document actually says, create simplified measured parts where geometry permits, and investigate existing technologies with explicit sources. The first experience is one project with a chosen goal: patent research or part design. General patent research does not require a physical model.

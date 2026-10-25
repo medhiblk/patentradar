@@ -31,6 +31,17 @@ function previews(form: FormData, raw: Uint8Array, pageNumbers: number[] = [1]) 
 }
 
 describe("shared real PDF ingestion", () => {
+  it("accepts the physical module's entered technical context before checking minimum text length", async () => {
+    vi.stubEnv("OPENAI_API_KEY", "");
+    const context = "Components: a rotor, a stator and a bearing. Function: an electric drive rotates the shaft inside the housing. Interfaces: the bearing supports the shaft.";
+    const form = new FormData(); form.set("text", ""); form.set("context", context); form.set("consent", "false");
+    const response = await extract(new Request("https://app.example/api/extract", { method: "POST", body: form }));
+    const data = await response.json();
+    expect(response.status, JSON.stringify(data)).toBe(200);
+    expect(data.notice).toContain("entered technical context");
+    expect(data.profile.technicalFeatures.every((feature: { description: string }) => context.includes(feature.description))).toBe(true);
+    expect(parse).not.toHaveBeenCalled();
+  });
   it.each(["application/pdf", "application/octet-stream", ""])("extracts the real text PDF with file-provider MIME '%s'", async type => {
     vi.stubEnv("OPENAI_API_KEY", "");
     const raw = sample();

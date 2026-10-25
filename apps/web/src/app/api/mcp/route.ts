@@ -15,6 +15,7 @@ import {
   publicCompare,
 } from "@/lib/api/public";
 import { localExtract } from "@/lib/local-extract";
+import { spotDocument } from "@/lib/search/spot";
 import { AssemblySchema } from "@/lib/cad/schema";
 import { STARTER_PARTS, inspectAssembly } from "@/lib/cad/workbench";
 export const runtime = "nodejs";
@@ -94,6 +95,34 @@ export async function POST(req: Request) {
             error:
               "Search unavailable. Review query-sharing consent, provider quotas and configuration.",
           }),
+          isError: true,
+        };
+      }
+    },
+  );
+  server.registerTool(
+    "spot_patent_text",
+    {
+      description:
+        "Check user-approved technical text against the indexed public patent corpus. Requires approveProcessing=true. No account or external AI; verifyPublication=false by default. Optional verification sends only eligible detected EP publication numbers and dates to EPO. Coverage is limited; recognition and lexical overlap are not infringement or legal clearance. Up to 60000 user-approved input characters are analysed.",
+      inputSchema: z.object({
+        text: z.string().min(30).max(60000),
+        approveProcessing: z.literal(true),
+        verifyPublication: z.boolean().default(false),
+      }).strict(),
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await spotDocument({
+          pages: [{ page: 1, text: args.text }],
+          consentToPublicLookup: args.verifyPublication,
+          signal: req.signal,
+        });
+        return output(result);
+      } catch {
+        return {
+          ...output({ error: "Document matching unavailable. Supply readable user-approved technical text and review coverage or verification limits." }),
           isError: true,
         };
       }

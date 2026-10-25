@@ -14,6 +14,7 @@ const config: NextConfig = {
     "/api/v1/cad/*": ["./cad/worker.py"],
     "/api/cad/interpret": ["../../node_modules/pdfjs-dist/legacy/build/*.mjs"],
     "/api/extract": ["../../node_modules/pdfjs-dist/legacy/build/*.mjs"],
+    "/api/spot": ["../../node_modules/pdfjs-dist/legacy/build/*.mjs"],
   },
   experimental: { serverActions: { bodySizeLimit: "6mb" } },
   async headers() {

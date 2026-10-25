@@ -9,20 +9,22 @@ test("lightweight home explains the workflow without loading research or CAD", a
   });
   await page.goto("/", { waitUntil: "networkidle" });
   await expect(
-    page.getByRole("heading", { name: /D’un document/ }),
+    page.getByRole("heading", { name: /Before you build/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("region", { name: "Comment ça marche" }),
+    page.getByRole("region", { name: "How it works" }),
   ).toBeVisible();
   expect(calls).toEqual([]);
   await page
-    .getByRole("link", { name: "Commencer mon projet", exact: true })
+    .locator(".hero-actions")
+    .getByRole("link", { name: "Check PDF", exact: true })
     .click();
-  await expect(page).toHaveURL(/\/workspace$/);
-  await expect(page.getByLabel("Document du projet", { exact: true })).toBeVisible();
-  await expect(page.getByRole("radio", { name: /Trouver les brevets proches/ })).toBeChecked();
-  await expect(page.getByRole("radio", { name: /Concevoir une pièce ou un assemblage/ })).not.toBeChecked();
-  await expect(page.getByRole("button", { name: "Continuer", exact: true })).toBeDisabled();
+  await expect(page).toHaveURL(/\/spot$/);
+  await expect(page.getByLabel("Technical document", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "SPOT IT", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Describe a design", exact: true }).click();
+  await expect(page.getByLabel("Describe your design", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "SPOT IT", exact: true })).toBeDisabled();
   await expect(page.locator("canvas")).toHaveCount(0);
   expect(calls.filter((c) => c.includes("cad-kernel"))).toEqual([]);
 });
@@ -40,7 +42,12 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }).getByRole("link"),
   ).toHaveCount(2);
-  await page.getByRole("link", { name: "Nouveau projet", exact: true }).click();
+  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "My files", exact: true })).toHaveAttribute("href", "/files");
+  await page.locator(".app-nav-actions").getByRole("link", { name: "Check PDF", exact: true }).click();
+  await expect(page).toHaveURL(/\/spot$/);
+  await expect(page.getByLabel("Technical document", { exact: true })).toBeVisible();
+  // The adaptive design/project workspace remains directly available.
+  await page.goto("/workspace");
   await expect(
     page.getByRole("heading", { name: /Partez de ce que vous avez/ }),
   ).toBeVisible();
@@ -66,7 +73,7 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
     .getByRole("link", { name: "FormaProof home", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: /D’un document/ }),
+    page.getByRole("heading", { name: /Before you build/ }),
   ).toBeVisible();
   await page.goBack();
   await expect(

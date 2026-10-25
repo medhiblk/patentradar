@@ -41,7 +41,7 @@ test("real measured PDF generates CAD, edits geometry and downloads STEP", async
       externalSearches++;
   });
   await page
-    .getByRole("button", { name: "Review features for patent research" })
+    .getByRole("button", { name: "Check this design for related patents" })
     .click();
   const description = page.getByLabel(
     "Describe your invention. We’ll find the closest existing technologies.",
@@ -61,7 +61,7 @@ test("real measured PDF generates CAD, edits geometry and downloads STEP", async
   ).toBeVisible();
   await page.getByLabel("width (mm)", { exact: true }).fill("60");
   await page
-    .getByRole("button", { name: "Review features for patent research" })
+    .getByRole("button", { name: "Check this design for related patents" })
     .click();
   await expect(description).toHaveValue(/width 60 mm/);
   expect(externalSearches).toBe(0);

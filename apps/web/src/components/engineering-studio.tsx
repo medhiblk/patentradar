@@ -1,5 +1,6 @@
 "use client";
 import { setDesignSession, takeDesignSession, clearDesignSession } from "@/lib/cad/design-session";
+import { designFunctionText } from "@/lib/cad/spot-design";
 import { DesignRevision, currentDesignResult } from "@/lib/cad/design-revision";
 import { browserCAD, type ImportedSolid } from "@/lib/cad/browser";
 import { mergeAssembly } from "@/lib/cad/workbench";
@@ -127,6 +128,7 @@ export function EngineeringStudio({
     setSpecState(value);
   }, []);
   const [source, setSource] = useState({ name: "", hash: "" });
+  const [documentPages, setDocumentPages] = useState<{ page: number; text: string }[]>([]);
   const [pickerVersion, setPickerVersion] = useState(0);
   const [showPrivateFiles, setShowPrivateFiles] = useState(false);
   const [imports, setImportsState] = useState<Record<string, ImportedSolid>>({});
@@ -179,6 +181,7 @@ export function EngineeringStudio({
         limitations: [],
       });
       setSource({ name: "", hash: "" });
+      setDocumentPages([]);
       setImports({});
       setGeometry(null);
       setCatalog([]);
@@ -285,6 +288,7 @@ export function EngineeringStudio({
           setSpec(memory.spec);
           setImports(memory.imports);
           setSource(memory.source);
+          setDocumentPages(memory.documentPages || []);
           setFile(memory.sourceFile || null);
           setAppliedSource(memory.sourceFile || null);
           setSelected(memory.spec.components[0]?.id || "");
@@ -304,6 +308,7 @@ export function EngineeringStudio({
         }
         setSpec(restored.data);
         setImports({});
+        setDocumentPages([]);
         setGeometry(null);
         setSelected(restored.data.components[0]?.id || "");
         if (
@@ -400,6 +405,7 @@ export function EngineeringStudio({
           }));
         }
         installParts(incoming);
+        setDocumentPages([]);
         setAppliedSource(file);
         setNotice(
           "Editable parameters imported. Rebuild measured parts; imported CAD source files must be reselected.",
@@ -433,6 +439,7 @@ export function EngineeringStudio({
           ),
         );
         setSource({ name: file.name, hash: "" });
+        setDocumentPages([]);
         setAppliedSource(file);
         setNotice(
           "STEP geometry imported. Add library or custom parts, then rebuild to export the combined assembly. Feature history was not recovered.",
@@ -481,6 +488,7 @@ export function EngineeringStudio({
             engine: "Imported mesh",
           },
         );
+        setDocumentPages([]);
         setAppliedSource(file);
         return;
       }
@@ -530,6 +538,7 @@ export function EngineeringStudio({
         })),
       });
       setSource({ name: result.sourceName, hash: result.sourceHash });
+      setDocumentPages(!file && text.trim() ? [{ page: 1, text: text.slice(0, 8000) }] : []);
       setAppliedSource(file);
       setNotice([
         result.spec.components.length
@@ -1063,6 +1072,7 @@ export function EngineeringStudio({
                 Function / description
                 <textarea
                   maxLength={1000}
+                  placeholder="Describe what this component actually does and how it interacts with the system. Dimensions alone do not explain its technical function."
                   value={component.description}
                   onChange={(e) =>
                     update(component.id, { description: e.target.value })
@@ -1280,7 +1290,7 @@ export function EngineeringStudio({
             disabled={!spec.components.length}
             onClick={() => {
               try {
-                setDesignSession({ spec, source, imports, sourceFile: appliedSource || file || undefined });
+                setDesignSession({ spec, source, imports, sourceFile: appliedSource || file || undefined, documentPages });
               } catch {
                 setError("Review the component parameters before starting patent research. The current assembly contains invalid values.");
                 return;
@@ -1295,25 +1305,10 @@ export function EngineeringStudio({
                   "Browser parameter storage is unavailable. This tab retains the design and imported STEP references in memory; export editable parameters before closing it.",
                 );
               }
-              onPatentResearch(
-                `${spec.title}\nRepresentation goal: ${spec.goal || "User-selected components"}\n` +
-                  spec.components
-                    .map(
-                      (c) =>
-                        `${c.name}: ${c.description}\nCurrent design geometry (parameter review: ${measurementReview(c).state}): ${c.shape}; ${Object.entries(
-                          c.dimensions,
-                        )
-                          .filter(([, value]) => value !== null)
-                          .map(([name, value]) => `${name} ${value} mm`)
-                          .join(
-                            ", ",
-                          )}; material: ${c.material}. Connections: ${c.connections.join(", ") || "Not specified"}.`,
-                    )
-                    .join("\n"),
-              );
+              onPatentResearch(designFunctionText({ spec, source, imports, sourceFile: appliedSource || file || undefined, documentPages }));
             }}
           >
-            Review features for patent research
+            Check this design for related patents
           </Button>
           <Button
             variant="outline"
@@ -1450,6 +1445,7 @@ export function EngineeringStudio({
                   } else if (item.data.assembly) {
                     const next = AssemblySchema.parse(item.data.assembly);
                     setSpec(next);
+                    setDocumentPages([]);
                     setImports({});
                     setSelected(next.components[0]?.id || "");
                     setHidden([]);

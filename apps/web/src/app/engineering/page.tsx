@@ -21,8 +21,8 @@ export default function Engineering() {
       <main className="engineering-page" id="main-content">
         <EngineeringStudio
           onPatentResearch={(text) => {
-            sessionStorage.setItem("patentradar-engineering-handoff", text);
-            router.push("/");
+            void text;
+            router.push("/spot?from=design");
           }}
         />
       </main>

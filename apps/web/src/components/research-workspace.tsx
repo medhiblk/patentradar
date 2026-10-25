@@ -9,6 +9,7 @@ import { preparePdfVision } from "@/lib/documents/browser-pdf";
 import { isPdfSource, sourceFileError } from "@/lib/cad/source-files";
 import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 import { WorkspaceShell } from "./shell/workspace-shell";
 import { pageFromHash, workspaceHref } from "@/lib/navigation";
@@ -94,6 +95,7 @@ export default function Dashboard({
   startWithRealPatent?: boolean;
   initialSource?: ProjectSource;
 }) {
+  const spotRouter = useRouter();
   const [analysisModule, setAnalysisModule] = useState<"general" | "physical">(
     initialPage === "Physical Analysis" ? "physical" : "general",
   );
@@ -724,7 +726,7 @@ export default function Dashboard({
                     setNotice("Caractéristiques reprises de votre assemblage. Vérifiez les fonctions et les concepts avant de lancer la recherche.");
                   }
                   setReviewed(!!draft);
-                  go("New Analysis");
+                  spotRouter.push("/spot?from=design");
                 }}
               />
             )}

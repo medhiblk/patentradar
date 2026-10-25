@@ -82,8 +82,14 @@ test("source execution, analysed publications and feature evidence remain inspec
           .join("\n") + "\n",
     }),
   );
-  await page.goto("/");
-  await page.getByRole("button", { name: "Voir un cas brevet réel" }).click();
+  await page.goto("/#analyze");
+  await page.getByRole("button", { name: "Use public patent research brief", exact: true }).click();
+  await page.getByRole("button", { name: "Comprendre mon document", exact: true }).click();
+  await expect(page.getByLabel("Feature 1 name", { exact: true })).toBeVisible();
+  await page.getByLabel("Concepts qui seront envoyés aux sources publiques", { exact: true }).fill("EP1000000A1");
+  await page.getByRole("button", { name: "Use verified retrieval example", exact: true }).click();
+  await page.getByRole("checkbox", { name: /Share the reviewed search concepts/ }).check();
+  await page.getByRole("button", { name: "Trouver les brevets proches", exact: true }).click();
   const audit = page.getByRole("region", {
     name: "Search sources and analysed patents",
   });

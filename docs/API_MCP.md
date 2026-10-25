@@ -19,7 +19,7 @@ Base URL (public deployment): `https://patentradar-puce.vercel.app`
 - Discovery descriptor: `/.well-known/mcp.json`
 - Health: `/api/v1/health`; source configuration: `/api/v1/providers`
 
-Public research tools are anonymous and use actual provider records. Coverage is partial; an empty response is not clearance. Queries are sent externally only when `shareQuery=true`. Send short, reviewed public concepts, not confidential descriptions. Provider quotas and the application rate limit apply; respect HTTP429 and Retry-After. No paid OpenAI tool is exposed anonymously. All server-side credentials stay server-side.
+Public research tools are anonymous and use actual provider records. Coverage is partial; an empty response is not clearance. Keyword search queries are sent externally only when `shareQuery=true`. The document-matching tool has a separate, opt-in exact-publication verification flag described below. Send short, reviewed public concepts, not confidential descriptions. Provider quotas and the application rate limit apply; respect HTTP429 and Retry-After. No paid OpenAI tool is exposed anonymously. All server-side credentials stay server-side.
 
 ## HTTP examples
 
@@ -75,6 +75,7 @@ Official SDK transport, stateless JSON responses, protocol negotiation and valid
 |---|---|---|
 | `provider_status` | `{}` | Configuration and observed source health; UNTESTED is not healthy |
 | `search_patents` | `{query,shareQuery,sources?,seeds?}` | Actual parallel patent/research retrieval; explicit external-query sharing |
+| `spot_patent_text` | `{text,approveProcessing:true,verifyPublication?:false}` | Match approved text against the actual indexed public corpus; optional detected EP-number verification, no external AI |
 | `lookup_patent` | `{publicationNumber,publicationDate}` | Real EP A/B XML retrieval and available claim text |
 | `compare_patent_features` | `{profile,patents}` | Lexical, explained comparison of supplied records |
 | `extract_technical_profile` | `{text}` | Local literal extraction, no OpenAI call or external document transmission |
@@ -121,7 +122,7 @@ Production deployment READY at the base URL above. Official SDK client initializ
 - `POST /api/v1/cad/inspect`: validated assembly JSON. Returns missing measurements, computed pocket-envelope fit, per-currency known purchase subtotals and unverified rights declarations. It never searches patents or builds geometry. Its `patentClearance` is always `NOT ESTABLISHED`. Submit only data approved for processing by this server; no confidential request data is logged or forwarded externally by this operation.
 - Optional component metadata: `sourceName`, `referenceUrl`, `templateId`, `role`, `commerce` (HTTP(S) URL, nullable user-entered unit price, currency, recordedAt, basis), `rights` (status, evidenceUrl, note), and `pocket` (wall, floor, targetId). Unknown required dimensions remain null. Native build now supports the same open-top pocket cut, where the native runtime is configured.
 - Browser-only CAD also combines STEP-imported solids with parametric parts and can explicitly fuse touching/overlapping solids into one solid. Those operations run in the WASM worker; the public inspection API/MCP tools do not execute CAD. Native API does not accept STEP files mixed into its JSON build contract or perform the browser fusion option.
-- New MCP discovery exposes seven public tools. Earlier five-tool release observations above describe the older release.
+- New MCP discovery exposes eight public tools, including `spot_patent_text`. Earlier five/seven-tool observations describe older releases.
 
 See [component workbench](engineering/WORKBENCH.md) for reproduction and limitations.
 
@@ -146,3 +147,31 @@ See [storage setup and limits](PRIVATE_STORAGE.md). Native CAD, the sourced SQLi
 ### Search provenance
 
 Search results include optional `searchTrace` with per-run provider states/counts/queries, observed network or cache access, sanitized endpoint paths and actually observed HTTP statuses. Streaming search also emits `searchTrace` on `started` and `providerRun` updates on provider events. These fields are additive; existing publication/source fields remain unchanged. No secret-bearing query strings or headers are exposed. See [search and evidence semantics](SEARCH_EVIDENCE.md).
+
+
+## Document-to-patent matching: HTTP and MCP
+
+`POST /api/spot` is the anonymous document-matching endpoint used by `/spot`. It accepts **multipart/form-data** with either `file` (an actual PDF, up to 4 MB/80 pages) or `text` (a technical description of at least 30 characters, bounded to 60000 characters). Up to the first 20 PDF text pages are read; scanned PDFs without a usable text layer return a typed error rather than an invented result. `consent=true` optionally permits eligible publication numbers and dates detected in the document to be verified with EPO. The default performs no external lookup and does not send the document to an AI service.
+
+```bash
+curl -X POST https://patentradar-puce.vercel.app/api/spot \
+  -F 'file=@technical-document.pdf' \
+  -F 'consent=false'
+```
+
+The JSON response contains `identity`, `profile`, `matches`, `coverage`, `lookupTraces`, `warnings` and `document`. Each match includes its actual patent record, match type, evidence passages and limitations. `document` records the input SHA-256, page count, analysed pages, truncation and input kind. Exact-publication recognition is kept distinct from lexical technical overlap. Coverage is a bounded, attributed reference corpus plus any explicitly requested exact EPO lookup; it is not a worldwide keyword search or a novelty/FTO opinion. Inspect the reported analysed coverage before interpreting a missing match.
+
+MCP clients use **`spot_patent_text`** for approved text, not a PDF upload:
+
+```json
+{
+  "name": "spot_patent_text",
+  "arguments": {
+    "text": "User-approved technical text describing components and their operating functions...",
+    "approveProcessing": true,
+    "verifyPublication": false
+  }
+}
+```
+
+`approveProcessing` must be literal `true`; clients must obtain the user's approval before submitting their text to this server. The schema accepts 30–60000 characters, matching the engine’s bounded total text budget. The tool returns the same core matching evidence and coverage fields as the HTTP matcher, without a PDF-file manifest. `verifyPublication` defaults to `false`. When enabled, only eligible detected EP publication numbers and dates are shared with EPO; the full technical text is not forwarded. No account, paid model, arbitrary URL or expected result identifier is accepted. Tool processing failures return a sanitized `isError` response.

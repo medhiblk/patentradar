@@ -22,6 +22,12 @@ export const PUBLIC_MCP_TOOLS = [
       "Search patent metadata and literature with approved generic concepts.",
   },
   {
+    name: "spot_patent_text",
+    title: "Check a technical document",
+    detail:
+      "Match user-approved text against indexed public patent evidence; optional exact EPO verification, no external AI.",
+  },
+  {
     name: "lookup_patent",
     title: "Open an EP publication",
     detail:

@@ -1,10 +1,20 @@
 # FormaProof · PatentRadar
 
-**Document → reviewed components → editable 3D → patent evidence → design iteration.**
+**Upload a PDF → identify patent publications → inspect matching passages and sources.**
 
 Bring a technical manual, drawing or specification. Choose what to represent, check the measurements, build an assembly and investigate related patents. General patent research remains available for non-physical inventions.
 
 [Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [Real patent case](https://patentradar-puce.vercel.app/demo/patent) · [Use in ChatGPT](https://patentradar-puce.vercel.app/connect) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
+
+## Check a document now
+
+Open [/spot](https://patentradar-puce.vercel.app/spot), upload a PDF with selectable text and press **SPOT IT**. No account or AI key is needed for this check. The page identifies publication metadata from actual pages, compares against the attributed public medical reference index and can verify an eligible EP number/date through the public EPO Publication Server. Only publication identifiers/dates leave the application for that lookup, not the full document.
+
+Identifier recognition, reproduced-publication text and technical-term overlap are reported separately, with source passages and retrieval timestamps. The current index contains 18 real medical publications; it is not worldwide patent coverage. An empty result does not prove that no patent exists or that manufacture is permitted. Scans without a readable text layer need OCR; the page reports that limitation rather than returning false clearance.
+
+Existing 3D tools remain at [/engineering](https://patentradar-puce.vercel.app/engineering). **Check this design for related patents** transfers current component functions to the same check while retaining the assembly in this tab.
+
+API: `POST /api/spot` with multipart `file` or `text`; optional `consent=true` permits exact EP verification. MCP: `spot_patent_text` with explicit processing approval. See [HTTP/MCP documentation](docs/API_MCP.md), [reference data provenance](docs/MEDTECH_REFERENCE_CORPUS.md) and [blind acceptance cases](docs/evaluation/README.md).
 
 ## Work from any environment
 

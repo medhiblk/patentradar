@@ -7,6 +7,8 @@ export type DesignSession = {
   source: { name: string; hash: string };
   imports: Record<string, ImportedSolid>;
   sourceFile?: File;
+  /** Literal source text only; never generated component descriptions. */
+  documentPages?: { page: number; text: string }[];
 };
 let retained: DesignSession | null = null;
 let listening = false;
@@ -18,6 +20,7 @@ export function setDesignSession(value: DesignSession) {
     spec: structuredClone(spec),
     source: { ...value.source },
     sourceFile: value.sourceFile,
+    documentPages: value.documentPages?.slice(0, 20).map(page => ({ page: page.page, text: page.text.slice(0, 8000) })),
     imports: Object.fromEntries(Object.entries(value.imports)
       .filter(([id]) => ids.has(id))
       .map(([id, source]) => [id, { ...source }])),
@@ -30,6 +33,7 @@ export function setDesignSession(value: DesignSession) {
 export function peekDesignSession(): DesignSession | null {
   return retained ? {
     spec: structuredClone(retained.spec), source: { ...retained.source }, sourceFile: retained.sourceFile,
+    documentPages: retained.documentPages?.map(page => ({ ...page })),
     imports: Object.fromEntries(Object.entries(retained.imports).map(([id, source]) => [id, { ...source }])),
   } : null;
 }

@@ -62,7 +62,7 @@ test("guided demo builds real editable CAD from the synthetic source PDF", async
   ).toBe(true);
   await page
     .getByRole("button", {
-      name: "Review features for patent research",
+      name: "Check this design for related patents",
       exact: true,
     })
     .click();

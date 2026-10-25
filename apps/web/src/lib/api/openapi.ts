@@ -30,12 +30,20 @@ export const openapi = {
   openapi: "3.1.0",
   info: {
     title: "PatentRadar API",
-    version: "1.3.0",
+    version: "1.4.0",
     description:
       "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. Native CAD requires its configured runtime and account access. Original private files require full owner sessions and configured private Blob/local storage. No legal FTO conclusions.",
   },
   servers: [{ url: "/", description: "Current host" }],
   paths: {
+    "/api/spot": {
+      post: {
+        operationId: "spotPatentDocument",
+        summary: "Recognize an uploaded patent and compare document passages against the attributed public MedTech reference index.",
+        requestBody: { required: true, content: { "multipart/form-data": { schema: { type: "object", properties: { file: { type: "string", format: "binary", description: "Optional text-based PDF, max4MiB/80pages; first20 textpages." }, text: { type: "string", maxLength: 60000, description: "Alternative technical description; minimum30characters. Ignored whenPDFsupplied." }, consent: { type: "string", enum: ["true", "false"], default: "false", description: "Allow exactEPlookup using detectedpublicationnumber/date only. Never sendsfulldocumenttoEPO." } } } } } },
+        responses: { "200": { description: "Identity candidates, sourced matches and passages, corpus/live-lookup coverage and actual inputSHA/pagecoverage. Identifier recognition is separate from technical overlap; not global/FTOclearance." }, "400": { description: "Invalid document." }, "413": { description: "Upload too large." }, "415": { description: "Unsupportedformat." }, "422": { description: "Unreadable/scannedPDF or insufficienttechnicaltext." }, "429": { description: "Rate limited." }, "503": { description: "Temporaryprocessingfailure." } },
+      },
+    },
     ...attachmentPaths,
     "/api/v1/datasets": {
       get: {

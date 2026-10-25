@@ -52,12 +52,12 @@ test("three project seeds reach consented search and live results remain usable"
     .fill("EP2345898B1\nCN102299288B\nJP1234567B2");
   await page.getByRole("button", { name: "Review technical features" }).click();
   await page
-    .getByRole("button", { name: "Extract technical features" })
+    .getByRole("button", { name: "Comprendre mon document" })
     .click();
   await page
     .getByRole("checkbox", { name: /Share the reviewed search concepts/ })
     .check();
-  await page.getByRole("button", { name: "Retrieve & compare" }).click();
+  await page.getByRole("button", { name: "Trouver les brevets proches" }).click();
   await expect.poll(() => received.length).toBe(3);
   await expect(page.getByText("No fixture patents.")).toBeVisible();
 });

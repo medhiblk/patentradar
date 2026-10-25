@@ -60,8 +60,8 @@ export function AppNavigation({
         className={"app-nav-links" + (open ? " is-open" : "")}
         aria-label="Main navigation"
       >
-        <a href="/demo" aria-current={page === "Demo" ? "page" : undefined}>
-          Démo
+        <a href="/files" aria-current={page === "Files" ? "page" : undefined}>
+          My files
         </a>
         <a
           href="/connect"
@@ -71,8 +71,8 @@ export function AppNavigation({
         </a>
       </nav>
       <div className="app-nav-actions">
-        <a href="/workspace" className="nav-workspace-link">
-          Nouveau projet <ArrowUpRight size={13} />
+        <a href="/spot" className="nav-workspace-link">
+          Check PDF <ArrowUpRight size={13} />
         </a>
         <button
           ref={toggle}

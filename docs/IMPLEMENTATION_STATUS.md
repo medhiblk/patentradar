@@ -63,3 +63,8 @@ Moved the working application into `apps/web`; extracted canonical contracts, en
 ## Reliability and adaptive workflow — 2026-10-25
 
 Six parallel work areas corrected document ingestion, measurement provenance, stale CAD exports, same-tab assembly continuity, evidence ranking and manual-watch history. The adaptive project intake is now `/workspace`. See [implementation and limits](RELIABILITY_FIXES.md) and [validation record](RELIABILITY_RELEASE.json). Keyless EP enrichment is exact document retrieval from known dates, not a worldwide search engine. Final production tests are left to the user.
+
+
+## Real PDF-to-patent workflow — 2026-10-25
+
+The primary site action is `/spot`: real PDF upload, publication recognition from actual pages, sourced comparison and optional public EPO exact retrieval. No new demo page is included. The real medical reference corpus contains 18 publications; current coverage is explicit. Blind uploads, metadata-redacted text, independent technical descriptions and a real outside-index EPO lookup are separately verified. See [release evidence](SITE_RELEASE.json) and [blind acceptance observations](evaluation/local-blind-verification.json).

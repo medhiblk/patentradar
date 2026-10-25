@@ -1,0 +1,51 @@
+{
+  "description": "Small curated evaluation using real public patent records. Expected identifiers are evaluation labels, never supplied to the matching engine as hints.",
+  "blindPdf": {
+    "path": "apps/web/public/examples/medtech/sample-document-03.pdf",
+    "publicationNumber": "EP3590450A1",
+    "title": "ATTACHMENT POSITION CONFIRMATION MEMBER, OSTEOTOMY ASSISTANCE KIT, AND POSITION DETECTION PROGRAM",
+    "applicants": [
+      "Goto, Makoto"
+    ],
+    "inventors": [
+      "Goto, Makoto"
+    ],
+    "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20200108/patents/EP3590450NWA1/document.pdf"
+  },
+  "positives": [
+    {
+      "label": "Osteotomy attachment confirmation — independently phrased technical description",
+      "publicationNumber": "EP3590450A1",
+      "text": "An osteotomy guide has cutting slits and guide holes that keep bone fixation rods in a planned relation after correction. A removable feature-point indication rod touches an anatomical landmark and is held by a rod support unit on a sliding elongate member. A second support reads graduated scales to confirm where the surgical guide sits on the bone."
+    },
+    {
+      "label": "Recapturable vascular support — independently phrased technical description",
+      "publicationNumber": "EP1000590A1",
+      "text": "A self-expanding tubular stent has separate elongated legs projecting from its proximal side. Retaining flanges near the proximal tips engage a second implanted graft. The delivery catheter permits the clinician to recapture and reposition this support before its final deployment."
+    },
+    {
+      "label": "Femoral fixation — French description matching the original French claims",
+      "publicationNumber": "EP1000594A1",
+      "text": "Une prothèse de hanche relie une tête articulaire à une tige ancrée dans le canal du fémur par du ciment. Sa zone de fixation présente une silhouette en étrave, avec un bord médian courbe adapté à l’os. Un rebord sépare la partie d’assemblage des zones qui s’évasent vers l’arrière et vers l’avant."
+    }
+  ],
+  "negativeText": "A bamboo garden parasol has a linen canopy, folding ribs and a hand-pulled rope over a pulley. A wooden crank opens the fabric cover and a stone base holds the mast upright.",
+  "historicalBlindPdf": {
+    "path": "apps/web/public/examples/medtech/sample-document-01.pdf",
+    "publicationNumber": "EP1000590A1",
+    "title": "An improved stent which is easly recaptured and repositioned within the body",
+    "applicants": [
+      "Cordis Corporation"
+    ],
+    "inventors": [
+      "Letendre, Robert P.",
+      "Solovay, Kenneth S."
+    ],
+    "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000590NWA1/document.pdf"
+  },
+  "liveLookupControl": {
+    "publicationNumber": "EP1000000A1",
+    "publicationDate": "20000517",
+    "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.pdf"
+  }
+}

@@ -6,7 +6,7 @@ test("home links to a usable ChatGPT connection guide and public MCP discovery",
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }).getByRole("link"),
   ).toHaveCount(2);
-  await page.getByRole("link", { name: "Connecter FormaProof", exact: true }).click();
+  await page.getByRole("link", { name: "Connect FormaProof", exact: true }).click();
   await expect(page).toHaveURL(/\/connect$/);
   await expect(
     page.getByRole("link", { name: "Open ChatGPT Plugins", exact: true }),
@@ -20,7 +20,7 @@ test("home links to a usable ChatGPT connection guide and public MCP discovery",
   await expect(
     page
       .getByRole("status")
-      .filter({ hasText: "MCP reachable · 7 public tools discovered" }),
+      .filter({ hasText: "MCP reachable · 8 public tools discovered" }),
   ).toBeVisible({ timeout: 30000 });
   const download = page.waitForEvent("download");
   await page
