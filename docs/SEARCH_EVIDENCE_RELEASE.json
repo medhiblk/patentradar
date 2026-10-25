@@ -1,0 +1,609 @@
+{
+  "checkedAt": "2026-10-25T17:16:31.440555+00:00",
+  "production": {
+    "url": "https://patentradar-puce.vercel.app",
+    "state": "READY",
+    "deploymentId": "dpl_5TkCCW27ucgTdg13wegbgUj1ZLCE",
+    "applicationCommit": "e69af29cb5b50617325cefa334e1d824282305ef",
+    "repository": "https://github.com/medhiblk/patentradar"
+  },
+  "automatedTests": {
+    "unitIntegration": {
+      "testsPassed": 113,
+      "filesPassed": 19,
+      "externalHTTPMocked": true
+    },
+    "localBrowser": {
+      "startTime": "2026-10-25T17:06:42.622Z",
+      "duration": 56858.048,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "productionBrowser": {
+      "startTime": "2026-10-25T17:11:16.131Z",
+      "duration": 20893.51,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0,
+      "scenarios": [
+        "Source panel, publication inspection, highlighted claim passages and responsive layout using an explicitly mocked provider fixture.",
+        "Unmocked known-reference ingestion, actual private portfolio/PDF storage, reopening saved search/evidence, source page link, persisted alert review and test-project deletion."
+      ]
+    },
+    "checks": [
+      "TypeScript passed",
+      "ESLint passed",
+      "Production build passed",
+      "Private trace scan: 41 manifests; zero private entries"
+    ]
+  },
+  "realProductionSearch": {
+    "checkedAt": "2026-10-25T17:11:40.058Z",
+    "httpStatus": 200,
+    "elapsedMs": 22958,
+    "streamEvents": 53,
+    "query": "green brick manufacturing",
+    "seed": {
+      "publicationNumber": "EP1000000A1",
+      "publicationDate": "20000517"
+    },
+    "claimsForSeed": 11,
+    "analysedPublications": [
+      "EP1000000A1",
+      "CN101402520A",
+      "GB2483426A",
+      "CN101130734B",
+      "US20100274349A1",
+      "CN101248817A",
+      "CN101248818B",
+      "KR20040066423A",
+      "CN101830613B",
+      "US20110020493A1",
+      "CN101278690B",
+      "WO2019211654A1",
+      "CN112079622A",
+      "CN110524709A",
+      "CN112659325A",
+      "CN112776169A"
+    ],
+    "sourceRuns": [
+      {
+        "id": "EPO EP1000000A1",
+        "name": "EPO EP1000000A1",
+        "category": "patent",
+        "method": "publication-lookup",
+        "documentation": "https://data.epo.org/publication-server",
+        "coverage": "Exact EP publication lookup with a supplied publication date; not unrestricted keyword search.",
+        "queries": [
+          "EP1000000A1"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 1,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "EP1000000A1"
+        ],
+        "requests": [
+          {
+            "provider": "epo-publication",
+            "endpoint": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+            "observedAt": "2026-10-25T17:11:18.093Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.093Z",
+        "completedAt": "2026-10-25T17:11:18.537Z",
+        "elapsedMs": 444
+      },
+      {
+        "id": "Local sourced patent index",
+        "name": "Local sourced patent index",
+        "category": "local",
+        "method": "local-index",
+        "coverage": "Previously cached or authorized imported records only; original providers remain attributed.",
+        "queries": [
+          "green brick manufacturing",
+          "EP1000000A1"
+        ],
+        "status": "failed",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 0,
+        "patentNumbers": [],
+        "requests": [],
+        "startedAt": "2026-10-25T17:11:18.094Z",
+        "completedAt": "2026-10-25T17:11:18.118Z",
+        "elapsedMs": 24,
+        "message": "Provider unavailable or response could not be validated."
+      },
+      {
+        "id": "OpenAIRE Graph",
+        "name": "OpenAIRE Graph",
+        "category": "mixed",
+        "method": "keyword-search",
+        "documentation": "https://graph.openaire.eu/faq",
+        "coverage": "Literature-linked patent metadata and scientific works. This is a partial patent subset; claims may be absent.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 8,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "openaire",
+            "endpoint": "https://api.openaire.eu/search/publications",
+            "observedAt": "2026-10-25T17:11:18.096Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.095Z",
+        "completedAt": "2026-10-25T17:11:19.242Z",
+        "elapsedMs": 1147
+      },
+      {
+        "id": "DataCite",
+        "name": "DataCite",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://support.datacite.org/docs/api",
+        "coverage": "Research dataset and publication metadata; not a patent database.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 4,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "datacite",
+            "endpoint": "https://api.datacite.org/dois",
+            "observedAt": "2026-10-25T17:11:18.097Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.096Z",
+        "completedAt": "2026-10-25T17:11:18.555Z",
+        "elapsedMs": 459
+      },
+      {
+        "id": "HAL",
+        "name": "HAL",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://api.archives-ouvertes.fr/docs",
+        "coverage": "French open research repository; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "failed",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 0,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "hal",
+            "endpoint": "https://api.hal.science/search/",
+            "observedAt": "2026-10-25T17:11:18.119Z",
+            "servedFrom": "network",
+            "errorCode": "UNAVAILABLE"
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.119Z",
+        "completedAt": "2026-10-25T17:11:38.122Z",
+        "elapsedMs": 20003,
+        "message": "Provider unavailable or response could not be validated."
+      },
+      {
+        "id": "arXiv",
+        "name": "arXiv",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://info.arxiv.org/help/api/index.html",
+        "coverage": "Scientific preprint metadata; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "empty",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 0,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "arxiv",
+            "endpoint": "https://export.arxiv.org/api/query",
+            "observedAt": "2026-10-25T17:11:18.539Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.539Z",
+        "completedAt": "2026-10-25T17:11:18.608Z",
+        "elapsedMs": 69
+      },
+      {
+        "id": "Zenodo",
+        "name": "Zenodo",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://developers.zenodo.org/",
+        "coverage": "Research records and datasets; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 4,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "zenodo",
+            "endpoint": "https://zenodo.org/api/records",
+            "observedAt": "2026-10-25T17:11:18.556Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.555Z",
+        "completedAt": "2026-10-25T17:11:19.759Z",
+        "elapsedMs": 1203
+      },
+      {
+        "id": "Crossref",
+        "name": "Crossref",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+        "coverage": "DOI metadata for scientific prior art; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 6,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "crossref",
+            "endpoint": "https://api.crossref.org/works",
+            "observedAt": "2026-10-25T17:11:18.609Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.609Z",
+        "completedAt": "2026-10-25T17:11:18.916Z",
+        "elapsedMs": 307
+      },
+      {
+        "id": "OpenAlex",
+        "name": "OpenAlex",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://docs.openalex.org/",
+        "coverage": "Scientific literature metadata; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 6,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "openalex",
+            "endpoint": "https://api.openalex.org/works",
+            "observedAt": "2026-10-25T17:11:18.918Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:18.917Z",
+        "completedAt": "2026-10-25T17:11:19.288Z",
+        "elapsedMs": 371
+      },
+      {
+        "id": "Europe PMC scientific",
+        "name": "Europe PMC scientific",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://europepmc.org/RestfulWebService",
+        "coverage": "MED/PMC scientific records only; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 4,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "europe-pmc-research",
+            "endpoint": "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+            "observedAt": "2026-10-25T17:11:19.243Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:19.243Z",
+        "completedAt": "2026-10-25T17:11:19.746Z",
+        "elapsedMs": 503
+      },
+      {
+        "id": "PubMed",
+        "name": "PubMed",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://www.ncbi.nlm.nih.gov/books/NBK25501/",
+        "coverage": "Biomedical scientific literature; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 4,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "pubmed",
+            "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+            "observedAt": "2026-10-25T17:11:19.289Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          },
+          {
+            "provider": "pubmed",
+            "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
+            "observedAt": "2026-10-25T17:11:19.839Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:19.289Z",
+        "completedAt": "2026-10-25T17:11:19.923Z",
+        "elapsedMs": 634
+      },
+      {
+        "id": "Europe PMC",
+        "name": "Europe PMC",
+        "category": "patent",
+        "method": "keyword-search",
+        "documentation": "https://europepmc.org/RestfulWebService",
+        "coverage": "Optional legacy patent archive; incomplete coverage.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 10,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "KR20040066423A",
+          "CN101402520A",
+          "CN101830613B",
+          "CN101130734B",
+          "CN101248817A",
+          "CN101248818B",
+          "GB2483426A",
+          "US20100274349A1",
+          "US20110020493A1",
+          "CN101278690B"
+        ],
+        "requests": [
+          {
+            "provider": "europe-pmc",
+            "endpoint": "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+            "observedAt": "2026-10-25T17:11:19.748Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:19.747Z",
+        "completedAt": "2026-10-25T17:11:20.798Z",
+        "elapsedMs": 1051
+      },
+      {
+        "id": "Semantic Scholar",
+        "name": "Semantic Scholar",
+        "category": "research",
+        "method": "keyword-search",
+        "documentation": "https://api.semanticscholar.org/api-docs/graph",
+        "coverage": "Scientific paper metadata; not patent search.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "failed",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 0,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "semantic-scholar",
+            "endpoint": "https://api.semanticscholar.org/graph/v1/paper/search",
+            "observedAt": "2026-10-25T17:11:19.760Z",
+            "servedFrom": "network",
+            "httpStatus": 429,
+            "errorCode": "RATE_LIMITED"
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:19.759Z",
+        "completedAt": "2026-10-25T17:11:20.946Z",
+        "elapsedMs": 1187,
+        "message": "Rate-limited; retry later."
+      },
+      {
+        "id": "VeyIP MCP",
+        "name": "VeyIP MCP",
+        "category": "patent",
+        "method": "keyword-search",
+        "documentation": "https://www.veyip.com/api/mcp",
+        "coverage": "Experimental provider enabled explicitly; access and coverage may vary.",
+        "queries": [
+          "green brick manufacturing"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 5,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "WO2019211654A1",
+          "CN112079622A",
+          "CN110524709A",
+          "CN112659325A",
+          "CN112776169A"
+        ],
+        "requests": [
+          {
+            "provider": "veyip",
+            "endpoint": "https://www.veyip.com/api/mcp",
+            "observedAt": "2026-10-25T17:11:19.924Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          },
+          {
+            "provider": "veyip",
+            "endpoint": "https://www.veyip.com/api/mcp",
+            "observedAt": "2026-10-25T17:11:21.073Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:19.924Z",
+        "completedAt": "2026-10-25T17:11:21.843Z",
+        "elapsedMs": 1919
+      },
+      {
+        "id": "Public document enrichment EP1000000A1",
+        "name": "Public document enrichment EP1000000A1",
+        "category": "patent",
+        "method": "publication-lookup",
+        "coverage": "Optional public document enrichment; not BigQuery search.",
+        "queries": [
+          "EP1000000A1"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 1,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "EP1000000A1"
+        ],
+        "requests": [
+          {
+            "provider": "patent-pages",
+            "endpoint": "https://patents.google.com/patent/EP1000000A1/en",
+            "observedAt": "2026-10-25T17:11:38.133Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:38.132Z",
+        "completedAt": "2026-10-25T17:11:38.796Z",
+        "elapsedMs": 664
+      },
+      {
+        "id": "Public document enrichment CN101402520A",
+        "name": "Public document enrichment CN101402520A",
+        "category": "patent",
+        "method": "publication-lookup",
+        "coverage": "Optional public document enrichment; not BigQuery search.",
+        "queries": [
+          "CN101402520A"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 1,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "CN101402520A"
+        ],
+        "requests": [
+          {
+            "provider": "patent-pages",
+            "endpoint": "https://patents.google.com/patent/CN101402520A/en",
+            "observedAt": "2026-10-25T17:11:38.133Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:38.133Z",
+        "completedAt": "2026-10-25T17:11:39.934Z",
+        "elapsedMs": 1801
+      },
+      {
+        "id": "Public document enrichment GB2483426A",
+        "name": "Public document enrichment GB2483426A",
+        "category": "patent",
+        "method": "publication-lookup",
+        "coverage": "Optional public document enrichment; not BigQuery search.",
+        "queries": [
+          "GB2483426A"
+        ],
+        "status": "failed",
+        "patentsRetrieved": 0,
+        "papersRetrieved": 0,
+        "patentNumbers": [],
+        "requests": [
+          {
+            "provider": "patent-pages",
+            "endpoint": "https://patents.google.com/patent/GB2483426A/en",
+            "observedAt": "2026-10-25T17:11:38.133Z",
+            "servedFrom": "network",
+            "errorCode": "RATE_LIMITED"
+          }
+        ],
+        "startedAt": "2026-10-25T17:11:38.133Z",
+        "message": "Enrichment unavailable; original evidence retained.",
+        "completedAt": "2026-10-25T17:11:38.135Z",
+        "elapsedMs": 2
+      }
+    ],
+    "notQueried": [
+      {
+        "name": "Google Patents Public Data / BigQuery",
+        "reason": "Not enabled or missing project configuration. Google Patents links are references, not evidence of a BigQuery search."
+      },
+      {
+        "name": "EPO OPS",
+        "reason": "Authenticated credentials are not configured."
+      }
+    ],
+    "note": "Actual configured production adapters; no mocked external responses. Provider jobs include repeated document-enrichment operations and separate capabilities on the same source, not independent database counts. An exact EP seed lookup is not worldwide full-text keyword search. Failed and empty sources remain recorded."
+  },
+  "unmockedBrowserStory": {
+    "base": "https://patentradar-puce.vercel.app",
+    "checkedAt": "2026-10-25T17:15:11.934Z",
+    "method": "Real browser CTA -> unmocked streaming search -> external provider data -> rendered source audit and patent evidence",
+    "completed": true,
+    "sourceJobs": 17,
+    "analysedPublications": 16,
+    "epPatentVisible": true,
+    "evidenceSource": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+    "highlightedTerms": 45,
+    "pageErrors": 0
+  },
+  "visualChecks": {
+    "desktop": "Source audit and highlighted excerpt screenshots inspected.",
+    "mobile": "390px viewport: no horizontal overflow in source/evidence fixtures and actual US reference case.",
+    "referenceHighlightedTerms": 20
+  },
+  "runtimeLogScan": {
+    "deploymentId": "dpl_5TkCCW27ucgTdg13wegbgUj1ZLCE",
+    "checkedAt": "2026-10-25T17:13:50.816Z",
+    "window": "10 minutes",
+    "level": "error",
+    "result": "No matching runtime logs. Provider availability failures are separately represented in the execution trace; this is not an uptime guarantee."
+  },
+  "limitations": [
+    "The US20080003142A1 demo uses a preselected verified snapshot, not a new worldwide search; no BigQuery query is performed in that case.",
+    "No claims, abstracts or source pages are invented. Title-only records are explicitly labeled.",
+    "Lexical feature overlap is not a legal or semantic-equivalence conclusion.",
+    "Older saved reports have no reconstructed execution history.",
+    "Cached HTTP results are identified as reused. Query strings, credentials, headers and response bodies are excluded from HTTP observations.",
+    "Availability is run-specific. The local index is unavailable on the Vercel runtime without a persistent local volume; other adapters continue.",
+    "Experimental/optional adapters use existing explicit production feature flags; this change did not enable new providers or supply credentials."
+  ]
+}
