@@ -1,3 +1,4 @@
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { request } from "./http";
 import type { PatentGraphRecord } from "./contracts";
@@ -67,7 +68,7 @@ export async function lookupApplication(application: string) {
   if (!/^\d{8,12}$/.test(application))
     throw new Error("Invalid EP application number");
   const url =
-    "https://data.epo.org/linked-data/doc/application/EP/" +
+    endpoint(["EPO_LINKED_DATA_URL"], "https://data.epo.org/linked-data") + "/doc/application/EP/" +
     application +
     ".json";
   return parseApplication(JSON.parse(await request("epo-linked", url)), url);
@@ -97,7 +98,7 @@ export async function lookupApplicationRdf(application: string) {
   if (!/^\d{8,12}$/.test(application))
     throw new Error("Invalid EP application number");
   const url =
-    "https://data.epo.org/linked-data/doc/application/EP/" +
+    endpoint(["EPO_LINKED_DATA_URL"], "https://data.epo.org/linked-data") + "/doc/application/EP/" +
     application +
     ".ttl";
   return {

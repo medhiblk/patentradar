@@ -1,4 +1,4 @@
-import { wikidataSparqlUrl } from "./urls";
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { request } from "./http";
 import type { OrganizationRecord } from "./contracts";
@@ -158,7 +158,9 @@ export async function wikidataRelations(qid: string) {
   if (!/^Q[1-9]\d{0,12}$/.test(qid))
     throw new Error("Wikidata lookup requires a Q identifier.");
   const query = `PREFIX wd: <http://www.wikidata.org/entity/> PREFIX wdt: <http://www.wikidata.org/prop/direct/> PREFIX wikibase: <http://wikiba.se/ontology#> PREFIX bd: <http://www.bigdata.com/rdf#> SELECT ?property ?target ?targetLabel WHERE { VALUES ?property {wdt:P749 wdt:P127 wdt:P355} wd:${qid} ?property ?target . SERVICE wikibase:label {bd:serviceParam wikibase:language "en".} } LIMIT 20`;
-  const url = wikidataSparqlUrl();
+  const url = new URL(
+    endpoint(["WIKIDATA_SPARQL_URL", "WIKIDATA_API_URL"], "https://query.wikidata.org/sparql"),
+  );
   url.searchParams.set("query", query);
   url.searchParams.set("format", "json");
   const data = z

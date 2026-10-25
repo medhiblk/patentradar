@@ -66,7 +66,8 @@ Official SDK transport, stateless JSON responses, protocol negotiation and valid
 | `search_patents` | `{query,shareQuery,sources?,seeds?}` | Actual parallel patent/research retrieval; explicit external-query sharing |
 | `lookup_patent` | `{publicationNumber,publicationDate}` | Real EP A/B XML retrieval and available claim text |
 | `compare_patent_features` | `{profile,patents}` | Lexical, explained comparison of supplied records |
-| `extract_technical_profile` | `{text}` | Local literal extraction, no OpenAI call or external document transmission |
+| `extract_technical_profile` | `{text}` | Literal extraction on the remote PatentRadar server; no onward OpenAI call |
+| `query_source` | `{provider, query, consent: true, operation?, page?, publicationDate?}` | Direct source queries with explicit per-source status |
 | `component_library` | `{}` | Starter templates and manufacturer footprint references, no live supplier retrieval |
 | `inspect_assembly` | Assembly schema | Missing geometry, housing-envelope checks, known user-entered costs and unverified rights evidence; no external calls or patent clearance |
 
@@ -114,6 +115,7 @@ Production deployment READY at the base URL above. Official SDK client initializ
 
 See [component workbench](engineering/WORKBENCH.md) for reproduction and limitations.
 
+The PatentRadar plugin uses `/api/mcp/patents`: six public patent/research tools only. CAD and private project tools remain on `/api/mcp`. Dataset catalogues are queried with `query_source` and are never counted as imported patents.
 ## Public source configuration and dataset catalogues
 
 `EPO_PUBLICATION_SERVER_URL`, `OPENALEX_API_URL` and `WIKIDATA_SPARQL_URL` are compatible server-side aliases. Europe PMC scientific discovery is enabled for MED/PMC article metadata in the parallel search flow and Source Explorer, using `EUROPE_PMC_API_URL`. The legacy PAT archive remains disabled. Scientific titles/identifiers/year links are returned; abstracts/full text are not redistributed by the new adapter.

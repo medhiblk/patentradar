@@ -1,3 +1,4 @@
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { request, invalidResponse } from "./http";
 import type { Paper } from "./types";
@@ -26,7 +27,7 @@ export async function search(query: string) {
       JSON.parse(
         await request(
           "crossref",
-          `${process.env.CROSSREF_API_URL || (process.env.CROSSREF_BASE_URL || "https://api.crossref.org") + "/works"}?query=${encodeURIComponent(query)}&rows=6`,
+          `${endpoint(["CROSSREF_API_URL", "CROSSREF_URL", "CROSSREF_BASE_URL"], "https://api.crossref.org", "/works")}?query=${encodeURIComponent(query)}&rows=6`,
         ),
       ),
     );

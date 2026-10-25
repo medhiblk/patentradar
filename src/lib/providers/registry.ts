@@ -1,6 +1,7 @@
 import type { Provider, ProviderCapability } from "./types";
 import { endpointCatalogue } from "./eligibility";
 import { observations } from "./http";
+import { providerSetup } from "./setup";
 const entry = (
   id: string,
   name: string,
@@ -24,6 +25,8 @@ const entry = (
 });
 export function registry(): Provider[] {
   const list = [
+    entry("uspto-datasets", "USPTO research dataset catalogue", ["dataset-discovery"], "Public catalogue, no key", "https://www.uspto.gov/ip-policy/economic-research/research-datasets", "Dataset discovery only; not the authenticated USPTO patent search API. Files require separate import.", true),
+    entry("patentsview-bulk", "PatentsView bulk dataset catalogue", ["dataset-discovery"], "Public catalogue, no key", "https://www.uspto.gov/ip-policy/economic-research/patentsview", "Current USPTO ODP catalogue after the 2026 migration. Lists datasets; does not imply imported patent records.", true),
     ...[
       [
         "openaire",
@@ -262,11 +265,11 @@ export function registry(): Provider[] {
     entry(
       "lens",
       "Lens",
-      [],
+      ["patent-search"],
       "Approved API token",
       "https://docs.api.lens.org/",
-      "Authorized search adapter pending.",
-      false,
+      "Bounded authenticated patent search implemented; approved token and live verification required.",
+      true,
       !!process.env.LENS_API_TOKEN,
     ),
     entry(
@@ -342,6 +345,7 @@ export function registry(): Provider[] {
         : endpointCatalogue.find((e) => e.provider === (aliases[p.id] || p.id));
     return {
       ...p,
+      setup: providerSetup[p.id],
       tier:
         p.tier ||
         (p.id === "patent-pages" ? "C" : (evidence?.tier as Provider["tier"])),

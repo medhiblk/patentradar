@@ -52,25 +52,29 @@ export function plan(input: SearchInput): {
       "Review and supply a short search concept before searching. Your description will not be used as a fallback.",
     );
   const warnings: string[] = [];
-  const jobs: Job[] = [
-    {
-      name: "Local sourced patent index",
-      run: async () => ({
-        patents: deduplicate([
-          ...(await localIndex.search(query)),
-          ...(await localIndex.lookup([
-            ...input.seedPublications.map(
-              (s) => patentSeed(s.publicationNumber).publicationNumber,
-            ),
-            ...(input.publicationNumber
-              ? [patentSeed(input.publicationNumber).publicationNumber]
-              : []),
-          ])),
-        ]),
-        papers: [],
-      }),
-    },
-  ];
+  const jobs: Job[] = localIndex.enabled()
+    ? [
+        {
+          name: "Local sourced patent index",
+          run: async () => ({
+            patents: deduplicate([
+              ...(await localIndex.search(query)),
+              ...(await localIndex.lookup([
+                ...input.seedPublications.map(
+                  (s) => patentSeed(s.publicationNumber).publicationNumber,
+                ),
+                ...(input.publicationNumber
+                  ? [patentSeed(input.publicationNumber).publicationNumber]
+                  : []),
+              ])),
+            ]),
+            papers: [],
+          }),
+        },
+      ]
+    : [];
+  if (input.sources === "local" && !localIndex.enabled())
+    throw new Error("Local patent index is not configured on this deployment.");
   if (input.sources === "local")
     return {
       jobs,
@@ -86,6 +90,9 @@ export function plan(input: SearchInput): {
   paper("HAL", () => extra.hal(query));
   paper("arXiv", () => extra.arxiv(query));
   paper("Zenodo", () => extra.zenodo(query));
+  paper("NASA NTRS", () => extra.nasa(query));
+  paper("DOE OSTI", () => extra.doe(query));
+  paper("INSPIRE", () => extra.inspire(query));
   paper("Crossref", () => crossref.search(query));
   paper("OpenAlex", () => openalex.search(query));
   paper("Europe PMC scientific", () => epmcResearch.search(query));
@@ -199,6 +206,14 @@ export async function execute(
     let patents: PatentRecord[] = [];
     const papers: Paper[] = [];
     const warnings = [...planned.warnings];
+    const sourceResults: {
+      provider: string;
+      status: string;
+      patents?: number;
+      papers?: number;
+      elapsedMs: number;
+      code?: string;
+    }[] = [];
     send("started");
     await Promise.all(
       Array.from({ length: Math.min(4, jobs.length) }, async () => {
@@ -212,13 +227,17 @@ export async function execute(
             patents = deduplicate([...patents, ...records.patents]);
             localIndex.indexPatents(records.patents);
             papers.push(...records.papers);
-            for (const candidate of deduplicate(records.patents).map(
-              (p) =>
-                patents.find(
-                  (v) => v.publicationNumber === p.publicationNumber,
-                )!,
+            for (const candidate of deduplicate(records.patents).map((p) =>
+              patents.find((v) => v.publicationNumber === p.publicationNumber)!,
             ))
               send("candidate_upsert", { provider: job.name, candidate });
+            sourceResults.push({
+              provider: job.name,
+              status: "HEALTHY",
+              patents: records.patents.length,
+              papers: records.papers.length,
+              elapsedMs: Date.now() - began,
+            });
             send("provider_finished", { provider: job.name });
             console.info(
               JSON.stringify({
@@ -230,7 +249,17 @@ export async function execute(
                 elapsedMs: Date.now() - began,
               }),
             );
-          } catch {
+          } catch (error) {
+            sourceResults.push({
+              provider: job.name,
+              status: "UNAVAILABLE",
+              code:
+                error instanceof Error &&
+                ["ZodError", "SyntaxError"].includes(error.name)
+                  ? "INVALID_RESPONSE"
+                  : "SOURCE_FAILED",
+              elapsedMs: Date.now() - began,
+            });
             warnings.push(
               `${job.name} unavailable or rate-limited; other sources continue.`,
             );
@@ -289,7 +318,8 @@ export async function execute(
         .map(([c]) => c)
         .slice(0, 12),
     };
-    const result: Research = {
+    const result: Research & { sourceResults: typeof sourceResults } = {
+      sourceResults,
       seedSuggestions,
       profile: input.profile,
       mode: "PARTIAL",

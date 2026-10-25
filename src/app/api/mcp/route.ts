@@ -15,6 +15,7 @@ import {
   publicCompare,
 } from "@/lib/api/public";
 import { localExtract } from "@/lib/local-extract";
+import { SourceInput, querySource } from "@/lib/api/source-query";
 import { AssemblySchema } from "@/lib/cad/schema";
 import { STARTER_PARTS, inspectAssembly } from "@/lib/cad/workbench";
 export const runtime = "nodejs";
@@ -42,6 +43,8 @@ export async function POST(req: Request) {
         "Patent intelligence with partial source coverage. Use only short non-confidential concepts for public search and obtain user approval to share queries. Never infer infringement or novelty from relevance or missing results.",
     },
   );
+  const patentsOnly = new URL(req.url).pathname.endsWith("/mcp/patents");
+  if (!patentsOnly) {
   server.registerTool(
     "component_library",
     {
@@ -67,6 +70,7 @@ export async function POST(req: Request) {
     },
     async (args) => output(inspectAssembly(args)),
   );
+  }
   server.registerTool(
     "provider_status",
     {
@@ -76,6 +80,29 @@ export async function POST(req: Request) {
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async () => output({ providers: registry() }),
+  );
+  server.registerTool(
+    "query_source",
+    {
+      description:
+        "Query one public source directly: research, organizations, compounds, citations or patents. Requires consent=true for the supplied public query. Returns explicit NOT_CONFIGURED/UNAVAILABLE states; no CAD tools.",
+      inputSchema: SourceInput,
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await querySource(args);
+        return {
+          ...output(result),
+          ...(result.status !== "HEALTHY" ? { isError: true } : {}),
+        };
+      } catch {
+        return {
+          ...output({ error: "Invalid source input or missing consent." }),
+          isError: true,
+        };
+      }
+    },
   );
   server.registerTool(
     "search_patents",
@@ -147,7 +174,7 @@ export async function POST(req: Request) {
   );
   // Private tools are scoped to this request. An anonymous server never touches the account database.
   let account: ReturnType<typeof user> = null;
-  if (req.headers.has("authorization") || req.headers.has("cookie")) {
+  if (!patentsOnly && (req.headers.has("authorization") || /(?:^|;\s*)pr_session=/.test(req.headers.get("cookie") || ""))) {
     try {
       account = user(req);
     } catch {

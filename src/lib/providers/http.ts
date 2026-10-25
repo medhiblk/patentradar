@@ -36,10 +36,7 @@ export class ProviderRequestError extends Error {
   constructor(
     public provider: string,
     public code:
-      | "RATE_LIMITED"
-      | "HTTP_ERROR"
-      | "UNAVAILABLE"
-      | "INVALID_RESPONSE",
+      "RATE_LIMITED" | "HTTP_ERROR" | "UNAVAILABLE" | "INVALID_RESPONSE",
     message: string,
     public retryAfterMs?: number,
   ) {
@@ -157,8 +154,9 @@ async function perform(provider: string, url: string, init: RequestInit) {
         throw e;
       }
       failure =
-        e instanceof Error &&
-        /^HTTP|Rate limited|Response exceeds/.test(e.message)
+        e instanceof ProviderRequestError ||
+        (e instanceof Error &&
+          /^HTTP|Rate limited|Response exceeds/.test(e.message))
           ? e.message
           : "Network timeout or unavailable";
       if (
@@ -180,7 +178,11 @@ async function perform(provider: string, url: string, init: RequestInit) {
   console.warn(
     JSON.stringify({ event: "provider_failure", provider, reason: failure }),
   );
-  throw new ProviderRequestError(provider, "UNAVAILABLE", failure);
+  throw new ProviderRequestError(
+    provider,
+    status && status >= 400 ? "HTTP_ERROR" : "UNAVAILABLE",
+    failure,
+  );
 }
 export async function request(
   provider: string,

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { SearchInput, LookupInput, CompareInput } from "./public";
 import { AssemblySchema } from "../cad/schema";
+import { SourceInput } from "./source-query";
 const post = (
   operationId: string,
   summary: string,
@@ -85,6 +86,7 @@ export const openapi = {
         },
       },
     },
+    "/api/v1/sources/query": post("querySource", "Query a configured source with explicit consent and per-source status", SourceInput),
     "/api/v1/search": post(
       "searchPatents",
       "Search public patent and research sources using approved concepts",

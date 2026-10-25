@@ -6,6 +6,7 @@ export async function GET() {
     endpoint: "/api/mcp",
     publicTools: [
       "provider_status",
+      "query_source",
       "search_patents",
       "lookup_patent",
       "compare_patent_features",
