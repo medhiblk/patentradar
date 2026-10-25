@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "formaproof",
+  "version": "0.1.0",
+  "description": "Evidence-backed patent research and mechanical component inspection using the existing FormaProof MCP service.",
+  "author": {
+    "name": "FormaProof"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "FormaProof",
+        "shortDescription": "Patent evidence for engineers",
+        "longDescription": "Find related patent evidence, inspect sources, compare supplied technical features, and explore editable mechanical component templates. Search coverage is partial. Results are preliminary technical research, not a legal opinion or patent clearance.",
+        "developerName": "FormaProof",
+        "category": "Education & Research",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png",
+        "defaultPrompt": "Help me find patent evidence for my engineering design. Explain which sources were searched and the limitations of each match."
+      }
+    }
+  }
+}
