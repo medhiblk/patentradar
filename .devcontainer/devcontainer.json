@@ -1,0 +1,12 @@
+{
+  "name": "FormaProof · PatentRadar",
+  "image": "node:24-bookworm",
+  "remoteUser": "node",
+  "updateRemoteUserUID": true,
+  "postCreateCommand": "npm ci",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "FormaProof", "onAutoForward": "openBrowser" }
+  },
+  "customizations": { "vscode": { "extensions": ["dbaeumer.vscode-eslint"] } }
+}

@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "3000:3000"
+    volumes:
+      - patentradar-data:/var/lib/patentradar
+    restart: unless-stopped
+volumes:
+  patentradar-data:

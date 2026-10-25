@@ -36,11 +36,19 @@ test("sign in explains validation, submits with Enter and restores the account p
     page.getByRole("button", { name: "Sign out of workspace", exact: true }),
   ).toBeVisible({ timeout: 60000 });
   await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByText("More", { exact: true })
+    .click();
   await page.getByRole("button", { name: "Account", exact: true }).click();
   await expect(
     page.getByText(`Signed in as ${email}`, { exact: true }),
   ).toBeVisible({ timeout: 60000 });
-  const logout = page.waitForResponse((r) => new URL(r.url()).pathname === "/api/vault" && r.request().method() === "POST");
+  const logout = page.waitForResponse(
+    (r) =>
+      new URL(r.url()).pathname === "/api/vault" &&
+      r.request().method() === "POST",
+  );
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   expect((await logout).ok()).toBe(true);
   await page.goto("/files");

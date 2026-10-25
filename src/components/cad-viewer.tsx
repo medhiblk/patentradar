@@ -33,6 +33,7 @@ export function CADViewer({
   onSelect: (id: string) => void;
   onMove: (id: string, position: [number, number, number]) => void;
 }) {
+  const needsRender = useRef(true);
   const host = useRef<HTMLDivElement>(null),
     meshes = useRef(new Map<string, THREE.Mesh>()),
     gizmo = useRef<TransformControls | null>(null);
@@ -47,6 +48,7 @@ export function CADViewer({
     onMove,
   });
   useEffect(() => {
+    needsRender.current = true;
     latest.current = {
       components,
       selected,
@@ -69,6 +71,7 @@ export function CADViewer({
         "WebGL unavailable. Parametric editing and STEP/STL exports remain available.";
       return;
     }
+    needsRender.current = true;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     el.appendChild(renderer.domElement);
     renderer.domElement.setAttribute(
@@ -176,7 +179,11 @@ export function CADViewer({
     };
     renderer.domElement.addEventListener("pointerdown", pointerDown);
     renderer.domElement.addEventListener("pointerup", pointerUp);
+    transform.addEventListener("change", () => {
+      needsRender.current = true;
+    });
     const resize = new ResizeObserver(() => {
+      needsRender.current = true;
       const w = el.clientWidth,
         h = el.clientHeight;
       renderer.setSize(w, h);
@@ -188,6 +195,16 @@ export function CADViewer({
     const tick = () => {
       frame = requestAnimationFrame(tick);
       const p = latest.current;
+      const controlsChanged = orbit.update();
+      if (
+        document.hidden ||
+        (!needsRender.current &&
+          !controlsChanged &&
+          !p.animate &&
+          !transform.dragging)
+      )
+        return;
+      needsRender.current = false;
       parts.forEach((part, index) => {
         const mesh = meshes.current.get(part.id),
           c = p.components.find((c) => c.id === part.id);
@@ -218,7 +235,6 @@ export function CADViewer({
       if (chosen && chosen.visible && !p.explode && !p.animate) {
         if (transform.object !== chosen) transform.attach(chosen);
       } else transform.detach();
-      orbit.update();
       renderer.render(scene, camera);
     };
     tick();
@@ -229,6 +245,11 @@ export function CADViewer({
       renderer.domElement.removeEventListener("pointerup", pointerUp);
       transform.dispose();
       orbit.dispose();
+      grid.geometry.dispose();
+      for (const material of Array.isArray(grid.material)
+        ? grid.material
+        : [grid.material])
+        material.dispose();
       meshMap.forEach((m) => {
         m.geometry.dispose();
         (m.material as THREE.Material).dispose();

@@ -1,71 +1,12 @@
 "use client";
-import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { BRAND } from "@/lib/brand";
-const experiences = [
-  {
-    number: "01",
-    title: "Analyze an invention",
-    description: "Start with your manual, technical description or engineering brief.",
-    action: "Start an analysis",
-    page: "New Analysis",
-    theme: "cobalt",
-    shape: "lens",
-  },
-  {
-    number: "02",
-    title: "Explore patents",
-    description: "Compare your design with existing technologies and trace the evidence.",
-    action: "Explore the evidence",
-    page: "Patent Search",
-    theme: "emerald",
-    shape: "layers",
-  },
-  {
-    number: "03",
-    title: "Competitor intelligence",
-    description: "Investigate relevant applicants and the technologies they publish.",
-    action: "Discover the landscape",
-    page: "Competitor Intelligence",
-    theme: "amber",
-    shape: "torus",
-  },
-  {
-    number: "04",
-    title: "Physical inventions",
-    description: "Describe parts and relationships, or reconstruct measured geometry in the studio.",
-    action: "Open the physical module",
-    page: "Physical Analysis",
-    theme: "violet",
-    shape: "orbit",
-  },
-];
-function Sculpture({ shape }: { shape: string }) {
-  return (
-    <div className={"patent-drawing drawing-" + shape} aria-hidden="true">
-      <span className="drawing-axis horizontal" />
-      <span className="drawing-axis vertical" />
-      {Array.from({ length: 5 }, (_, i) => (
-        <span
-          key={i}
-          className="drawing-element"
-          style={{ "--i": i } as React.CSSProperties}
-        />
-      ))}
-      <span className="drawing-label">
-        FIG.{" "}
-        {shape === "lens"
-          ? "01"
-          : shape === "layers"
-            ? "02"
-            : shape === "torus"
-              ? "03"
-              : "04"}
-      </span>
-      <span className="drawing-coordinate">PR / RESEARCH SYSTEM</span>
-    </div>
-  );
-}
+import {
+  ArrowUpRight,
+  ArrowRight,
+  FileText,
+  Box,
+  ScanLine,
+  FolderOpen,
+} from "lucide-react";
 export function Home({
   go,
   demo,
@@ -75,152 +16,188 @@ export function Home({
   demo: () => void;
   busy: boolean;
 }) {
-  const reduce = useReducedMotion();
   return (
     <>
-      <section className="home-intro">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <div className="intro-label">
-            <span className="live-dot" /> DOCUMENT → SYSTEM → DESIGN → EVIDENCE
-          </div>
+      <section className="product-hero">
+        <div className="hero-story">
+          <span className="product-kicker">
+            <span className="live-dot" />
+            FROM DOCUMENT TO DESIGN
+          </span>
           <h1>
-            Start with what you have.
+            Your next prototype
             <br />
-            <span>Explore what you could build.</span>
+            starts with <em>a page.</em>
           </h1>
           <p>
-            Bring your technical PDF, drawing or manual. Review the system,
-            explore measured 3D parts and investigate patent evidence.
-            <br className="mobile-break" /> Modify your design, then investigate again.
+            Turn a manual, drawing or technical brief into editable parts. Build
+            your assembly, explore alternatives, then investigate the patent
+            evidence behind your design.
           </p>
-          <div className="intro-actions">
-            <a className="quiet-button" href="/engineering">
-              Upload a technical document <ArrowUpRight size={14} />
-            </a>
-            <button className="quiet-button" disabled={busy} onClick={demo}>
-              Research a real patent <ArrowUpRight size={14} />
+          <div className="hero-actions">
+            <button
+              className="btn btn-primary"
+              onClick={() => go("Engineering Studio")}
+            >
+              Start with a document <ArrowUpRight size={16} />
             </button>
-            <span>
-              Measured CAD on your device · External research only after consent
-            </span>
+            <button
+              className="hero-secondary"
+              onClick={() => go("New Analysis")}
+            >
+              Analyze an invention <ArrowRight size={15} />
+            </button>
           </div>
-        </motion.div>
-      </section>
-      <section className="experience-section" aria-label="Explore FormaProof">
-        <div className="gallery-heading">
-          <span>YOUR DOCUMENTS. YOUR NEXT DESIGN.</span>
-          <span>
-            Engineering, connected <span className="tiny-arrow">↘</span>
+          <span className="hero-note">
+            No account needed to model. Save privately when you’re ready.
           </span>
         </div>
-        <div className="experience-gallery">
-          {experiences.map((item, i) => (
-            <motion.button
-              className={"experience-card " + item.theme}
-              key={item.theme}
-              onClick={() => go(item.page)}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.08 * i }}
-              whileHover={reduce ? {} : { y: -6 }}
-              whileTap={reduce ? {} : { scale: 0.99 }}
-            >
-              <div className="card-grain" />
-              <div className="experience-top">
-                <span>{item.number} / {BRAND.name.toUpperCase()}</span>
-                <span className="card-arrow">
-                  <ArrowUpRight size={17} strokeWidth={1.4} />
-                </span>
-              </div>
-              <Sculpture shape={item.shape} />
-              <div className="experience-copy">
-                <h2>{item.title}</h2>
-                <p>{item.description}</p>
-                <span className="experience-cta">
-                  {item.action}
-                  <ArrowRight size={14} />
-                </span>
-              </div>
-            </motion.button>
-          ))}
-        </div>
-        <div className="gallery-foot">
-          <span>From the document you already have to the design you can question.</span>
-          <span>Evidence-led. Human-reviewed.</span>
+        <div
+          className="design-scene"
+          role="img"
+          aria-label="Illustration of a technical drawing becoming an editable mechanical assembly; not a generated model"
+        >
+          <div className="scene-topline">
+            <span>THE DESIGN WORKSPACE</span>
+            <span>DOCUMENT → ASSEMBLY</span>
+          </div>
+          <div className="scene-document">
+            <FileText size={19} strokeWidth={1.3} />
+            <span>Technical specification</span>
+            <div />
+            <div />
+            <div />
+            <svg viewBox="0 0 120 85" aria-hidden="true">
+              <path d="M20 50 60 28 104 48 64 72Z M20 50v-10l40-22 44 20v10 M64 72V62 M60 18v10" />
+              <ellipse cx="62" cy="43" rx="14" ry="8" />
+              <path d="M13 66 58 90 M111 57 70 82" strokeDasharray="2 3" />
+            </svg>
+            <small>SOURCE DIMENSIONS</small>
+          </div>
+          <div className="scene-assembly">
+            <div className="assembly-layer layer-top" />
+            <div className="assembly-pin pin-one" />
+            <div className="assembly-pin pin-two" />
+            <div className="assembly-layer layer-middle" />
+            <div className="assembly-layer layer-base" />
+          </div>
+          <div className="scene-tag tag-one">
+            <span />
+            Editable components
+          </div>
+          <div className="scene-tag tag-two">
+            <span />
+            Measurements first
+          </div>
+          <div className="scene-caption">
+            <span>01 / UNDERSTAND THE SYSTEM</span>
+            <small>
+              Concept illustration · Geometry requires source measurements
+            </small>
+          </div>
         </div>
       </section>
-      <section className="perspective">
-        <div className="perspective-copy">
-          <span className="section-kicker">UNDERSTAND. MODEL. INVESTIGATE. ITERATE.</span>
+      <section className="journey-section" aria-label="How it works">
+        <div className="journey-heading">
+          <span className="product-kicker">ONE CONTINUOUS WORKFLOW</span>
           <h2>
-            One system.
+            Bring the document.
             <br />
-            New possibilities.
+            Keep moving the design forward.
           </h2>
           <p>
-            Start with the documents on your desk. Review the components,
-            functions and available dimensions. Explore an editable assembly,
-            investigate relevant patents, then return to the design.
-            Each step keeps the evidence and uncertainty visible.
+            Each step builds on your work. You decide what to model and what to
+            share.
           </p>
-          <a className="quiet-button" href="/engineering">
-            Open your engineering workspace <ArrowUpRight size={15} />
-          </a>
         </div>
-        <div className="evidence-flow">
-          <span className="section-kicker">ONE RESEARCH WORKFLOW</span>
+        <div className="journey-steps">
           {[
-            {
-              n: "01",
-              title: "Bring your existing documents",
-              detail: "A PDF, technical drawing, manual or measured specification.",
-            },
-            {
-              n: "02",
-              title: "Understand the system",
-              detail: "Review components, functions, geometry and connections. Confirm what is known and what is missing.",
-            },
-            {
-              n: "03",
-              title: "Explore an editable 3D model",
-              detail: "Build from available measurements. Inspect, arrange and modify supported parts.",
-            },
-            {
-              n: "04",
-              title: "Investigate patent evidence",
-              detail: "Review search concepts, find similar technologies and inspect source passages and available claims.",
-            },
-            {
-              n: "05",
-              title: "Iterate the design",
-              detail: "Return to your assembly, explore a different design and launch a fresh analysis.",
-            },
-          ].map((step) => (
-            <div key={step.n}>
-              <span>{step.n}</span>
-              <div>
-                <strong>{step.title}</strong>
-                <p>{step.detail}</p>
-              </div>
-            </div>
+            [
+              "01",
+              "Bring your source",
+              "Upload a PDF, drawing or manual. Tell us which system or part you want to represent.",
+            ],
+            [
+              "02",
+              "Review the interpretation",
+              "Check identified components and dimensions. Fill in missing measurements.",
+            ],
+            [
+              "03",
+              "Build & adjust in 3D",
+              "Edit parts, assemble components and export STEP or STL for your next tool.",
+            ],
+            [
+              "04",
+              "Investigate the evidence",
+              "Search related inventions, inspect source passages and return to refine your design.",
+            ],
+          ].map(([n, title, text]) => (
+            <article key={n}>
+              <span className="step-index">{n}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
           ))}
         </div>
       </section>
-      <section className="trust-strip">
+      <section className="workspace-shortcuts" aria-label="Choose a workspace">
+        <button onClick={() => go("Engineering Studio")}>
+          <Box size={21} strokeWidth={1.4} />
+          <h3>Build a physical prototype</h3>
+          <p>
+            Parts, purchased components and custom housings in one assembly.
+          </p>
+          <span>
+            Open 3D Studio <ArrowUpRight size={15} />
+          </span>
+        </button>
+        <button onClick={() => go("New Analysis")}>
+          <ScanLine size={21} strokeWidth={1.4} />
+          <h3>Research an invention</h3>
+          <p>
+            Start with any idea: mechanical, digital, biological or a new
+            process.
+          </p>
+          <span>
+            Open patent research <ArrowUpRight size={15} />
+          </span>
+        </button>
+        <a href="/files">
+          <FolderOpen size={21} strokeWidth={1.4} />
+          <h3>Pick up where you left off</h3>
+          <p>
+            Keep documents in private projects. Reopen them for design or
+            research.
+          </p>
+          <span>
+            Open private files <ArrowUpRight size={15} />
+          </span>
+        </a>
+      </section>
+      <footer className="product-footer">
+        <span>Built around your engineering workflow.</span>
         <div>
-          <span className="trust-dot" /> Clarity, with context.
+          <button disabled={busy} onClick={demo}>
+            Research a real patent
+          </button>
+          <button onClick={() => go("Physical Analysis")}>
+            Physical inventions
+          </button>
+          <button onClick={() => go("API Providers")}>Data sources</button>
+          <a
+            href="https://github.com/medhiblk/patentradar"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open on GitHub ↗
+          </a>
         </div>
         <p>
-          Traceable sources. Visible limitations. Your expertise at the center.
+          Model only what the source supports. Patent research is preliminary
+          technical intelligence, not legal clearance.
         </p>
-        <button className="quiet-button" onClick={() => go("API Providers")}>
-          Meet the sources <ArrowUpRight size={14} />
-        </button>
-      </section>
+      </footer>
     </>
   );
 }

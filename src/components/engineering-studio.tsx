@@ -64,6 +64,7 @@ export function EngineeringStudio({
   });
   const [source, setSource] = useState({ name: "", hash: "" });
   const [pickerVersion, setPickerVersion] = useState(0);
+  const [showPrivateFiles, setShowPrivateFiles] = useState(false);
   const [imports, setImports] = useState<Record<string, ImportedSolid>>({});
   const [appendDocument, setAppendDocument] = useState(true);
   const [file, setFile] = useState<File | null>(null),
@@ -479,17 +480,40 @@ export function EngineeringStudio({
       <header className="studio-intro">
         <span className="eyebrow">FORMAPROOF / ENGINEERING STUDIO</span>
         <h1>
-          From a technical page
+          Make the document
           <br />
-          to an editable assembly.
+          your starting point.
         </h1>
         <p>
-          Start with your PDF, drawing or manual. Review the system, build
-          measured parts, investigate patent evidence and return to refine your
-          design. CAD runs on your device.
+          Choose what to represent. Review the parts and measurements, then
+          build an editable assembly. Investigate patent evidence when your
+          design is ready.
         </p>
       </header>
-      <section className="panel">
+      <nav className="studio-journey" aria-label="Design workflow">
+        <a href="#studio-source">
+          <span>01</span> Source document
+        </a>
+        <a href="#studio-model">
+          <span>02</span> Parts & 3D{" "}
+          <small>{spec.components.length} parts</small>
+        </a>
+        <a href="#parts-workbench">
+          <span>03</span> Add & customize
+        </a>
+        <a href="#studio-export">
+          <span>04</span> Export & investigate
+        </a>
+      </nav>
+      <section className="panel studio-source" id="studio-source">
+        <div className="section-heading">
+          <span className="product-kicker">01 / YOUR STARTING POINT</span>
+          <h2>What are we building?</h2>
+          <p>
+            A complete machine, one component or a custom part. Start with what
+            you have.
+          </p>
+        </div>
         <label>
           What would you like to represent?
           <textarea
@@ -563,21 +587,26 @@ export function EngineeringStudio({
           to 4 MB. Missing dimensions require your input.
         </p>
       </section>
-      <details className="private-file-drawer">
+      <details
+        className="private-file-drawer"
+        onToggle={(e) => setShowPrivateFiles(e.currentTarget.open)}
+      >
         <summary>Keep source files in a private project</summary>
-        <PrivateWorkspace
-          allowPatentAnalysis={false}
-          pendingFile={file}
-          onUseFile={async (source) => {
-            if (/\.txt$/i.test(source.name)) {
-              setText(await source.text());
-              setFile(null);
-            } else setFile(source);
-            setNotice(
-              "Private source loaded. Click Read document & identify parts when ready.",
-            );
-          }}
-        />
+        {showPrivateFiles && (
+          <PrivateWorkspace
+            allowPatentAnalysis={false}
+            pendingFile={file}
+            onUseFile={async (source) => {
+              if (/\.txt$/i.test(source.name)) {
+                setText(await source.text());
+                setFile(null);
+              } else setFile(source);
+              setNotice(
+                "Private source loaded. Click Read document & identify parts when ready.",
+              );
+            }}
+          />
+        )}
       </details>
       {file && <p className="hint">Selected source: {file.name}</p>}
       {error && (
@@ -591,7 +620,7 @@ export function EngineeringStudio({
         </p>
       )}
       {notice && <p className="notice">{notice}</p>}
-      <div className="cad-layout">
+      <div className="cad-layout" id="studio-model">
         <aside className="panel cad-parts">
           <h3>Assembly components</h3>
           <input
@@ -693,17 +722,34 @@ export function EngineeringStudio({
           </div>
         </aside>
         <section className="cad-stage">
-          <Viewer
-            parts={geometry?.parts || EMPTY_PARTS}
-            components={spec.components}
-            selected={selected}
-            hidden={hidden}
-            isolated={isolate}
-            explode={explode}
-            animate={animate}
-            onSelect={setSelected}
-            onMove={(id, position) => update(id, { position })}
-          />
+          {geometry?.parts.length ? (
+            <Viewer
+              parts={geometry?.parts || EMPTY_PARTS}
+              components={spec.components}
+              selected={selected}
+              hidden={hidden}
+              isolated={isolate}
+              explode={explode}
+              animate={animate}
+              onSelect={setSelected}
+              onMove={(id, position) => update(id, { position })}
+            />
+          ) : (
+            <div className="cad-canvas cad-empty">
+              <div className="empty-assembly-symbol" aria-hidden="true">
+                ◇
+              </div>
+              <h3>Your assembly takes shape here</h3>
+              <p>
+                Identify parts from a document or add one from the library.
+                <br />
+                Review its dimensions, then select Rebuild CAD.
+              </p>
+              <a href="#parts-workbench" className="link-button">
+                Browse the parts library ↗
+              </a>
+            </div>
+          )}
           <div className="cad-toolbar">
             <Button
               variant="outline"
@@ -963,7 +1009,8 @@ export function EngineeringStudio({
           onError={setError}
         />
       </div>
-      <section className="panel">
+      <section className="panel" id="studio-export">
+        <span className="product-kicker">04 / TAKE YOUR DESIGN FURTHER</span>
         <h3>Export & research</h3>
         {dirty && geometry && (
           <p>
