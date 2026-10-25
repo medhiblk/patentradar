@@ -88,3 +88,9 @@ PDF text extraction now uses the existing pdfjs server runtime, preserving text 
 CAD computation takes place on the user's device. The unmodified 22 MB WASM runtime is self-hosted and prepared during npm install from pinned dependencies; no confidential dimensions are sent to a third-party CAD service. Device-local catalog saves and parameter export work without server accounts. Device storage is separate from authenticated private server storage and is labeled accordingly.
 
 The real browser test now runs with no CAD_PYTHON environment variable and verifies original and changed solid volumes as well as STEP download. Exported geometry is still a primitive approximation, not a manufacturing certification or solved joint simulation.
+
+## Production browser verification — complete
+
+The real public-site test at https://patentradar-puce.vercel.app/engineering passed in 15 seconds: measured PDF → validated solid volume 24000 mm³ → edited width and volume 26400 mm³ → real 21479-byte ISO-10303-21 STEP → STEP reimport. Zero requests were made to native CAD build/import endpoints. Device catalog saving passed and no overflow was detected at 390px. See BROWSER_CAD_RELEASE.json and scripts/verify-browser-cad.mjs. The screenshot in artifacts/engineering-studio-live.png was captured from the deployed site.
+
+Production deployment: dpl_4FXteKxc36C5EZyDNNGcYy3L9y7P, READY, Node24/Next.js, published source snapshot 2ef9bc9. Native server APIs remain optional; the browser studio does not depend on them.

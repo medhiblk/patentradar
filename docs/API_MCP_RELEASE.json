@@ -1,6 +1,6 @@
 {
   "base": "https://patentradar-puce.vercel.app",
-  "checkedAt": "2026-10-25T10:00:52.815Z",
+  "checkedAt": "2026-10-25T10:50:23.002Z",
   "checks": [
     {
       "path": "/api/v1/health",
@@ -60,20 +60,13 @@
     }
   ],
   "deployment": {
-    "id": "dpl_E9wwtZeCw4jZWyxDpkTqdxn6osqY",
+    "id": "dpl_4FXteKxc36C5EZyDNNGcYy3L9y7P",
     "state": "READY",
-    "target": "production",
-    "framework": "Next.js / Node 24",
-    "commit": "04e2db8edaf2075e80e226d3fe702ca7766d0d64",
-    "buildSeconds": 48.811
+    "sourceCommit": "2ef9bc96ed7ca8b76a5d2977ab57b5e2559c00c3"
   },
-  "validation": {
-    "unitIntegrationTestsPassed": 72,
-    "browserTestsPassed": 10,
-    "typecheck": "passed",
-    "lint": "passed",
-    "productionBuild": "passed",
-    "mcpClient": "official SDK 1.32.2",
-    "githubPublication": "blocked by GitHub integration permissions; awaiting authorized existing repository"
+  "github": {
+    "repository": "https://github.com/medhiblk/patentradar",
+    "published": true,
+    "codeCI": "success"
   }
 }

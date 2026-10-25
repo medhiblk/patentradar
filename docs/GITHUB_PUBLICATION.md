@@ -1,13 +1,11 @@
-# GitHub publication
+# GitHub publication — complete
 
-Target selected by the owner: https://github.com/medhiblk/patentradar . The public repository exists, initialized with Apache 2.0 LICENSE. The original commit/licence will be preserved, and PatentRadar will be added as a clean source snapshot without private portfolio files or internal user-text research outputs.
+Source: https://github.com/medhiblk/patentradar . The owner’s initial commit and Apache 2.0 LICENSE were preserved. Application code was published as a clean source snapshot in commit `2ef9bc96ed7ca8b76a5d2977ab57b5e2559c00c3`. Private account databases, credentials and earlier user-text research outputs were excluded.
 
-The owner connected the correct GitHub installation. A subsequent dry-run push succeeded; release publication now proceeds to this exact repository. The earlier HTTP403 is resolved for ordinary git writes.
+GitHub Actions source validation passed: https://github.com/medhiblk/patentradar/actions/runs/40185950508 . The earlier HTTP403 was resolved after the owner connected the correct GitHub installation. No other repository was used.
 
-Code, API/MCP and browser 3D are prepared independently of this external permission. Once access is granted:
+The production website/API/MCP are live at https://patentradar-puce.vercel.app . Browser 3D is directly testable at /engineering without Python, an account or an API key. API documentation is at /developers and /api/v1/openapi.json. The user-facing working identity is FormaProof; repository and API/MCP identifiers remain compatible.
 
-```bash
-./scripts/publish-github.sh medhiblk/patentradar
-```
+The local development history is separate from the clean published snapshot. Do not force-push that private history. Use a fresh clone of the published repository or the clean snapshot publisher. Dependency WASM is prepared from pinned packages during npm install and is not committed as a generated binary.
 
-The script clones the existing repository, preserves its original licence/history, commits a reviewed source snapshot and uses a normal non-force push. Generated WASM assets are prepared from pinned dependencies during npm install, not checked in as binary development artifacts. Credentials, private SQLite data and earlier user-text research outputs are excluded.
+GitHub setup for future repository permissions: https://github.com/settings/installations . Select the ChatGPT GitHub application on the correct account and authorize this repository. No tokens should be pasted into chat.
