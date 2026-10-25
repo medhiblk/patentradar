@@ -20,7 +20,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. `npm ci` restores exact lockfile versions and prepares the self-hosted CAD assets. It does not download customer documents or production credentials. No `.env` is required for browser CAD, local storage and keyless research. To configure optional AI/providers, copy `.env.example` to `.env.local` and fill only what you need. Never commit secrets.
+Open http://localhost:3000. `npm ci` restores exact lockfile versions and prepares the self-hosted CAD assets. It does not download customer documents or production credentials. No `.env` is required for browser CAD, local storage and keyless research. To configure optional AI/providers, copy `apps/web/.env.example` to `apps/web/.env.local` and fill only what you need. Never commit secrets.
 
 ```bash
 # Production build on any supported Node host
@@ -28,7 +28,7 @@ npm run build
 npm start
 ```
 
-Each environment has its **own** local accounts/files in `.data/` by default. Keep that directory on a persistent volume. Production private documents are **not** cloned from GitHub. To share the same private cloud workspace across trusted deployments, configure the same authorized private Blob backend and sign in separately on each host; see [storage setup](docs/PRIVATE_STORAGE.md). Use a separate store for disposable development environments.
+Each environment has its **own** local accounts/files in `apps/web/.data/` by default. Keep that directory on a persistent volume. Production private documents are **not** cloned from GitHub. To share the same private cloud workspace across trusted deployments, configure the same authorized private Blob backend and sign in separately on each host; see [storage setup](docs/PRIVATE_STORAGE.md). Use a separate store for disposable development environments.
 
 ### Lightweight Docker runtime
 
@@ -69,22 +69,26 @@ Research now shows **Where we searched**, the exact analysed patent shortlist an
 
 Missing dimensions are never treated as verified measurements. Image interpretation and AI processing require explicit consent and configured OpenAI access. A relevant patent, expired record or missing result does **not** establish permission to manufacture or legal FTO clearance.
 
-## Project map
+## Monorepo
 
-| Location | Responsibility |
+Four npm workspaces share the same lockfile. The existing app, API and MCP routes keep their URLs.
+
+| Workspace | Responsibility |
 | --- | --- |
-| `src/app/page.tsx` | Lightweight entry and lazy workspace loading |
-| `src/components/home.tsx` | Product story and starting points |
-| `src/components/app-navigation.tsx` | Minimal public menu: Demo, ChatGPT, Open workspace |
-| `src/components/shell/` | Workspace shell and contextual tool navigation |
-| `src/app/connect/`, `src/lib/mcp/` | ChatGPT onboarding, shared public metadata and real protocol probe |
-| `src/components/demo/product-tour.tsx` | Controlled motion preview; actual CAD stays in the interactive Studio |
-| `src/components/research-workspace.tsx` | Existing research flow, results, evidence and reports |
-| `src/components/engineering-studio.tsx` | Document → measured parts → assembly → research |
-| `src/lib/cad/` | Browser geometry worker and parametric schemas |
-| `src/lib/providers/` | Capability-specific source adapters |
-| `src/lib/platform/` | Private accounts, projects and attachments |
-| `src/app/api/` | Existing API and MCP routes |
+| `apps/web` — `@formaproof/web` | Next.js app, API/MCP routes, server integrations, private storage, browser CAD and end-to-end tests |
+| `packages/contracts` — `@formaproof/contracts` | Shared Zod schemas for patent records, profiles, search audit and public API inputs |
+| `packages/engineering` — `@formaproof/engineering` | Framework-independent component/assembly schemas, catalog and parametric workbench operations |
+| `packages/sdk` — `@formaproof/sdk` | Typed HTTP client, progressive search reader and MCP connection utilities |
+| `services/cad` | Optional Python/CadQuery worker and native tests; browser CAD remains the default |
+
+[Integration guide and deployment settings](docs/MONOREPO.md) · [Functional inventory](docs/FEATURES.md) · [API contract](docs/API_MCP.md)
+
+```bash
+npm run sdk:pack       # creates three installable .tgz files in artifacts/
+node examples/integration.mjs  # validates local contracts; no network by default
+```
+
+Packages are private workspaces, not published npm packages. Other projects can use the packed artifacts or join this repository as another workspace. Shared packages contain no Next.js or server credential imports.
 
 ## Validate changes
 
@@ -104,7 +108,7 @@ GitHub Actions runs application checks and the separate native CAD tests. Extern
 
 ## Deploy
 
-Import this repository into Vercel as Next.js, choose Node 24.x, use `npm run build` and configure private Blob if you want persistent cloud accounts/files. Local SQLite is not persistent on a stateless Vercel function. Optional BigQuery/authenticated providers remain disabled without configuration. Environment values are not kept in GitHub source.
+Import this repository into Vercel with root directory `apps/web`, include sources outside the root, choose Node 24.x, set install command `cd ../.. && npm ci` and build command `cd ../.. && npm run build`. Configure private Blob if you want persistent cloud accounts/files. See [all deployment settings](docs/MONOREPO.md#deploy-the-monorepo). Local SQLite is not persistent on a stateless Vercel function. Optional BigQuery/authenticated providers remain disabled without configuration. Environment values are not kept in GitHub source.
 
 ## Further documentation
 

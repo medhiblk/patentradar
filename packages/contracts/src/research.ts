@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { PatentSchema } from "./providers/types";
-import { SearchTraceSchema } from "./search/audit";
+import { PatentSchema } from "./patents.js";
+import { SearchTraceSchema } from "./audit.js";
 export const ProfileSchema = z.object({
   title: z.string().min(1).max(200),
   domain: z.string().max(200),

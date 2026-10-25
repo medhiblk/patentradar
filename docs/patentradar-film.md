@@ -16,7 +16,7 @@ The existing FormaProof identity, engineering hero, research workflows and navig
 | 51–58 | Stay ahead | Publication timeline, competitor and technology watches, personalized update. |
 | 58–65 | Explore | PatentRadar signature and direct invention-research CTA. |
 
-The chapter text and timings live in `src/components/patent-film/story.json`. The complete text is also available in the homepage’s expandable walkthrough.
+The chapter text and timings live in `apps/web/src/components/patent-film/story.json`. The complete text is also available in the homepage’s expandable walkthrough.
 
 ## Playback and implementation
 

@@ -1,8 +1,9 @@
 import unittest,subprocess,json,sys,base64,math,pathlib
-ROOT=pathlib.Path(__file__).resolve().parent.parent
+ROOT=pathlib.Path(__file__).resolve().parent
+REPO=ROOT.parent.parent
 
 def worker(data):
- p=subprocess.run([sys.executable,str(ROOT/'cad/worker.py')],input=json.dumps(data),text=True,capture_output=True,timeout=60)
+ p=subprocess.run([sys.executable,str(ROOT/'worker.py')],input=json.dumps(data),text=True,capture_output=True,timeout=60)
  return json.loads(p.stdout)
 def part(id='plate',shape='box',dimensions=None):return {'id':id,'shape':shape,'dimensions':dimensions or {'length':80,'width':50,'height':6},'position':[0,0,0],'rotation':[0,0,0]}
 class CADTests(unittest.TestCase):
@@ -20,5 +21,5 @@ class CADTests(unittest.TestCase):
  def test_missing_dimensions_rejected(self):
   d=worker({'action':'build','components':[part(dimensions={'length':80,'width':None,'height':6})]});self.assertIn('error',d)
  def test_pdf_real_text_page_and_render(self):
-  raw=base64.b64encode((ROOT/'tests/fixtures/mechanical-dimensions.pdf').read_bytes()).decode();d=worker({'action':'document','file':raw});self.assertEqual(d['pages'][0]['page'],1);self.assertIn('80 x 50 x 6 mm',d['pages'][0]['text']);self.assertEqual(base64.b64decode(d['pages'][0]['image'])[:4],b'\x89PNG')
+  raw=base64.b64encode((REPO/'apps/web/tests/fixtures/mechanical-dimensions.pdf').read_bytes()).decode();d=worker({'action':'document','file':raw});self.assertEqual(d['pages'][0]['page'],1);self.assertIn('80 x 50 x 6 mm',d['pages'][0]['text']);self.assertEqual(base64.b64decode(d['pages'][0]['image'])[:4],b'\x89PNG')
 if __name__=='__main__':unittest.main()

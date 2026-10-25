@@ -9,7 +9,7 @@ try{
  const portfolio=(await json('/api/vault')).data;if(!portfolio.user||!['blob','local'].includes(portfolio.storage?.backend))throw Error('Persistent backend not reported');
  if(process.env.EXPECT_PRIVATE_BACKEND&&portfolio.storage.backend!==process.env.EXPECT_PRIVATE_BACKEND)throw Error('Unexpected private backend');
  const project=await json('/api/vault',{action:'save',kind:'project',title:'Synthetic attachment verification',data:{description:'Public test fixture, not a customer invention.'}});projectId=project.data.id;
- const original=await readFile('tests/fixtures/mechanical-dimensions.pdf');const form=new FormData();form.set('projectId',projectId);form.set('file',new File([original],'verification.pdf',{type:'application/pdf'}));
+ const original=await readFile('apps/web/tests/fixtures/mechanical-dimensions.pdf');const form=new FormData();form.set('projectId',projectId);form.set('file',new File([original],'verification.pdf',{type:'application/pdf'}));
  const uploaded=await json('/api/attachments',form);fileId=uploaded.data.file.id;
  if(uploaded.data.file.url||JSON.stringify(uploaded.data).includes('blob.vercel-storage.com'))throw Error('An object-store URL was returned');
  const endpoint=`/api/attachments/${fileId}?projectId=${projectId}`;

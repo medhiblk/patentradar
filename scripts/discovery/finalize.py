@@ -26,7 +26,7 @@ for tier in 'ABCD':
  for r in rows:
   if r['tier']!=tier:continue
   env+=['# '+r['jurisdiction']+' | '+r['provider']+' | '+r['purpose'],'# '+r['method']+' | '+r['kind']+' | '+r['license'],'# Observed '+str(r['httpStatus'] or 'NOT TESTED')+' | '+str(r['format'])+' | '+r['rateLimits'],('' if tier=='A' else '# ')+r['variable']+'='+r['url'],'']
-(ROOT/'.env.registry.example').write_text('\n'.join(env))
+(ROOT/'apps/web/.env.registry.example').write_text('\n'.join(env))
 columns=['variable','provider','jurisdiction','url','testUrl','method','kind','documentation','authentication','httpStatus','latencyMs','format','usableResponse','rateLimits','license','tier','observation','checkedAt']
 with (ROOT/'docs/discovery/verification.csv').open('w') as f:
  w=csv.DictWriter(f,fieldnames=columns,extrasaction='ignore');w.writeheader();w.writerows(rows)
@@ -37,5 +37,5 @@ for r in rows:
 (ROOT/'docs/discovery/VERIFICATION.md').write_text('\n'.join(md)+'\n')
 # Smaller server catalogue excludes raw payloads and test details; no secret values.
 public=[{k:r.get(k) for k in ['variable','provider','jurisdiction','url','purpose','kind','method','documentation','authentication','license','rateLimits','tier','checkedAt','httpStatus','format','usableResponse','observation']} for r in rows]
-(ROOT/'src/lib/providers/catalogue.json').write_text(json.dumps(public,ensure_ascii=False,indent=2))
+(ROOT/'apps/web/src/lib/providers/catalogue.json').write_text(json.dumps(public,ensure_ascii=False,indent=2))
 print(dict(counts))

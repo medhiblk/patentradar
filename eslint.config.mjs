@@ -4,11 +4,14 @@ import ts from "eslint-config-next/typescript";
 export default defineConfig([
   ...next,
   ...ts,
+  { settings: { next: { rootDir: "apps/web/" } } },
   globalIgnores([
-    "public/cad-kernel/**",
-    "public/document-kernel/**",
-    ".next/**",
-    "test-results/**",
-    "playwright-report/**",
+    "apps/web/public/cad-kernel/**",
+    "apps/web/public/document-kernel/**",
+    "**/.next/**",
+    "**/test-results/**",
+    "**/playwright-report/**",
+    "packages/*/dist/**",
+    "artifacts/**",
   ]),
 ]);
