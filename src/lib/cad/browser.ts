@@ -6,10 +6,18 @@ export type BrowserGeometry = {
   stl: string;
   engine: string;
   units: string;
+  fused?: boolean;
+  exportVolume?: number;
 };
+export type ImportedSolid = { file: File; solidIndex: number };
 export async function browserCAD(
   action: "build" | "import",
-  payload: AssemblySpec | { file: File; placements?: unknown[] },
+  payload:
+    | (AssemblySpec & {
+        imports?: Record<string, ImportedSolid>;
+        fuse?: boolean;
+      })
+    | { file: File; placements?: unknown[] },
 ): Promise<BrowserGeometry> {
   if (typeof Worker === "undefined" || typeof WebAssembly === "undefined")
     throw new Error(

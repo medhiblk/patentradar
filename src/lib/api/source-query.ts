@@ -19,6 +19,7 @@ import * as local from "@/lib/providers/local-index";
 import { registry } from "@/lib/providers/registry";
 import * as lens from "@/lib/providers/lens";
 import * as patentPages from "@/lib/providers/patent-pages";
+import * as datasets from "@/lib/providers/datasets";
 export const SourceInput = z
   .object({
     provider: z.enum([
@@ -55,6 +56,8 @@ export const SourceInput = z
       "cnipa",
       "wipo",
       "openai",
+      "uspto-datasets",
+      "patentsview-bulk",
     ]),
     query: z.string().trim().min(1).max(150),
     publicationDate: z
@@ -229,6 +232,10 @@ export async function querySource(raw: unknown) {
     } else if (i.provider === "patent-pages") {
       records = await patentPages.lookup(i.query);
       category = "patent";
+    } else if (i.provider === "uspto-datasets" || i.provider === "patentsview-bulk") {
+      if (i.page !== 1) throw new Error("This adapter supports the first bounded page only.");
+      records = await datasets.search(i.provider, i.query);
+      category = "dataset-catalogue";
     } else if (i.provider === "lens") {
       records = await lens.search(i.query, i.page);
       category = "patent";
@@ -256,6 +263,7 @@ export async function querySource(raw: unknown) {
       retrievedAt: new Date().toISOString(),
       latencyMs: Date.now() - started,
       warnings: [
+        ...(category === "dataset-catalogue" ? ["Catalogue links only. Dataset contents are not downloaded, imported or searchable as patents until a separate import completes."] : []),
         "Partial coverage. Preserve source attribution. Name matching does not establish ownership.",
       ],
     };

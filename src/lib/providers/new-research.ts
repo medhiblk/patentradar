@@ -1,3 +1,4 @@
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { load } from "cheerio";
 import { request, invalidResponse } from "./http";
@@ -34,7 +35,7 @@ export async function datacite(query: string, page = 1): Promise<Paper[]> {
 }
 export async function hal(query: string, page = 1): Promise<Paper[]> {
   const url = new URL(
-    process.env.HAL_API_URL || "https://api.hal.science/search/",
+    endpoint(["HAL_API_URL", "HAL_URL"], "https://api.hal.science/search/"),
   );
   Object.entries({
     q: query,
@@ -93,7 +94,7 @@ export function parseArxiv(xml: string): Paper[] {
 }
 export async function arxiv(query: string, page = 1) {
   const url = new URL(
-    process.env.ARXIV_API_URL || "https://export.arxiv.org/api/query",
+    endpoint(["ARXIV_API_URL", "ARXIV_URL"], "https://export.arxiv.org/api/query"),
   );
   const literal = query.replace(/["\\]/g, " ").slice(0, 250);
   url.searchParams.set("search_query", 'all:"' + literal + '"');

@@ -113,7 +113,7 @@ test("upstream HTTP status is retained as a typed failure", async () => {
 test.each([undefined, "_vercel_jwt=preview-cookie; analytics=1"])("MCP advertises public tools with unrelated cookie %s", async (cookie) => {
   const { POST } = await import("../src/app/api/mcp/route");
   const response = await POST(
-    new Request("https://patentradar.test/api/mcp", {
+    new Request("https://patentradar.test/api/mcp/patents", {
       method: "POST",
       headers: {
         ...(cookie ? { Cookie: cookie } : {}),
@@ -136,7 +136,7 @@ test.each([undefined, "_vercel_jwt=preview-cookie; analytics=1"])("MCP advertise
   expect(
     body.result.tools
       .map((t: { name: string }) => t.name)
-      .some((n: string) => /cad|3d/i.test(n)),
+      .some((n: string) => /cad|3d|component_library|inspect_assembly|list_my_projects/i.test(n)),
   ).toBe(false);
 });
 test("aggregate response keeps successful data and identifies a failed source", async () => {

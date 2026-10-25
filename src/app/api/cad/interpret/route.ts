@@ -2,7 +2,11 @@ import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { guard } from "@/lib/security";
 import { reserveAI } from "@/lib/platform/auth";
-import { AssemblySchema, extractMeasured } from "@/lib/cad/schema";
+import {
+  AssemblySchema,
+  DocumentAssemblySchema,
+  extractMeasured,
+} from "@/lib/cad/schema";
 import { pdfTextPages } from "@/lib/cad/pdf-pages";
 import { cadWorker } from "@/lib/cad/worker";
 import { createHash } from "node:crypto";
@@ -14,6 +18,7 @@ export async function POST(req: Request) {
     const form = await req.formData(),
       f = form.get("file"),
       consent = form.get("consent") === "true";
+    const goal = String(form.get("goal") || "").slice(0, 1000);
     let pages: { page: number; text: string; image?: string | null }[] = [
       { page: 1, text: String(form.get("text") || "").slice(0, 40000) },
     ];
@@ -49,12 +54,12 @@ export async function POST(req: Request) {
     if (!process.env.OPENAI_API_KEY || !consent) {
       const spec = extractMeasured(pages);
       return Response.json({
-        spec,
+        spec: { ...spec, goal },
         sourceName,
         sourceHash: hash,
         method: "local-measured-text",
         notice:
-          "No document was sent externally. Explicit dimensions only; images require configured multimodal AI and consent or manual measurements.",
+          "No document was sent externally. Local rules extract explicit dimensions and labeled component-list entries. Unknown geometry stays unresolved; images need configured multimodal AI and consent or manual measurements.",
       });
     }
     reserveAI(req);
@@ -62,9 +67,10 @@ export async function POST(req: Request) {
     const content: OpenAI.Responses.ResponseInputContent[] = [
       {
         type: "input_text",
-        text: JSON.stringify(
-          pages.map((p) => ({ page: p.page, text: p.text })),
-        ),
+        text: JSON.stringify({
+          userRepresentationGoal: goal,
+          pages: pages.map((p) => ({ page: p.page, text: p.text })),
+        }),
       },
     ];
     for (const page of pages.slice(0, 4))
@@ -86,9 +92,11 @@ export async function POST(req: Request) {
         },
         { role: "user", content },
       ],
-      text: { format: zodTextFormat(AssemblySchema, "mechanical_assembly") },
+      text: {
+        format: zodTextFormat(DocumentAssemblySchema, "mechanical_assembly"),
+      },
     });
-    const spec = AssemblySchema.parse(r.output_parsed);
+    const spec = AssemblySchema.parse({ ...r.output_parsed, goal });
     for (const c of spec.components) {
       const page = pages.find((p) => p.page === c.sourcePage);
       if (!page) throw new Error("Unverified source page");

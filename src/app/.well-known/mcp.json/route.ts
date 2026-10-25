@@ -11,6 +11,8 @@ export async function GET() {
       "lookup_patent",
       "compare_patent_features",
       "extract_technical_profile",
+      "component_library",
+      "inspect_assembly",
     ],
     authentication: { public: "none", private: "scoped bearer token" },
     documentation: "/developers",

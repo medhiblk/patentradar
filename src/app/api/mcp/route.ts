@@ -16,6 +16,8 @@ import {
 } from "@/lib/api/public";
 import { localExtract } from "@/lib/local-extract";
 import { SourceInput, querySource } from "@/lib/api/source-query";
+import { AssemblySchema } from "@/lib/cad/schema";
+import { STARTER_PARTS, inspectAssembly } from "@/lib/cad/workbench";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 const output = (value: unknown) => ({
@@ -41,6 +43,34 @@ export async function POST(req: Request) {
         "Patent intelligence with partial source coverage. Use only short non-confidential concepts for public search and obtain user approval to share queries. Never infer infringement or novelty from relevance or missing results.",
     },
   );
+  const patentsOnly = new URL(req.url).pathname.endsWith("/mcp/patents");
+  if (!patentsOnly) {
+  server.registerTool(
+    "component_library",
+    {
+      description:
+        "List original editable geometry templates and linked manufacturer board footprints. No downloaded supplier CAD, live prices or patent clearance.",
+      inputSchema: z.object({}).strict(),
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
+    async () =>
+      output({
+        parts: STARTER_PARTS,
+        templateCodeLicense: "Apache-2.0",
+        patentClearance: "NOT ESTABLISHED",
+      }),
+  );
+  server.registerTool(
+    "inspect_assembly",
+    {
+      description:
+        "Inspect supplied assembly parameters: missing dimensions, spatial housing fit, known user-entered purchase costs and unverified rights evidence. No external calls, geometry build or legal clearance.",
+      inputSchema: AssemblySchema,
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
+    async (args) => output(inspectAssembly(args)),
+  );
+  }
   server.registerTool(
     "provider_status",
     {
@@ -144,7 +174,7 @@ export async function POST(req: Request) {
   );
   // Private tools are scoped to this request. An anonymous server never touches the account database.
   let account: ReturnType<typeof user> = null;
-  if (req.headers.has("authorization") || /(?:^|;\s*)pr_session=/.test(req.headers.get("cookie") || "")) {
+  if (!patentsOnly && (req.headers.has("authorization") || /(?:^|;\s*)pr_session=/.test(req.headers.get("cookie") || ""))) {
     try {
       account = user(req);
     } catch {

@@ -68,6 +68,8 @@ Official SDK transport, stateless JSON responses, protocol negotiation and valid
 | `compare_patent_features` | `{profile,patents}` | Lexical, explained comparison of supplied records |
 | `extract_technical_profile` | `{text}` | Literal extraction on the remote PatentRadar server; no onward OpenAI call |
 | `query_source` | `{provider, query, consent: true, operation?, page?, publicationDate?}` | Direct source queries with explicit per-source status |
+| `component_library` | `{}` | Starter templates and manufacturer footprint references, no live supplier retrieval |
+| `inspect_assembly` | Assembly schema | Missing geometry, housing-envelope checks, known user-entered costs and unverified rights evidence; no external calls or patent clearance |
 
 Tool inputs are bounded and untrusted. No arbitrary SQL, URLs, Python, MCP tool forwarding or paid AI calls are accepted. The server supplies actual source provenance and avoids legal infringement conclusions.
 
@@ -102,3 +104,15 @@ This initializes the official MCP client, lists tools, extracts supplied text, p
 ## Deployed verification — 2026-10-25
 
 Production deployment READY at the base URL above. Official SDK client initialization, five-tool discovery, local extraction and actual EP1000000A1 lookup succeeded remotely. Versioned public search returned 12 patent records and 30 scientific records. A separate remote NDJSON check returned 13 patents (including exact EP lookup), first patent at 1.284s, completed at 20.985s; the slower provider did not delay initial patent display. See API_MCP_RELEASE.json and API_STREAM_RELEASE.json. GitHub source is now published at https://github.com/medhiblk/patentradar; see GITHUB_PUBLICATION.md.
+
+## Engineering workbench API (v1.2)
+
+- `GET /api/v1/cad/catalog`: ten starter entries. Two entries link manufacturer board specifications; remaining entries are original editable geometry templates or incomplete envelopes. This is not ten external providers or a live supplier catalogue.
+- `POST /api/v1/cad/inspect`: validated assembly JSON. Returns missing measurements, computed pocket-envelope fit, per-currency known purchase subtotals and unverified rights declarations. It never searches patents or builds geometry. Its `patentClearance` is always `NOT ESTABLISHED`. Submit only data approved for processing by this server; no confidential request data is logged or forwarded externally by this operation.
+- Optional component metadata: `sourceName`, `referenceUrl`, `templateId`, `role`, `commerce` (HTTP(S) URL, nullable user-entered unit price, currency, recordedAt, basis), `rights` (status, evidenceUrl, note), and `pocket` (wall, floor, targetId). Unknown required dimensions remain null. Native build now supports the same open-top pocket cut, where the native runtime is configured.
+- Browser-only CAD also combines STEP-imported solids with parametric parts and can explicitly fuse touching/overlapping solids into one solid. Those operations run in the WASM worker; the public inspection API/MCP tools do not execute CAD. Native API does not accept STEP files mixed into its JSON build contract or perform the browser fusion option.
+- New MCP discovery exposes seven public tools. Earlier five-tool release observations above describe the older release.
+
+See [component workbench](engineering/WORKBENCH.md) for reproduction and limitations.
+
+The PatentRadar plugin uses `/api/mcp/patents`: six public patent/research tools only. CAD and private project tools remain on `/api/mcp`. Dataset catalogues are queried with `query_source` and are never counted as imported patents.

@@ -1,5 +1,6 @@
 import { z } from "zod";
 export type ProviderCapability =
+  | "dataset-discovery"
   | "patent-search"
   | "patent-lookup"
   | "full-text"

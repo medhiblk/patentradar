@@ -36,6 +36,24 @@ export const openapi = {
   },
   servers: [{ url: "/", description: "Current host" }],
   paths: {
+    "/api/v1/cad/catalog": {
+      get: {
+        operationId: "getComponentLibrary",
+        summary:
+          "Read starter templates and manufacturer footprint sources; no clearance or live pricing",
+        responses: {
+          "200": {
+            description:
+              "Original template metadata with external source references",
+          },
+        },
+      },
+    },
+    "/api/v1/cad/inspect": post(
+      "inspectAssembly",
+      "Check supplied parameters, envelope fit, known purchase costs and unverified rights; no legal clearance",
+      AssemblySchema,
+    ),
     "/api/v1/health": {
       get: {
         operationId: "getHealth",

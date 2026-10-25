@@ -106,6 +106,8 @@ export function CADViewer({
         roughness: 0.4,
       });
       const mesh = new THREE.Mesh(geometry, material);
+      // CAD exports apply extrinsic X, then Y, then Z rotations.
+      mesh.rotation.order = "ZYX";
       mesh.userData.id = part.id;
       group.add(mesh);
       meshes.current.set(part.id, mesh);

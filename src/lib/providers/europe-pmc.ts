@@ -1,3 +1,4 @@
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { request, invalidResponse } from "./http";
 import { PatentSchema, type PatentRecord } from "./types";
@@ -61,7 +62,7 @@ export async function search(query: string) {
   const expression =
     "SRC:PAT AND (" + terms.map((t) => '"' + t + '"').join(" OR ") + ")";
   const url =
-    "https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=10&query=" +
+    endpoint(["EUROPE_PMC_API_URL", "EUROPE_PMC_URL"], "https://www.ebi.ac.uk/europepmc/webservices/rest/search") + "?format=json&resultType=core&pageSize=10&query=" +
     encodeURIComponent(expression);
   return parsePatentSearch(JSON.parse(await request("europe-pmc", url)), query);
 }

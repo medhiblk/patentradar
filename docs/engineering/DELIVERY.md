@@ -1,6 +1,6 @@
 # Engineering Studio and continued PatentRadar delivery
 
-Local implementation, 2026-10-25. This is a working constrained engineering MVP, not unrestricted reverse engineering of arbitrary drawings. No deployment occurred in this execution.
+This document retains the initial native-runtime delivery history. For the current browser engineering workbench, component library, custom pockets, mixed STEP assemblies, costs, rights evidence and tests, see [WORKBENCH.md](WORKBENCH.md). This is a constrained engineering MVP, not unrestricted reverse engineering of arbitrary drawings. Later sections record the actual public browser deployments.
 
 ## What is operational
 

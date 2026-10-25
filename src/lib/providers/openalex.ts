@@ -1,10 +1,10 @@
+import { endpoint } from "./endpoints";
 import { z } from "zod";
 import { request, invalidResponse } from "./http";
 import type { Paper } from "./types";
 export async function search(query: string): Promise<Paper[]> {
   const url = new URL(
-    process.env.OPENALEX_WORKS_URL || "/works",
-    process.env.OPENALEX_BASE_URL || "https://api.openalex.org",
+    endpoint(["OPENALEX_WORKS_URL", "OPENALEX_API_URL", "OPENALEX_URL", "OPENALEX_BASE_URL"], "https://api.openalex.org", "/works"),
   );
   url.searchParams.set("search", query);
   url.searchParams.set("per-page", "6");

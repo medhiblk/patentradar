@@ -26,11 +26,24 @@ async function base64(blob: Blob) {
 function primitive(p: ComponentSpec): cad.Shape3D {
   if (!buildable(p)) throw new Error("Required dimensions are missing");
   const d = p.dimensions;
-  if (p.shape === "box")
-    return cad.makeBox(
+  if (p.shape === "box") {
+    const box = cad.makeBox(
       [-d.length! / 2, -d.width! / 2, -d.height! / 2],
       [d.length! / 2, d.width! / 2, d.height! / 2],
     );
+    if (!p.pocket) return box;
+    const { wall, floor } = p.pocket;
+    const cavity = cad.makeBox(
+      [-d.length! / 2 + wall, -d.width! / 2 + wall, -d.height! / 2 + floor],
+      [d.length! / 2 - wall, d.width! / 2 - wall, d.height! / 2 + 1],
+    );
+    try {
+      return box.cut(cavity);
+    } finally {
+      cavity.delete();
+      box.delete();
+    }
+  }
   const outer = cad.makeCylinder(d.diameter! / 2, d.length!, [
     0,
     0,
@@ -67,11 +80,34 @@ self.onmessage = async (event: MessageEvent) => {
     if (action === "build") {
       const spec = AssemblySchema.parse(payload);
       if (!spec.components.length) throw new Error("No components");
-      shapes = spec.components.map((p) => {
-        const shape = primitive(p);
+      const loaded = new Map<File, cad.Shape3D[]>();
+      for (const p of spec.components) {
+        const source = payload.imports?.[p.id];
+        let shape: cad.Shape3D;
+        if (source) {
+          if (
+            !(source.file instanceof Blob) ||
+            source.file.size > 4 * 1024 * 1024 ||
+            !Number.isInteger(source.solidIndex) ||
+            source.solidIndex < 0 ||
+            source.solidIndex >= 20
+          )
+            throw new Error("Invalid imported solid reference");
+          if (!loaded.has(source.file)) {
+            const imported = await cad.importSTEP(source.file);
+            cleanup.push(imported);
+            const solids = imported.solids.slice(0, 20);
+            cleanup.push(...solids);
+            loaded.set(source.file, solids);
+          }
+          const original = loaded.get(source.file)![source.solidIndex];
+          if (!original)
+            throw new Error("Imported solid no longer exists; reimport STEP");
+          shape = original.clone();
+        } else shape = primitive(p);
         cleanup.push(shape);
-        return { ...p, shape };
-      });
+        shapes.push({ ...p, shape });
+      }
     } else if (action === "import") {
       if (
         !(payload.file instanceof Blob) ||
@@ -135,13 +171,43 @@ self.onmessage = async (event: MessageEvent) => {
       placed.push(moved);
       cleanup.push(moved);
     }
+    let exports = placed;
+    if (payload.fuse) {
+      let fused = placed[0].clone();
+      cleanup.push(fused);
+      for (const part of placed.slice(1)) {
+        fused = fused.fuse(part);
+        cleanup.push(fused);
+      }
+      const solidCount = fused.solids.length;
+      if (solidCount !== 1)
+        throw new Error(
+          "Fusion needs touching or overlapping solids. Keep separate parts as an assembly or adjust their positions.",
+        );
+      const check = new oc.BRepCheck_Analyzer(
+        fused.wrapped,
+        true,
+        false,
+        false,
+      );
+      const valid = check.IsValid();
+      check.delete();
+      if (!valid) throw new Error("Fusion produced invalid geometry");
+      exports = [fused];
+    }
+    const exportVolume = payload.fuse
+      ? cad.measureVolume(exports[0])
+      : undefined;
     const step = await base64(
       cad.exportSTEP(
-        placed.map((shape, i) => ({ shape, name: shapes[i].name })),
+        exports.map((shape, i) => ({
+          shape,
+          name: payload.fuse ? "Fused prototype" : shapes[i].name,
+        })),
         { unit: "MM", modelUnit: "MM" },
       ),
     );
-    const compound = cad.makeCompound(placed);
+    const compound = cad.makeCompound(exports);
     cleanup.push(compound);
     const stl = await base64(
       compound.blobSTL({
@@ -158,6 +224,8 @@ self.onmessage = async (event: MessageEvent) => {
         stl,
         engine: "Replicad 1.2 / OpenCascade WASM — computed on your device",
         units: "mm",
+        fused: !!payload.fuse,
+        exportVolume,
         reconstructionStatus:
           "Measured primitive approximation; engineering validation required",
       },

@@ -1,5 +1,7 @@
 "use client";
-import { browserCAD } from "@/lib/cad/browser";
+import { browserCAD, type ImportedSolid } from "@/lib/cad/browser";
+import { mergeAssembly } from "@/lib/cad/workbench";
+import { PartsWorkbench } from "./parts-workbench";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
@@ -21,6 +23,8 @@ type Geometry = {
   step?: string;
   stl?: string;
   engine: string;
+  fused?: boolean;
+  exportVolume?: number;
 };
 const blank = (): ComponentSpec => ({
   id: crypto.randomUUID(),
@@ -53,6 +57,8 @@ export function EngineeringStudio({
     limitations: [],
   });
   const [source, setSource] = useState({ name: "", hash: "" });
+  const [imports, setImports] = useState<Record<string, ImportedSolid>>({});
+  const [appendDocument, setAppendDocument] = useState(true);
   const [file, setFile] = useState<File | null>(null),
     [text, setText] = useState(""),
     [consent, setConsent] = useState(false),
@@ -82,6 +88,55 @@ export function EngineeringStudio({
     [dirty, setDirty] = useState(false);
   const component = spec.components.find((c) => c.id === selected);
   const meshInfo = geometry?.parts.find((p) => p.id === selected);
+  const canBuild = (p: ComponentSpec) => buildable(p) || !!imports[p.id];
+  function addPart(part: ComponentSpec) {
+    if (spec.components.length >= 20) {
+      setError(
+        "An assembly supports at most 20 parts. Split the design or remove a part.",
+      );
+      return;
+    }
+    setSpec({ ...spec, components: [...spec.components, part] });
+    setSelected(part.id);
+    setDirty(true);
+    setError("");
+  }
+  function installParts(
+    incoming: AssemblySpec,
+    preview?: Geometry,
+    references: Record<string, ImportedSolid> = {},
+  ) {
+    const append = appendDocument && spec.components.length > 0;
+    const next = append
+      ? mergeAssembly(spec, incoming)
+      : AssemblySchema.parse(incoming);
+    const added = append
+      ? next.components.slice(spec.components.length)
+      : next.components;
+    const ids = new Map(incoming.components.map((p, i) => [p.id, added[i].id]));
+    const nextImports = Object.fromEntries(
+      Object.entries(references).map(([id, ref]) => [ids.get(id)!, ref]),
+    );
+    setSpec(next);
+    setSelected(added[0]?.id || "");
+    setImports(append ? { ...imports, ...nextImports } : nextImports);
+    setGeometry((g) =>
+      preview
+        ? {
+            ...preview,
+            parts: [
+              ...(append ? g?.parts || [] : []),
+              ...preview.parts.map((p) => ({ ...p, id: ids.get(p.id)! })),
+            ],
+            step: append ? undefined : preview.step,
+            stl: append ? undefined : preview.stl,
+          }
+        : append
+          ? g
+          : null,
+    );
+    setDirty(append || !preview);
+  }
   // An explicit research handoff retains parameters, never the original file.
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -99,14 +154,17 @@ export function EngineeringStudio({
         if (
           typeof parsed.source?.name === "string" &&
           typeof parsed.source?.hash === "string"
-        ) setSource({ name: parsed.source.name, hash: parsed.source.hash });
+        )
+          setSource({ name: parsed.source.name, hash: parsed.source.hash });
         setDirty(true);
         setNotice(
           "Design restored in this tab. Review your changes and rebuild CAD. Imported STEP/STL geometry requires reimporting the original file. No original document was retained.",
         );
         sessionStorage.removeItem("patentradar-design-return-v1");
       } catch {
-        setError("The saved design could not be restored. Reopen your source or use your exported parameters to re-enter measurements.");
+        setError(
+          "The saved design could not be restored. Reopen your source or use your exported parameters to re-enter measurements.",
+        );
       }
     }, 0);
     return () => clearTimeout(timer);
@@ -154,30 +212,51 @@ export function EngineeringStudio({
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  const build = () =>
+  const build = (fuse = false) =>
     run(
       "Generating CAD on your device (first kernel load may take a moment)",
       async () => {
-        let d;
-        if (file && /\.(step|stp)$/i.test(file.name)) {
-          d = await browserCAD("import", {
-            file,
-            placements: spec.components.map((c) => ({
-              id: c.id,
-              position: c.position,
-              rotation: c.rotation,
-            })),
-          });
-        } else d = await browserCAD("build", spec);
+        const d = await browserCAD("build", {
+          ...AssemblySchema.parse(spec),
+          imports,
+          fuse,
+        });
         setGeometry(d);
         setDirty(false);
         setNotice(
-          "OpenCascade generated valid parametric solids on your device. Primitive reconstruction still requires engineering validation.",
+          fuse
+            ? "Touching/overlapping parts fused into one checked solid. This geometric operation does not establish strength, printability or patent clearance."
+            : "OpenCascade generated checked solids on your device. Parts remain separate in the STEP assembly. Engineering validation still required.",
         );
       },
     );
   async function interpret() {
     await run("Reading source documentation", async () => {
+      if (file && /\.json$/i.test(file.name)) {
+        if (file.size > 4 * 1024 * 1024)
+          throw new Error("Parameter file exceeds 4 MB");
+        const data = JSON.parse(await file.text());
+        const incoming = AssemblySchema.parse(data.spec || data);
+        if (
+          typeof data.source?.name === "string" &&
+          data.source.name.length <= 250 &&
+          typeof data.source?.hash === "string" &&
+          /^(?:[a-f0-9]{64})?$/.test(data.source.hash)
+        ) {
+          setSource({ name: data.source.name, hash: data.source.hash });
+          incoming.components = incoming.components.map((p) => ({
+            ...p,
+            sourceName:
+              p.sourceName ||
+              (!p.referenceUrl && !p.templateId ? data.source.name : undefined),
+          }));
+        }
+        installParts(incoming);
+        setNotice(
+          "Editable parameters imported. Rebuild measured parts; imported CAD source files must be reselected.",
+        );
+        return;
+      }
       if (file && /\.(step|stp)$/i.test(file.name)) {
         const d = await browserCAD("import", { file });
         const components = d.parts.map((p: MeshPart) => ({
@@ -187,18 +266,26 @@ export function EngineeringStudio({
           shape: "unresolved" as const,
           description: "Imported STEP solid; parameters not recovered",
           sourceQuote: file.name,
+          sourceName: file.name,
+          role: "imported" as const,
         }));
-        setSpec({
-          title: file.name,
-          components,
-          limitations: [
-            "Imported geometry can be inspected and placed. Parametric feature history is not recovered.",
-          ],
-        });
-        setGeometry(d);
-        setSelected(components[0]?.id || "");
+        installParts(
+          {
+            title: file.name,
+            components,
+            limitations: [
+              "Imported geometry can be inspected and placed. Parametric feature history is not recovered.",
+            ],
+          },
+          d,
+          Object.fromEntries(
+            components.map((p, i) => [p.id, { file, solidIndex: i }]),
+          ),
+        );
         setSource({ name: file.name, hash: "" });
-        setDirty(false);
+        setNotice(
+          "STEP geometry imported. Add library or custom parts, then rebuild to export the combined assembly. Feature history was not recovered.",
+        );
         return;
       }
       if (file && /\.stl$/i.test(file.name)) {
@@ -218,45 +305,49 @@ export function EngineeringStudio({
         p.shape = "unresolved";
         p.name = file.name;
         p.description = "Imported STL mesh — no CAD feature history";
-        setSpec({
-          title: file.name,
-          components: [p],
-          limitations: [
-            "STL is a mesh; no parametric or STEP export is inferred.",
-          ],
-        });
-        setGeometry({
-          parts: [
-            {
-              id: p.id,
-              stl: btoa(binary),
-              volume: 0,
-              valid: false,
-              bounds: [],
-            },
-          ],
-          stl: btoa(binary),
-          engine: "Imported mesh",
-        });
-        setSelected(p.id);
-        setDirty(false);
+        installParts(
+          {
+            title: file.name,
+            components: [p],
+            limitations: [
+              "STL is a mesh; no parametric or STEP export is inferred.",
+            ],
+          },
+          {
+            parts: [
+              {
+                id: p.id,
+                stl: btoa(binary),
+                volume: 0,
+                valid: false,
+                bounds: [],
+              },
+            ],
+            stl: btoa(binary),
+            engine: "Imported mesh",
+          },
+        );
         return;
       }
       const form = new FormData();
       if (file) form.set("file", file);
       form.set("text", text);
       form.set("consent", String(consent));
+      form.set("goal", spec.goal || "");
       const d = await request("/api/cad/interpret", form);
-      setSpec(d.spec);
+      installParts({
+        ...d.spec,
+        components: d.spec.components.map((c: ComponentSpec) => ({
+          ...c,
+          sourceName: d.sourceName,
+        })),
+      });
       setSource({ name: d.sourceName, hash: d.sourceHash });
-      setGeometry(null);
-      setSelected(d.spec.components[0]?.id || "");
       setNotice(
         d.spec.components.length
           ? d.notice
           : "No reconstructable primitive with explicit mm dimensions was found. Add the required measurements below; no dimensions were invented.",
       );
-      setDirty(true);
     });
   }
   function deviceCatalog() {
@@ -348,13 +439,23 @@ export function EngineeringStudio({
         </p>
       </header>
       <section className="panel">
+        <label>
+          What would you like to represent?
+          <textarea
+            maxLength={1000}
+            value={spec.goal || ""}
+            onChange={(e) => setSpec({ ...spec, goal: e.target.value })}
+            placeholder="For example: the motor assembly, its drive shaft only, or an electronics enclosure. Specify the function you want to study."
+            rows={2}
+          />
+        </label>
         <div className="row wrap">
           <label className="grow">
             PDF, drawing, image or CAD file
             <input
               aria-label="Engineering source file"
               type="file"
-              accept=".pdf,.png,.jpg,.jpeg,.step,.stp,.stl"
+              accept=".pdf,.png,.jpg,.jpeg,.step,.stp,.stl,.json"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
             />
           </label>
@@ -368,6 +469,15 @@ export function EngineeringStudio({
             />
           </label>
         </div>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={appendDocument}
+            onChange={(e) => setAppendDocument(e.target.checked)}
+          />
+          Add imported or identified parts to the existing assembly (uncheck to
+          replace)
+        </label>
         <label className="checkbox">
           <input
             type="checkbox"
@@ -386,16 +496,14 @@ export function EngineeringStudio({
           </Button>
           <Button
             variant="outline"
-            disabled={!!busy}
-            onClick={() => {
-              const p = blank();
-              setSpec({ ...spec, components: [...spec.components, p] });
-              setSelected(p.id);
-              setDirty(true);
-            }}
+            disabled={!!busy || spec.components.length >= 20}
+            onClick={() => addPart(blank())}
           >
             Add a measured component
           </Button>
+          <a className="link-button" href="#parts-workbench">
+            Library, purchased parts & custom housing ↓
+          </a>
         </div>
         <p className="hint">
           Files stay on this server unless you explicitly consent to external AI
@@ -433,9 +541,9 @@ export function EngineeringStudio({
             >
               <strong>{c.name}</strong>
               <small>
-                {c.shape} · {c.basis} ·{" "}
-                {buildable(c)
-                  ? "Ready for primitive reconstruction"
+                {c.shape} · {c.role || c.basis} ·{" "}
+                {canBuild(c)
+                  ? "Ready to build"
                   : "Measurements / geometry required"}
               </small>
             </button>
@@ -445,16 +553,36 @@ export function EngineeringStudio({
               disabled={
                 !!busy ||
                 !spec.components.length ||
-                (spec.components.some((c) => !buildable(c)) &&
-                  !(file && /\.(step|stp)$/i.test(file.name)))
+                spec.components.some((c) => !canBuild(c))
               }
-              onClick={build}
+              onClick={() => build()}
             >
               Rebuild CAD
             </Button>
             <Button
               variant="outline"
-              disabled={!component}
+              disabled={!!busy || !spec.components.some(canBuild)}
+              onClick={() =>
+                run("Previewing measured parts", async () => {
+                  const ready = spec.components.filter(canBuild);
+                  const d = await browserCAD("build", {
+                    ...AssemblySchema.parse(spec),
+                    components: ready,
+                    imports,
+                  });
+                  setGeometry({ ...d, step: undefined, stl: undefined });
+                  setDirty(true);
+                  setNotice(
+                    `Preview contains ${ready.length} of ${spec.components.length} parts. Missing geometry is not reconstructed. Full assembly export requires every part; a ready selected part can be exported separately.`,
+                  );
+                })
+              }
+            >
+              Preview ready parts
+            </Button>
+            <Button
+              variant="outline"
+              disabled={!component || spec.components.length >= 20}
               onClick={() => {
                 if (!component) return;
                 const p = {
@@ -462,9 +590,9 @@ export function EngineeringStudio({
                   id: crypto.randomUUID(),
                   name: component.name + " copy",
                 };
-                setSpec({ ...spec, components: [...spec.components, p] });
-                setSelected(p.id);
-                setDirty(true);
+                addPart(p);
+                if (imports[component.id])
+                  setImports({ ...imports, [p.id]: imports[component.id] });
               }}
             >
               Duplicate
@@ -483,6 +611,11 @@ export function EngineeringStudio({
                     : g,
                 );
                 setSelected("");
+                setImports((current) =>
+                  Object.fromEntries(
+                    Object.entries(current).filter(([id]) => id !== selected),
+                  ),
+                );
                 setDirty(true);
               }}
             >
@@ -560,11 +693,26 @@ export function EngineeringStudio({
                 Primitive
                 <select
                   value={component.shape}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    if (imports[component.id]) {
+                      setImports((current) =>
+                        Object.fromEntries(
+                          Object.entries(current).filter(
+                            ([id]) => id !== component.id,
+                          ),
+                        ),
+                      );
+                      setNotice(
+                        "Imported shape replaced by a user-defined parametric approximation. Original CAD feature history is not recovered.",
+                      );
+                    }
                     update(component.id, {
                       shape: e.target.value as ComponentSpec["shape"],
-                    })
-                  }
+                      pocket:
+                        e.target.value === "box" ? component.pocket : undefined,
+                      role: "custom",
+                    });
+                  }}
                 >
                   {["box", "cylinder", "tube", "unresolved"].map((v) => (
                     <option key={v}>{v}</option>
@@ -602,6 +750,58 @@ export function EngineeringStudio({
                   }
                 />
               </label>
+              <label>
+                Function / description
+                <textarea
+                  maxLength={1000}
+                  value={component.description}
+                  onChange={(e) =>
+                    update(component.id, { description: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Connections (one per line)
+                <textarea
+                  value={component.connections.join("\n")}
+                  onChange={(e) =>
+                    update(component.id, {
+                      connections: e.target.value
+                        .split("\n")
+                        .map((s) => s.trim())
+                        .filter(Boolean)
+                        .slice(0, 10)
+                        .map((s) => s.slice(0, 150)),
+                    })
+                  }
+                />
+              </label>
+              {component.pocket && (
+                <>
+                  <h4>Open-top pocket</h4>
+                  {(["wall", "floor"] as const).map((k) => (
+                    <label key={k}>
+                      {k} thickness (mm)
+                      <input
+                        type="number"
+                        min="0.2"
+                        max="1000"
+                        step="0.1"
+                        value={component.pocket![k]}
+                        onChange={(e) =>
+                          update(component.id, {
+                            pocket: {
+                              ...component.pocket!,
+                              [k]: Number(e.target.value),
+                            },
+                            basis: "user-entered",
+                          })
+                        }
+                      />
+                    </label>
+                  ))}
+                </>
+              )}
               <h4>Position / rotation</h4>
               {(["position", "rotation"] as const).map((key) => (
                 <div className="cad-vector" key={key}>
@@ -627,9 +827,37 @@ export function EngineeringStudio({
               ))}
               <div className="cad-provenance">
                 <strong>
-                  Source: {source.name || "User specification"} · page{" "}
-                  {component.sourcePage}
+                  Source:{" "}
+                  {component.sourceName ||
+                    (component.referenceUrl
+                      ? "Linked reference"
+                      : component.templateId
+                        ? "Prototype template"
+                        : source.name || "User specification")}{" "}
+                  · page {component.sourcePage}
                 </strong>
+                {component.referenceUrl && (
+                  <p>
+                    <a
+                      href={component.referenceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Component source ↗
+                    </a>
+                  </p>
+                )}
+                {component.commerce && (
+                  <p>
+                    <a
+                      href={component.commerce.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Purchase reference (user supplied) ↗
+                    </a>
+                  </p>
+                )}
                 <blockquote>
                   {component.sourceQuote || "No verified source passage"}
                 </blockquote>
@@ -657,6 +885,15 @@ export function EngineeringStudio({
           )}
         </aside>
       </div>
+      <div id="parts-workbench">
+        <PartsWorkbench
+          spec={spec}
+          selected={selected}
+          onAdd={addPart}
+          onUpdate={update}
+          onError={setError}
+        />
+      </div>
       <section className="panel">
         <h3>Export & research</h3>
         {dirty && geometry && (
@@ -666,6 +903,35 @@ export function EngineeringStudio({
           </p>
         )}
         <div className="row wrap">
+          <Button
+            variant="outline"
+            disabled={
+              !!busy ||
+              spec.components.length < 2 ||
+              spec.components.some((c) => !canBuild(c))
+            }
+            onClick={() => build(true)}
+          >
+            Fuse touching parts into one solid
+          </Button>
+          <Button
+            variant="outline"
+            disabled={!!busy || !component || !canBuild(component)}
+            onClick={() =>
+              run("Exporting selected part", async () => {
+                if (!component) return;
+                const d = await browserCAD("build", {
+                  title: component.name,
+                  components: [component],
+                  limitations: [],
+                  imports,
+                });
+                download(d.stl, "selected-part.stl", "model/stl");
+              })
+            }
+          >
+            Export selected part STL
+          </Button>
           <Button
             disabled={!geometry?.step || dirty}
             onClick={() =>
@@ -709,16 +975,26 @@ export function EngineeringStudio({
                   JSON.stringify({ version: 1, spec, source }),
                 );
               } catch {
-                setError("This browser cannot retain your design for the return journey. Export editable parameters before leaving.");
+                setError(
+                  "This browser cannot retain your design for the return journey. Export editable parameters before leaving.",
+                );
                 return;
               }
               onPatentResearch(
-                `${spec.title}\n` + spec.components
-                  .map(
-                    (c) =>
-                      `${c.name}: ${c.description}\nCurrent design geometry (reviewed parameters): ${c.shape}; ${Object.entries(c.dimensions).filter(([, value]) => value !== null).map(([name, value]) => `${name} ${value} mm`).join(", ")}; material: ${c.material}. Connections: ${c.connections.join(", ") || "Not specified"}.`,
-                  )
-                  .join("\n"),
+                `${spec.title}\nRepresentation goal: ${spec.goal || "User-selected components"}\n` +
+                  spec.components
+                    .map(
+                      (c) =>
+                        `${c.name}: ${c.description}\nCurrent design geometry (reviewed parameters): ${c.shape}; ${Object.entries(
+                          c.dimensions,
+                        )
+                          .filter(([, value]) => value !== null)
+                          .map(([name, value]) => `${name} ${value} mm`)
+                          .join(
+                            ", ",
+                          )}; material: ${c.material}. Connections: ${c.connections.join(", ") || "Not specified"}.`,
+                    )
+                    .join("\n"),
               );
             }}
           >
@@ -768,6 +1044,19 @@ export function EngineeringStudio({
             Save part to catalog
           </Button>
         </div>
+        {geometry?.fused && (
+          <p className="hint">
+            Export contains one fused solid · Volume{" "}
+            {Number(geometry.exportVolume?.toFixed(3))} mm³. The viewer keeps
+            the original parts selectable. Rebuild normally to export separate
+            parts.
+          </p>
+        )}
+        <p className="hint">
+          STEP preserves separate solids for CAD tools; STL is a millimetre mesh
+          for a slicer, not printer G-code. Fusion requires connected solids and
+          is a geometric operation, not a functional assembly test.
+        </p>
         <p className="hint">
           Patent research starts with your review, not an automatic external
           search. Continuing retains editable parameters in this tab, without
@@ -824,8 +1113,11 @@ export function EngineeringStudio({
                       ...structuredClone(item.data.component),
                       id: crypto.randomUUID(),
                     };
-                    setSpec({ ...spec, components: [...spec.components, p] });
-                    setSelected(p.id);
+                    if (spec.components.length >= 20) {
+                      setError("At most 20 parts per assembly.");
+                      return;
+                    }
+                    addPart(p);
                     if (item.data.preview)
                       setGeometry((g) => ({
                         engine: g?.engine || "Catalog mesh preview",

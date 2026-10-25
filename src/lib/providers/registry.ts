@@ -25,6 +25,8 @@ const entry = (
 });
 export function registry(): Provider[] {
   const list = [
+    entry("uspto-datasets", "USPTO research dataset catalogue", ["dataset-discovery"], "Public catalogue, no key", "https://www.uspto.gov/ip-policy/economic-research/research-datasets", "Dataset discovery only; not the authenticated USPTO patent search API. Files require separate import.", true),
+    entry("patentsview-bulk", "PatentsView bulk dataset catalogue", ["dataset-discovery"], "Public catalogue, no key", "https://www.uspto.gov/ip-policy/economic-research/patentsview", "Current USPTO ODP catalogue after the 2026 migration. Lists datasets; does not imply imported patent records.", true),
     ...[
       [
         "openaire",
