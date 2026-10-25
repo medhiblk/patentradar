@@ -45,3 +45,7 @@ Automated tests cover meaningful overlap, negative cases, unsafe links, source c
 ## Signed-in save behavior
 
 Portfolio saving relies on the server cookie check directly. It does not guess authentication from a separate asynchronous account fetch; only an actual HTTP 401 opens the sign-in form. This fixes a race observed on the deployed private Blob backend when the new comparison view was saved immediately.
+
+## Private storage update verification
+
+Real production testing also exposed weak ETags on compressed private Blob reads (`Content-Encoding: br`). These cannot satisfy conditional writes and caused reviewed-state updates to fail. Private JSON reads now request `Accept-Encoding: identity`, preserving the strong original storage ETag for `ifMatch`. Conditional-write protection remains enabled; weak tags are never stripped or treated as strong. An isolated real Blob probe reproduced the failure and verified the corrected read/write round trip; regression coverage checks substantial research-document updates.

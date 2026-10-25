@@ -32,7 +32,14 @@ export async function readDocument<T>(
   key: string,
 ): Promise<{ data: T; version: string } | null> {
   if (blobBackend()) {
-    const r = await get(keyPath(key), { access: "private", useCache: false });
+    // Compressed Blob responses can carry weak ETags (W/…), which cannot be
+    // used for conditional writes. Read the original representation so the
+    // returned version remains a strong storage ETag. Never strip W/ manually.
+    const r = await get(keyPath(key), {
+      access: "private",
+      useCache: false,
+      headers: { "Accept-Encoding": "identity" },
+    });
     if (!r) return null;
     if (r.statusCode !== 200) throw Error("Private record unavailable");
     if (r.blob.size > 3200000) {

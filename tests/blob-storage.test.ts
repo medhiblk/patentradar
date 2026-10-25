@@ -41,14 +41,22 @@ beforeEach(() => {
   vi.stubEnv("PRIVATE_STORAGE_BACKEND", "blob");
   vi.stubEnv("BLOB_READ_WRITE_TOKEN", "fixture-only-not-a-real-token");
   fake.get.mockImplementation(
-    async (key: string, options: { access: string; useCache: boolean }) => {
-      expect(options).toMatchObject({ access: "private", useCache: false });
+    async (key: string, options: { access: string; useCache: boolean; headers?: Record<string, string> }) => {
+      expect(options).toMatchObject({
+        access: "private",
+        useCache: false,
+      });
+      if (key.endsWith(".json"))
+        expect(options.headers).toEqual({ "Accept-Encoding": "identity" });
       const row = fake.objects.get(key);
       return row
         ? {
             statusCode: 200,
             stream: new Blob([row.bytes as Uint8Array<ArrayBuffer>]).stream(),
-            blob: { etag: row.etag, size: row.bytes.length },
+            blob: {
+              etag: options.headers?.["Accept-Encoding"] === "identity" ? row.etag : "W/" + row.etag,
+              size: row.bytes.length,
+            },
           }
         : null;
     },
@@ -81,6 +89,12 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllEnvs();
   vi.clearAllMocks();
+});
+it("updates a substantial private research document using its strong storage version", async () => {
+  const key = "verification/large-research.json";
+  await mutateDocument(key, () => ({ text: "Reports “Abandoned” · technical evidence. ".repeat(500), reviewed: false }), (document) => document);
+  await mutateDocument(key, () => ({ text: "", reviewed: false }), (document) => ({ ...document, reviewed: true }));
+  expect((await readDocument<{ reviewed: boolean }>(key))?.data.reviewed).toBe(true);
 });
 it("persists private accounts, sessions, projects and attachments without SQLite on the cloud backend", async () => {
   const signup = await vault(
