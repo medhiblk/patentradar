@@ -48,5 +48,34 @@
     "MVP authentication: no verified email, password reset, MFA, or account deletion",
     "No malware scanning or automated stale-upload reconciliation",
     "Private Blob JSON index is for bounded small portfolios; local patent FTS/native CAD remain separate runtimes"
-  ]
+  ],
+  "latestRelease": {
+    "sourceCommit": "4e796ff04eab25f250ebdd41dd2ac06320467319",
+    "deploymentId": "dpl_63F78ob2TWCKj6bKrCmpQQD3WGPZ",
+    "ci": "https://github.com/medhiblk/patentradar/actions/runs/40203252100",
+    "ciConclusion": "success",
+    "ciEvidence": "gh run watch completed with success before CLI credential expiry",
+    "dependencyAudit": {
+      "vulnerabilities": 0,
+      "targetedAttachmentBrowserTest": "passed"
+    },
+    "apiProof": {
+      "base": "https://patentradar-puce.vercel.app",
+      "checkedAt": "2026-10-25T14:41:45.906Z",
+      "passed": true,
+      "backend": "blob",
+      "originalBytes": 1075,
+      "sha256": "a3b0aba88f46488e2a8cc26dad4b3b90f0e391a9460cbe277829fe2e612f208b",
+      "upload": true,
+      "identicalDownload": true,
+      "anonymousStatus": 401,
+      "crossAccountStatus": 404,
+      "loggedOutStatus": 401,
+      "freshLoginRetainsOriginal": true,
+      "deletedProjectStatus": 404,
+      "publicObjectUrlReturned": false,
+      "aiOrPatentSearchPerformed": false,
+      "input": "Synthetic measured PDF fixture only; test project/files deleted. Reserved .example.test account records remain, with generated credentials never logged."
+    }
+  }
 }
