@@ -50,6 +50,7 @@ test("real publication is ingested, compared, stored in a private portfolio and 
     "https://patents.google.com/patent/US20080003142A1/en",
   );
   await expect(final.getByText(/reports “Abandoned”/)).toBeVisible();
+  await expect(page.getByRole("form", { name: "Workspace sign in" })).toHaveCount(0);
   await page
     .getByRole("link", { name: "Open project ↗", exact: true })
     .click();

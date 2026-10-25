@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { Research } from "@/lib/model";
 import { WorkspaceAuthForm } from "../workspace-auth-form";
+class SignInRequired extends Error {}
 export function ResearchPortfolioSave({
   research,
   description,
@@ -13,20 +14,11 @@ export function ResearchPortfolioSave({
   document?: { url: string; name: string; sha256: string };
   onSaved?: (id: string) => void;
 }) {
-  const [signedIn, setSignedIn] = useState(false),
-    [showAuth, setShowAuth] = useState(false),
+  const [showAuth, setShowAuth] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [saved, setSaved] = useState("");
   const project = useRef("");
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/vault", { cache: "no-store", signal: controller.signal })
-      .then((r) => r.json())
-      .then((data) => setSignedIn(!!data.user))
-      .catch(() => {});
-    return () => controller.abort();
-  }, []);
   async function json(url: string, body?: object | FormData) {
     const response = await fetch(url, {
       cache: "no-store",
@@ -43,6 +35,7 @@ export function ResearchPortfolioSave({
         : {}),
     });
     const data = await response.json();
+    if (response.status === 401) throw new SignInRequired();
     if (!response.ok) throw Error(data.error || "Unable to save the research.");
     return data;
   }
@@ -97,7 +90,9 @@ export function ResearchPortfolioSave({
       setShowAuth(false);
       onSaved?.(project.current);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Unable to save research.");
+      if (e instanceof SignInRequired) setShowAuth(true);
+      else
+        setError(e instanceof Error ? e.message : "Unable to save research.");
     } finally {
       setBusy(false);
     }
@@ -121,11 +116,7 @@ export function ResearchPortfolioSave({
           <a href="/alerts">View alerts ↗</a>
         </p>
       ) : (
-        <button
-          className="btn btn-primary"
-          disabled={busy}
-          onClick={() => (signedIn ? save() : setShowAuth(true))}
-        >
+        <button className="btn btn-primary" disabled={busy} onClick={save}>
           {busy ? "Saving project and evidence…" : "Save to private portfolio"}
         </button>
       )}
@@ -137,7 +128,6 @@ export function ResearchPortfolioSave({
       {showAuth && !saved && (
         <WorkspaceAuthForm
           onAuthenticated={async () => {
-            setSignedIn(true);
             await save();
           }}
         />

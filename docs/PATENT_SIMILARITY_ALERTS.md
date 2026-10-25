@@ -41,3 +41,7 @@ This is a known-reference exercise, not a fresh worldwide discovery. No OpenAI c
 - `src/app/theme.css`: high-contrast navy text, cobalt actions, violet accents and amber alerts. Legacy faint text colors were darkened in component styles. The existing CAD/research integrations are retained.
 
 Automated tests cover meaningful overlap, negative cases, unsafe links, source checksum/page count, persistence, ownership and review state. Browser coverage exercises ingestion → comparison → private project/PDF → linked alert → review-state retention and mobile layout. Production evidence is recorded in the release JSON after deployment.
+
+## Signed-in save behavior
+
+Portfolio saving relies on the server cookie check directly. It does not guess authentication from a separate asynchronous account fetch; only an actual HTTP 401 opens the sign-in form. This fixes a race observed on the deployed private Blob backend when the new comparison view was saved immediately.
