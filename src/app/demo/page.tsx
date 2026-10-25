@@ -7,6 +7,7 @@ import { AppNavigation } from "@/components/app-navigation";
 import { ProductTour } from "@/components/demo/product-tour";
 import "./demo.css";
 import { Button } from "@/components/ui/button";
+import { loadExampleDocument } from "@/lib/demo/example-document";
 const Studio = dynamic(
   () =>
     import("@/components/engineering-studio").then((m) => m.EngineeringStudio),
@@ -22,40 +23,60 @@ export default function Demo() {
   const [revision, setRevision] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const consumed = useCallback(() => setFile(null), []);
+  const workspace = useRef<HTMLDivElement>(null);
+  const consumed = useCallback(() => {
+    setFile(null);
+    requestAnimationFrame(() => {
+      const action = workspace.current?.querySelector<HTMLButtonElement>(
+        "#studio-read-source",
+      );
+      if (!action) return;
+      action.focus({ preventScroll: true });
+      action.scrollIntoView({ block: "center", behavior: "auto" });
+    });
+  }, []);
   const preloaded = useRef<Promise<File> | null>(null);
-  const [ready, setReady] = useState(false);
-  async function loadExample(signal?: AbortSignal) {
-    const response = await fetch("/examples/mechanical-assembly.pdf", {
-      signal: signal || AbortSignal.timeout(20000),
-    });
-    if (!response.ok)
-      throw Error("The example document could not be loaded. Please retry.");
-    return new File([await response.blob()], "example-mounting-plate.pdf", {
-      type: "application/pdf",
-    });
-  }
+  const [preloadStatus, setPreloadStatus] = useState<
+    "loading" | "ready" | "failed"
+  >("loading");
   useEffect(() => {
     const controller = new AbortController();
-    const pending = loadExample(controller.signal);
+    const pending = loadExampleDocument(controller.signal);
     preloaded.current = pending;
     pending
       .then(() => {
-        if (!controller.signal.aborted) setReady(true);
+        if (!controller.signal.aborted) setPreloadStatus("ready");
       })
       .catch(() => {
         if (preloaded.current === pending) preloaded.current = null;
+        if (!controller.signal.aborted) setPreloadStatus("failed");
       });
     return () => controller.abort();
   }, []);
+  useEffect(() => {
+    if (!opened) return;
+    const frame = requestAnimationFrame(() =>
+      workspace.current?.scrollIntoView({ block: "start", behavior: "auto" }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [opened, revision]);
   async function start() {
     setBusy(true);
     setError("");
     try {
-      setFile(await (preloaded.current || loadExample()));
+      const pending = preloaded.current;
+      // A failed speculative preload must not poison the user's actual click.
+      const document = pending
+        ? await pending.catch(() => loadExampleDocument())
+        : await loadExampleDocument();
+      preloaded.current = Promise.resolve(document);
+      setPreloadStatus("ready");
+      setFile(document);
       setRevision((v) => v + 1);
       setOpened(true);
     } catch (e) {
+      preloaded.current = null;
+      setPreloadStatus("failed");
       setError(e instanceof Error ? e.message : "Unable to open the example.");
     } finally {
       setBusy(false);
@@ -81,7 +102,12 @@ export default function Demo() {
               review concepts for patent research.
             </p>
             <div className="row wrap">
-              <Button disabled={busy} onClick={start}>
+              <Button
+                disabled={busy}
+                onClick={start}
+                aria-controls="demo-workspace"
+                aria-expanded={opened}
+              >
                 {busy
                   ? "Opening document…"
                   : opened
@@ -98,6 +124,18 @@ export default function Demo() {
                 Download the source PDF
               </a>
             </div>
+            {error && (
+              <p role="alert" className="notice error">
+                {error}
+              </p>
+            )}
+            <p className="demo-preload-status" role="status">
+              {preloadStatus === "ready"
+                ? "Example PDF preloaded · Ready to open"
+                : preloadStatus === "failed"
+                  ? "Preload unavailable · Click Try the example document to retry"
+                  : "Preparing the example document…"}
+            </p>
             <p className="hint">
               No account or API key needed for this CAD example. No external AI
               or patent search starts automatically.
@@ -105,11 +143,6 @@ export default function Demo() {
           </header>
           <ProductTour />
         </div>
-        <p className="demo-preload-status" role="status">
-          {ready
-            ? "Example PDF preloaded · Ready to open"
-            : "Preparing the example document…"}
-        </p>
         <a className="real-patent-demo-link" href="/demo/patent">
           <span>REAL PATENT EXAMPLE</span>
           <strong>What if a similar publication already exists?</strong>
@@ -145,13 +178,14 @@ export default function Demo() {
             </p>
           </article>
         </section>
-        {error && (
-          <p role="alert" className="notice error">
-            {error}
-          </p>
-        )}
         {opened ? (
-          <div className="demo-live-workspace">
+          <div
+            className="demo-live-workspace"
+            id="demo-workspace"
+            ref={workspace}
+            role="region"
+            aria-label="Interactive example workspace"
+          >
             <div className="demo-context">
               <FileText size={17} />
               <span>
@@ -164,6 +198,7 @@ export default function Demo() {
               initialFile={file}
               onFileConsumed={consumed}
               restoreDraft={false}
+              guidedNavigation
               onPatentResearch={(description) => {
                 sessionStorage.setItem(
                   "patentradar-engineering-handoff",

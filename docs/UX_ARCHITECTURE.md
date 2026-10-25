@@ -18,6 +18,7 @@ The separate `WorkspaceShell` and `WorkspaceNavigation` own context navigation: 
 - `src/app/.well-known/mcp.json/route.ts`: backward-compatible descriptor plus display name and guide link.
 - `src/components/demo/product-tour.tsx`: isolated route-only Motion preview, four scenes, play/pause and manual selection. It is labeled as illustration rather than generated live evidence.
 - `src/app/demo/page.tsx`: preloads the 1,075-byte synthetic example PDF once, reuses that file when the user opens the real editor, and leaves actual extraction/geometry generation to explicit actions. No confidential design-return draft is restored into the example.
+- The example launch now scrolls to and focuses the enabled document-reading action after the source is committed. Guided navigation then follows actual extraction to the component list and a successful CAD build to the viewer. The selected source is shown beside its action. A failed preload can be retried on click; download errors are visible beside the launch button. The loader validates the PDF signature/size and applies a 20-second timeout even with a parent cancellation signal. Standard Studio navigation remains unchanged unless guided mode is requested.
 
 ## MCP availability and boundaries
 

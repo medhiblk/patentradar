@@ -408,6 +408,17 @@
 .demo-page {
   max-width: 1400px;
 }
+.demo-live-workspace,
+.demo-live-workspace #studio-model,
+.demo-live-workspace .cad-stage {
+  scroll-margin-top: 100px;
+}
+.demo-live-workspace .studio-selected-source {
+  overflow-wrap: anywhere;
+}
+.demo-intro .notice.error {
+  margin-top: 16px;
+}
 .demo-opening {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;

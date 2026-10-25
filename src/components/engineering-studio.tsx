@@ -4,7 +4,7 @@ import { mergeAssembly } from "@/lib/cad/workbench";
 import { PartsWorkbench } from "./parts-workbench";
 import { PrivateWorkspace } from "./private-workspace";
 import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
 import {
@@ -53,12 +53,23 @@ export function EngineeringStudio({
   initialFile,
   onFileConsumed,
   restoreDraft = true,
+  guidedNavigation = false,
 }: {
   onPatentResearch: (text: string) => void;
   initialFile?: File | null;
   onFileConsumed?: () => void;
   restoreDraft?: boolean;
+  guidedNavigation?: boolean;
 }) {
+  const studio = useRef<HTMLDivElement>(null);
+  function guideTo(selector: string) {
+    if (!guidedNavigation) return;
+    requestAnimationFrame(() => {
+      const target = studio.current?.querySelector<HTMLElement>(selector);
+      target?.focus({ preventScroll: true });
+      target?.scrollIntoView({ block: "start", behavior: "auto" });
+    });
+  }
   const [spec, setSpec] = useState<AssemblySpec>({
     title: "Untitled engineering assembly",
     components: [],
@@ -75,6 +86,7 @@ export function EngineeringStudio({
     [busy, setBusy] = useState(""),
     [error, setError] = useState(""),
     [notice, setNotice] = useState("");
+  const [appliedSource, setAppliedSource] = useState<File | null>(null);
   const [geometry, setGeometry] = useState<Geometry | null>(null),
     [selected, setSelected] = useState(""),
     [hidden, setHidden] = useState<string[]>([]),
@@ -101,6 +113,7 @@ export function EngineeringStudio({
   useEffect(() => {
     const reset = () => {
       setFile(null);
+      setAppliedSource(null);
       setText("");
       setSpec({
         title: "Untitled engineering assembly",
@@ -130,9 +143,9 @@ export function EngineeringStudio({
           setFile(null);
         } else setFile(initialFile);
         setNotice(
-          "Private source loaded. Choose what to represent, then read the document. No external AI processing was started.",
+          "Source loaded. Choose what to represent, then read the document. No external AI processing was started.",
         );
-        onFileConsumed?.();
+        setAppliedSource(initialFile);
       } catch {
         setError("Unable to read private source.");
       }
@@ -141,7 +154,12 @@ export function EngineeringStudio({
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [initialFile, onFileConsumed]);
+  }, [initialFile]);
+  // Notify after React has committed the selected source and enabled its action.
+  // Calling inside the loader timer can try to focus a still-disabled button.
+  useEffect(() => {
+    if (appliedSource && appliedSource === initialFile) onFileConsumed?.();
+  }, [appliedSource, initialFile, onFileConsumed]);
   const canBuild = (p: ComponentSpec) => buildable(p) || !!imports[p.id];
   function addPart(part: ComponentSpec) {
     if (spec.components.length >= 20) {
@@ -190,6 +208,7 @@ export function EngineeringStudio({
           : null,
     );
     setDirty(append || !preview);
+    guideTo("#studio-model");
   }
   // An explicit research handoff retains parameters, never the original file.
   useEffect(() => {
@@ -278,6 +297,7 @@ export function EngineeringStudio({
         });
         setGeometry(d);
         setDirty(false);
+        guideTo(".cad-stage");
         setNotice(
           fuse
             ? "Touching/overlapping parts fused into one checked solid. This geometric operation does not establish strength, printability or patent clearance."
@@ -479,7 +499,7 @@ export function EngineeringStudio({
   }
 
   return (
-    <div className="engineering-studio">
+    <div className="engineering-studio" ref={studio}>
       <header className="studio-intro">
         <span className="eyebrow">FORMAPROOF / ENGINEERING STUDIO</span>
         <h1>
@@ -529,7 +549,9 @@ export function EngineeringStudio({
         </label>
         <div className="row wrap">
           <label className="grow">
-            PDF, drawing, image or CAD file
+            {file
+              ? "Replace the selected source (optional)"
+              : "PDF, drawing, image or CAD file"}
             <input
               key={pickerVersion}
               aria-label="Engineering source file"
@@ -566,8 +588,14 @@ export function EngineeringStudio({
           Allow OpenAI to interpret document text and images (requires
           configured access and signed-in account).
         </label>
+        {file && (
+          <p className="notice studio-selected-source">
+            Selected source: {file.name}
+          </p>
+        )}
         <div className="row wrap">
           <Button
+            id="studio-read-source"
             disabled={!!busy || (!file && !text.trim())}
             onClick={interpret}
           >
@@ -611,7 +639,6 @@ export function EngineeringStudio({
           />
         )}
       </details>
-      {file && <p className="hint">Selected source: {file.name}</p>}
       {error && (
         <p role="alert" className="notice error">
           {error}
@@ -623,7 +650,7 @@ export function EngineeringStudio({
         </p>
       )}
       {notice && <p className="notice">{notice}</p>}
-      <div className="cad-layout" id="studio-model">
+      <div className="cad-layout" id="studio-model" tabIndex={-1}>
         <aside className="panel cad-parts">
           <h3>Assembly components</h3>
           <input
@@ -724,7 +751,7 @@ export function EngineeringStudio({
             </Button>
           </div>
         </aside>
-        <section className="cad-stage">
+        <section className="cad-stage" tabIndex={-1}>
           {geometry?.parts.length ? (
             <Viewer
               parts={geometry?.parts || EMPTY_PARTS}
