@@ -113,3 +113,9 @@ Production deployment READY at the base URL above. Official SDK client initializ
 - New MCP discovery exposes seven public tools. Earlier five-tool release observations above describe the older release.
 
 See [component workbench](engineering/WORKBENCH.md) for reproduction and limitations.
+
+## Public source configuration and dataset catalogues
+
+`EPO_PUBLICATION_SERVER_URL`, `OPENALEX_API_URL` and `WIKIDATA_SPARQL_URL` are compatible server-side aliases. Europe PMC scientific discovery is enabled for MED/PMC article metadata in the parallel search flow and Source Explorer, using `EUROPE_PMC_API_URL`. The legacy PAT archive remains disabled. Scientific titles/identifiers/year links are returned; abstracts/full text are not redistributed by the new adapter.
+
+`GET /api/v1/datasets` lists the USPTO research-dataset catalogue and the legacy PatentsView transition link, plus manual import limitations. It does not download data, search patents or change the local index. PatentsView’s current redirect does not certify anonymous file access. [Verification and import contract](discovery/PROVIDED_ENDPOINTS.md).

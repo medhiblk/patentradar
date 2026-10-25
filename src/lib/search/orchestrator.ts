@@ -3,6 +3,7 @@ import { deduplicate, diversePapers } from "@/lib/normalize";
 import { compare, tokens } from "@/lib/compare";
 import * as crossref from "@/lib/providers/crossref";
 import * as openalex from "@/lib/providers/openalex";
+import * as epmcResearch from "@/lib/providers/europe-pmc-research";
 import * as epo from "@/lib/providers/epo-publication";
 import * as publicPatents from "@/lib/providers/europe-pmc";
 import * as ops from "@/lib/providers/epo-ops";
@@ -87,6 +88,7 @@ export function plan(input: SearchInput): {
   paper("Zenodo", () => extra.zenodo(query));
   paper("Crossref", () => crossref.search(query));
   paper("OpenAlex", () => openalex.search(query));
+  paper("Europe PMC scientific", () => epmcResearch.search(query));
   paper("PubMed", () => pubmed.search(query));
   const seeds = [
     ...input.seedPublications,

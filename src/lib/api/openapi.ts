@@ -35,6 +35,19 @@ export const openapi = {
   },
   servers: [{ url: "/", description: "Current host" }],
   paths: {
+    "/api/v1/datasets": {
+      get: {
+        operationId: "getDatasetCatalogues",
+        summary:
+          "HTML catalogue links and manual import limitations; no patent search or download",
+        responses: {
+          "200": {
+            description:
+              "Dataset landing pages, access caveats and offline importer contract",
+          },
+        },
+      },
+    },
     "/api/v1/cad/catalog": {
       get: {
         operationId: "getComponentLibrary",

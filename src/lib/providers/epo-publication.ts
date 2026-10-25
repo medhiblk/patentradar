@@ -1,4 +1,5 @@
 import { request, invalidResponse } from "./http";
+import { epoPublicationBase } from "./urls";
 import { normalizePublication } from "../normalize";
 import { PatentSchema, type PatentRecord } from "./types";
 export const clean = (s: string) =>
@@ -64,7 +65,7 @@ export async function lookup(input: string, date?: string) {
   if (!date || !/^\d{8}$/.test(date))
     throw new Error("EPO publication date (YYYYMMDD) is required.");
   const id = number.replace(/([AB]\d)$/, "NW$1");
-  const url = `${process.env.EPO_PUBLICATION_URL || "https://data.epo.org/publication-server"}/rest/v1.2/publication-dates/${date}/patents/${id}/document.xml`;
+  const url = `${epoPublicationBase()}/publication-dates/${date}/patents/${id}/document.xml`;
   const record = parsePublication(await request("epo-publication", url), url);
   if (record.publicationNumber !== number)
     throw new Error("Publication identifier mismatch");

@@ -67,7 +67,9 @@ See **[the complete discovery handover](docs/discovery/README.md)**.
 
 These are endpoint counts, not independent search-engine counts. Tier A applies to declared metadata/retrieval scopes, quotas and rights; it does not promise uptime or unlimited use. Parameterized example URLs remain templates, not automatically callable search endpoints.
 
-Default research uses OpenAIRE's literature-linked patent metadata, DataCite, HAL, arXiv, Zenodo, Crossref, OpenAlex and PubMed. Exact EP XML/PDF retrieval is available when a publication number and date are supplied. Other source-specific operations include INSPIRE, NASA, DOE, ROR, GLEIF, French company search, Wikidata, RCSB, PubChem and OpenCitations.
+The [user-provided endpoint audit and configuration guide](docs/discovery/PROVIDED_ENDPOINTS.md) documents live tests, compatible environment aliases, Europe PMC scientific metadata and the legacy PatentsView redirect. Dataset catalogues appear under Sources and `/api/v1/datasets`; bulk files are not automatically downloaded or imported.
+
+Default research uses Europe PMC scientific metadata, OpenAIRE's literature-linked patent metadata, DataCite, HAL, arXiv, Zenodo, Crossref, OpenAlex and PubMed. Exact EP XML/PDF retrieval is available when a publication number and date are supplied. Other source-specific operations include INSPIRE, NASA, DOE, ROR, GLEIF, French company search, Wikidata, RCSB, PubChem and OpenCitations.
 
 VeyIP MCP anonymous Chinese patent search/claims were genuinely tested, but its commercial/upstream PatentHub rights are unresolved: disabled by default. ZYB returned firewall 403. TIPO returned a verification-code requirement despite HTTP 200. JPO/KIPRIS registration requirements are not bypassed. EPO linked-data JSON/Turtle work under CC BY 4.0 but official fair use excludes an automatic production backend; bulk download is the scale route.
 

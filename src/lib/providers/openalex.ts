@@ -1,11 +1,9 @@
 import { z } from "zod";
 import { request, invalidResponse } from "./http";
 import type { Paper } from "./types";
+import { openAlexWorksUrl } from "./urls";
 export async function search(query: string): Promise<Paper[]> {
-  const url = new URL(
-    process.env.OPENALEX_WORKS_URL || "/works",
-    process.env.OPENALEX_BASE_URL || "https://api.openalex.org",
-  );
+  const url = openAlexWorksUrl();
   url.searchParams.set("search", query);
   url.searchParams.set("per-page", "6");
   if (process.env.OPENALEX_API_KEY)

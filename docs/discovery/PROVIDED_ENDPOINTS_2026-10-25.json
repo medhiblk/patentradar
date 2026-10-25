@@ -1,0 +1,160 @@
+[
+  {
+    "variable": "EPO_PUBLICATION_SERVER_URL",
+    "url": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+    "finalUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+    "testedAt": "2026-10-25T12:50:01.538Z",
+    "status": 200,
+    "latencyMs": 2917,
+    "contentType": "application/xml",
+    "shape": "EPO patent XML",
+    "scope": "Declared service capability only; not complete patent coverage. Existing adapter restrictions preserved."
+  },
+  {
+    "variable": "OPENALEX_API_URL",
+    "url": "https://api.openalex.org/works?search=microfluidic&per-page=1",
+    "finalUrl": "https://api.openalex.org/works?search=microfluidic&per-page=1",
+    "testedAt": "2026-10-25T12:49:59.715Z",
+    "status": 200,
+    "latencyMs": 1084,
+    "contentType": "application/json",
+    "shape": "OpenAlex works JSON",
+    "sample": "Microfluidics-a review",
+    "documentation": "https://help.openalex.org/api/authentication/",
+    "authentication": "Anonymous basic use documented and tested. Keys increase budget; no unlimited keyless access.",
+    "rateLimit": "Current authentication docs: no-key 10 requests/s; lower budgets and endpoint-specific limits apply. Client uses conservative pacing.",
+    "licensing": "OpenAlex metadata CC0; linked full text has separate rights."
+  },
+  {
+    "variable": "CROSSREF_API_URL",
+    "url": "https://api.crossref.org/works?query=microfluidic&rows=1",
+    "finalUrl": "https://api.crossref.org/works?query=microfluidic&rows=1",
+    "testedAt": "2026-10-25T12:49:59.546Z",
+    "status": 200,
+    "latencyMs": 914,
+    "contentType": "application/json",
+    "shape": "Crossref works JSON",
+    "sample": "Microfluidic Holder",
+    "scope": "Declared service capability only; not complete patent coverage. Existing adapter restrictions preserved."
+  },
+  {
+    "variable": "EUROPE_PMC_API_URL",
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=microfluidic%20AND%20SRC%3AMED&format=json&resultType=core&pageSize=1",
+    "finalUrl": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=microfluidic%20AND%20SRC%3AMED&format=json&resultType=core&pageSize=1",
+    "testedAt": "2026-10-25T12:50:00.524Z",
+    "status": 200,
+    "latencyMs": 1891,
+    "contentType": "application/json;charset=UTF-8",
+    "shape": "Europe PMC core JSON",
+    "sample": "Live Imaging of Grass Roots Growth Dynamics Using Microfluidics.",
+    "documentation": "https://europepmc.org/RestfulWebService",
+    "scope": "MED/PMC scientific title/id/year/DOI metadata; excludes PAT records and abstracts/full text.",
+    "rateLimit": "Conservative 1.1-second minimum spacing, shared with legacy archive operation.",
+    "licensing": "Public bibliographic access; individual abstract/full-text rights are not cleared or redistributed."
+  },
+  {
+    "variable": "HAL_API_URL",
+    "url": "https://api.archives-ouvertes.fr/search/?q=microfluidic&wt=json&rows=1",
+    "finalUrl": "https://api.archives-ouvertes.fr/search/?q=microfluidic&wt=json&rows=1",
+    "testedAt": "2026-10-25T12:50:00.585Z",
+    "status": 200,
+    "latencyMs": 1952,
+    "contentType": "application/json; charset=utf-8",
+    "shape": "HAL JSON",
+    "scope": "Declared service capability only; not complete patent coverage. Existing adapter restrictions preserved."
+  },
+  {
+    "variable": "ARXIV_API_URL",
+    "url": "https://export.arxiv.org/api/query?search_query=all:microfluidic&start=0&max_results=1",
+    "finalUrl": "https://export.arxiv.org/api/query?search_query=all:microfluidic&start=0&max_results=1",
+    "testedAt": "2026-10-25T12:49:59.919Z",
+    "status": 200,
+    "latencyMs": 1285,
+    "contentType": "application/atom+xml; charset=utf-8",
+    "shape": "Atom research feed",
+    "scope": "Declared service capability only; not complete patent coverage. Existing adapter restrictions preserved."
+  },
+  {
+    "variable": "WIKIDATA_SPARQL_URL",
+    "url": "https://query.wikidata.org/sparql?format=json&query=ASK%20%7B%20%3Chttp%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ312%3E%20%3Chttp%3A%2F%2Fwww.wikidata.org%2Fprop%2Fdirect%2FP31%3E%20%3Ftype%20%7D",
+    "finalUrl": "https://query.wikidata.org/sparql?format=json&query=ASK%20%7B%20%3Chttp%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ312%3E%20%3Chttp%3A%2F%2Fwww.wikidata.org%2Fprop%2Fdirect%2FP31%3E%20%3Ftype%20%7D",
+    "testedAt": "2026-10-25T12:50:01.015Z",
+    "status": 200,
+    "latencyMs": 2378,
+    "contentType": "application/sparql-results+json;charset=utf-8",
+    "shape": "SPARQL ASK JSON",
+    "scope": "Declared service capability only; not complete patent coverage. Existing adapter restrictions preserved."
+  },
+  {
+    "variable": "USPTO_DATASETS_URL",
+    "url": "https://www.uspto.gov/ip-policy/economic-research/research-datasets",
+    "finalUrl": "https://www.uspto.gov/ip-policy/economic-research/research-datasets",
+    "testedAt": "2026-10-25T12:49:59.435Z",
+    "status": 200,
+    "latencyMs": 797,
+    "contentType": "text/html; charset=UTF-8",
+    "shape": "HTML catalogue or access page",
+    "sample": " Skip to main content An official website of the United States government Here’s how you know keyboard_arrow_down close An official website of the United States government Here’s how you know keyboard_arrow_down Official websites use .gov A .gov website belongs to an official government organization in the United States. The site is secure. A lock ( lock ) or https:// means you’ve safely connected",
+    "links": [
+      {
+        "text": "Glossary of terms",
+        "url": "/learning-and-resources/glossary"
+      },
+      {
+        "text": "Access free services",
+        "url": "/learning-and-resources/access-our-free-services"
+      },
+      {
+        "text": "Federal Register Notices",
+        "url": "/learning-and-resources/federal-register"
+      },
+      {
+        "text": "Apply to register",
+        "url": "/trademarks#apply-to-register-1"
+      },
+      {
+        "text": "Glossary of terms",
+        "url": "/learning-and-resources/glossary#glossary-of-terms-2"
+      },
+      {
+        "text": "Access free services",
+        "url": "/learning-and-resources/access-our-free-services#access-free-services-2"
+      },
+      {
+        "text": "Federal Register Notices",
+        "url": "/learning-and-resources/federal-register#federal-register-notices-2"
+      },
+      {
+        "text": "Historical Patent Data Files (06/2015)",
+        "url": "/ip-policy/economic-research/research-datasets/historical-patent-data-files"
+      },
+      {
+        "text": "Accessibility",
+        "url": "https://www.uspto.gov/using-usptogov/accessibility-uspto-website"
+      },
+      {
+        "text": "Terms of Use",
+        "url": "https://www.uspto.gov/terms-use-uspto-websites"
+      }
+    ],
+    "scope": "Public HTML research-dataset catalogue; not a search API or verified file import.",
+    "documentation": "https://www.uspto.gov/ip-policy/economic-research/research-datasets",
+    "licensing": "Assess schema, attribution and redistribution terms per dataset; no blanket patent-content reuse claim."
+  },
+  {
+    "variable": "PATENTSVIEW_DATA_URL",
+    "url": "https://patentsview.org/download/data-downloads",
+    "finalUrl": "https://data.uspto.gov/support/transition-guide/patentsview",
+    "testedAt": "2026-10-25T12:50:00.476Z",
+    "status": 200,
+    "latencyMs": 1838,
+    "contentType": "text/html",
+    "shape": "HTML catalogue or access page",
+    "sample": " ",
+    "links": [],
+    "scope": "Legacy landing URL now redirects to an HTML/JS USPTO transition guide. No data file tested.",
+    "documentation": "https://data.uspto.gov/support/transition-guide/patentsview",
+    "authentication": "Bulk-file authentication not verified",
+    "licensing": "File download rights and schema not verified; no automatic import enabled."
+  }
+]

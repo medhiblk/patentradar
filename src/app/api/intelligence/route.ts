@@ -1,5 +1,6 @@
+import * as epmcResearch from "@/lib/providers/europe-pmc-research";
 import { z } from "zod";
-import { observations,ProviderRequestError } from "@/lib/providers/http";
+import { observations, ProviderRequestError } from "@/lib/providers/http";
 import { guard, failure } from "@/lib/security";
 import * as research from "@/lib/providers/new-research";
 import * as organizations from "@/lib/providers/organizations";
@@ -14,6 +15,7 @@ import {
 export const maxDuration = 60;
 const Input = z.object({
   provider: z.enum([
+    "europe-pmc-research",
     "datacite",
     "hal",
     "arxiv",
@@ -103,6 +105,9 @@ export async function POST(req: Request) {
         i.page,
       );
       category = "research";
+    } else if (i.provider === "europe-pmc-research") {
+      records = await epmcResearch.search(i.query, i.page);
+      category = "research";
     } else if (i.provider === "wikidata") {
       records =
         i.operation === "relations"
@@ -177,6 +182,16 @@ export async function POST(req: Request) {
         detail: "Response validation failed",
         checkedAt: new Date().toISOString(),
       });
-    return failure(requestedProvider&&e instanceof Error&&["ZodError","SyntaxError"].includes(e.name)?new ProviderRequestError(requestedProvider,"INVALID_RESPONSE","Response validation failed"):e);
+    return failure(
+      requestedProvider &&
+        e instanceof Error &&
+        ["ZodError", "SyntaxError"].includes(e.name)
+        ? new ProviderRequestError(
+            requestedProvider,
+            "INVALID_RESPONSE",
+            "Response validation failed",
+          )
+        : e,
+    );
   }
 }

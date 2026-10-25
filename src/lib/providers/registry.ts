@@ -166,6 +166,21 @@ export function registry(): Provider[] {
       true,
       process.env.ENABLE_EPMC_PATENT_ARCHIVE === "true",
     ),
+    {
+      ...entry(
+        "europe-pmc-research",
+        "Europe PMC scientific",
+        ["scientific-search"],
+        "Public REST; anonymous request verified",
+        "https://europepmc.org/RestfulWebService",
+        "MED/PMC article metadata only; no patent claims or full-text redistribution. Separate from disabled historical patent archive.",
+        true,
+      ),
+      tier: "A" as const,
+      license:
+        "Public bibliographic metadata; abstracts and article files retain source-specific rights. Only title/identifier/year links returned.",
+      enabledByDefault: true,
+    },
     entry(
       "epo-publication",
       "EPO Publication Server",
