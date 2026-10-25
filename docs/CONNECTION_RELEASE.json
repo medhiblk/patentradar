@@ -1,0 +1,26 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "sourceCommit": "46ff9ade3dd1fff0d51d4bd230601c4a9e774d6c",
+  "deploymentId": "dpl_761kADCknt7zXgULTLdKEw3Ba81i",
+  "state": "READY",
+  "startedAt": "2026-10-25T14:54:25.246Z",
+  "productionBrowserChecks": [
+    {
+      "name": "private attachments survive refresh and sign-in, remain isolated, and reopen in analysis and CAD",
+      "status": "expected",
+      "durationMs": 20990
+    },
+    {
+      "name": "sign in explains validation, submits with Enter and restores the account page",
+      "status": "expected",
+      "durationMs": 6513
+    }
+  ],
+  "local": {
+    "unitIntegrationTests": 98,
+    "lint": "passed",
+    "productionBuild": "passed",
+    "privateBuildTraceEntries": 0
+  },
+  "testData": "Reserved synthetic accounts, no customer credentials or documents. Attachment test files/project deleted."
+}

@@ -21,7 +21,7 @@ The Files form disabled both buttons for passwords shorter than 12 characters wi
 - Production build and lint passed. All 34 function traces contained zero private local-file entries.
 - Browser attachment flow passed with the shared form: signup, project/file storage, logout/login, isolation, analysis/CAD reuse and deletion.
 - New browser sign-in flow passed: short-password explanation, show-password, signup, sign-in with Enter, Account recognizing the session, and sign-out.
-- Tests use synthetic reserved `.example.test` identities. No user credentials or private documents were accessed. New production browser verification is recorded separately after deployment.
+- Tests use synthetic reserved `.example.test` identities. No user credentials or private documents were accessed. Both flows also passed against the deployed production site; see `CONNECTION_RELEASE.json`.
 
 ## Existing limitations
 
