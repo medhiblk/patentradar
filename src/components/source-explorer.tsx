@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { ExternalLink, Search } from "lucide-react";
 const choices = [
+  ["europe-pmc-research", "Europe PMC — scientific articles", "search"],
   ["datacite", "DataCite — research datasets", "search"],
   ["hal", "HAL — French research", "search"],
   ["arxiv", "arXiv — preprint metadata", "search"],
@@ -87,6 +88,22 @@ function display(input: unknown): Display[] {
   });
 }
 export function SourceExplorer() {
+  const [catalogues, setCatalogues] = useState<
+    { id: string; name: string; url: string; detail: string }[]
+  >([]);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/v1/datasets", { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (Array.isArray(data?.catalogues))
+          setCatalogues(
+            data.catalogues.filter((r: { url?: unknown }) => href(r.url)),
+          );
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, []);
   const [choice, setChoice] = useState("datacite"),
     [query, setQuery] = useState(""),
     [consent, setConsent] = useState(false),
@@ -233,6 +250,24 @@ export function SourceExplorer() {
           )}
         </div>
       )}
+      <details>
+        <summary>Patent datasets for manual import</summary>
+        <p className="hint">
+          These are catalogue pages, not live search APIs. Check file access,
+          schema and reuse terms before downloading and normalizing records for
+          the offline importer. No files are imported automatically.
+        </p>
+        {catalogues.map((c) => (
+          <article className="paper" key={c.id}>
+            <div>
+              <a href={c.url} target="_blank" rel="noreferrer">
+                {c.name} ↗
+              </a>
+              <small>{c.detail}</small>
+            </div>
+          </article>
+        ))}
+      </details>
     </section>
   );
 }

@@ -1,0 +1,38 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "checkedAt": "2026-10-25T13:04:11.452Z",
+  "sourceCommit": "d960ac7ec064fd683bfc7b4237d381e5983ce665",
+  "deploymentId": "dpl_AaThNhbKLThfpXbYsoc9zUo9hJoR",
+  "ci": "https://github.com/medhiblk/patentradar/actions/runs/40195710758",
+  "passed": true,
+  "science": {
+    "status": 200,
+    "latencyMs": 1716,
+    "count": 4,
+    "first": {
+      "id": "europepmc:PMC:PMC13693171",
+      "title": "Rotational Microfluidic Paper-Based Chip Platform Integrating Nucleic Acid Sequence-Based Amplification for Visual and Sensitive Detection of Viable Pathogens",
+      "source": "Europe PMC scientific metadata",
+      "sourceUrl": "https://europepmc.org/article/PMC/PMC13693171",
+      "retrievedAt": "2026-10-25T13:04:11.023Z"
+    }
+  },
+  "epo": {
+    "status": 200,
+    "latencyMs": 2024,
+    "publicationNumber": "EP1000000A1",
+    "claims": 11,
+    "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml"
+  },
+  "datasets": {
+    "status": 200,
+    "count": 2,
+    "automaticImports": 0
+  },
+  "checks": {
+    "unitIntegrationTests": 88,
+    "browserTests": 13,
+    "build": "passed",
+    "lint": "passed"
+  }
+}

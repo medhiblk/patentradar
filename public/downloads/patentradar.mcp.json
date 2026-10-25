@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "patentradar": {
+      "type": "http",
+      "url": "https://patentradar-puce.vercel.app/api/mcp/patents"
+    }
+  }
+}

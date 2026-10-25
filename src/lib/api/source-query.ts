@@ -13,6 +13,7 @@ import * as pubmed from "@/lib/providers/pubmed";
 import * as publication from "@/lib/providers/epo-publication";
 import * as ops from "@/lib/providers/epo-ops";
 import * as google from "@/lib/providers/google-patents";
+import * as epmcResearch from "@/lib/providers/europe-pmc-research";
 import * as epmc from "@/lib/providers/europe-pmc";
 import * as semantic from "@/lib/providers/semantic-scholar";
 import * as local from "@/lib/providers/local-index";
@@ -47,6 +48,7 @@ export const SourceInput = z
       "epo-ops",
       "google-patents",
       "europe-pmc",
+      "europe-pmc-research",
       "semantic-scholar",
       "local-index",
       "patent-pages",
@@ -223,6 +225,9 @@ export async function querySource(raw: unknown) {
     } else if (i.provider === "google-patents") {
       records = await google.retrieve(i.query, []);
       category = "patent";
+    } else if (i.provider === "europe-pmc-research") {
+      records = await epmcResearch.search(i.query, i.page);
+      category = "research";
     } else if (i.provider === "europe-pmc") {
       records = await epmc.search(i.query);
       category = "patent";

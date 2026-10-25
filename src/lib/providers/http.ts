@@ -44,8 +44,9 @@ export class ProviderRequestError extends Error {
   }
 }
 async function pace(provider: string) {
+  const quota = provider === "europe-pmc-research" ? "europe-pmc" : provider;
   if (sharedConfigured()) {
-    const delay = await reserve(provider, gaps[provider] || 1100);
+    const delay = await reserve(quota, gaps[quota] || 1100);
     if (delay > 0)
       throw new ProviderRequestError(
         provider,
@@ -56,7 +57,7 @@ async function pace(provider: string) {
     return;
   }
   const now = Date.now(),
-    next = nextAllowed.get(provider) || 0,
+    next = nextAllowed.get(quota) || 0,
     delay = Math.max(0, next - now);
   if (delay > 1500)
     throw new ProviderRequestError(
@@ -65,7 +66,7 @@ async function pace(provider: string) {
       "Rate limit: retry later",
       delay,
     );
-  nextAllowed.set(provider, Math.max(now, next) + (gaps[provider] || 1100));
+  nextAllowed.set(quota, Math.max(now, next) + (gaps[quota] || 1100));
   if (delay) await new Promise((r) => setTimeout(r, delay));
 }
 async function readBounded(response: Response) {

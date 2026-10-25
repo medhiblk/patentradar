@@ -3,6 +3,7 @@ import * as openaire from "../src/lib/providers/openaire";
 import * as pubmed from "../src/lib/providers/pubmed";
 import * as semantic from "../src/lib/providers/semantic-scholar";
 import * as publicPatents from "../src/lib/providers/europe-pmc";
+import * as epmcResearch from "../src/lib/providers/europe-pmc-research";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { readFileSync } from "node:fs";
 import {
@@ -127,6 +128,7 @@ describe("workflow integration", () => {
     for (const name of ["datacite", "hal", "arxiv", "zenodo", "nasa", "doe", "inspire"] as const)
       vi.spyOn(extra, name).mockResolvedValue([]);
     vi.spyOn(publicPatents, "search").mockResolvedValue([]);
+    vi.spyOn(epmcResearch, "search").mockResolvedValue([]);
     vi.spyOn(pubmed, "search").mockResolvedValue([]);
     vi.spyOn(semantic, "search").mockResolvedValue([]);
     vi.spyOn(crossref, "search").mockRejectedValue(new Error("unavailable"));
