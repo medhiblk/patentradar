@@ -85,6 +85,12 @@ export default function Developers() {
             <li>POST /api/v1/patents/lookup — exact EP number + date</li>
             <li>POST /api/v1/compare — lexical evidence comparison</li>
             <li>GET /api/v1/providers — source capabilities</li>
+            <li>
+              <a href="/api/v1/cad/catalog">
+                GET /api/v1/cad/catalog — starter parts and sources
+              </a>
+            </li>
+            <li>POST /api/v1/cad/inspect — fit, costs and rights evidence</li>
           </ul>
         </section>
         <section className="panel">
@@ -97,7 +103,8 @@ export default function Developers() {
           <p>
             Search patents, retrieve exact EP publications, inspect provider
             health, extract literal technical features and compare supplied
-            evidence.
+            evidence. Inspect assembly envelopes, known purchase costs and the
+            starter library with component_library and inspect_assembly.
           </p>
           <p>
             Private tools additionally accept scoped bearer tokens from Account.

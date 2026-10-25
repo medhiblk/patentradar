@@ -11,6 +11,12 @@ class CADTests(unittest.TestCase):
   r=worker({'action':'import','file':d['step']});self.assertEqual(len(r['parts']),1);self.assertAlmostEqual(r['parts'][0]['volume'],24000,places=3)
  def test_tube_bore_is_real_geometry(self):
   d=worker({'action':'build','components':[part('tube','tube',{'length':50,'diameter':20,'innerDiameter':12})]});self.assertAlmostEqual(d['parts'][0]['volume'],math.pi*(100-36)*50,places=3)
+ def test_pocket_removes_actual_material(self):
+  p=part(dimensions={'length':56,'width':26,'height':4});p['pocket']={'wall':2,'floor':2}
+  d=worker({'action':'build','components':[p]});self.assertTrue(d['parts'][0]['valid']);self.assertAlmostEqual(d['parts'][0]['volume'],3536,places=4)
+ def test_impossible_pocket_rejected(self):
+  p=part();p['pocket']={'wall':30,'floor':2}
+  d=worker({'action':'build','components':[p]});self.assertIn('error',d)
  def test_missing_dimensions_rejected(self):
   d=worker({'action':'build','components':[part(dimensions={'length':80,'width':None,'height':6})]});self.assertIn('error',d)
  def test_pdf_real_text_page_and_render(self):

@@ -18,6 +18,8 @@ it("official MCP transport lists anonymous public tools without exposing private
   const names = data.result.tools.map((t: { name: string }) => t.name);
   expect(names).toContain("search_patents");
   expect(names).toContain("lookup_patent");
+  expect(names).toContain("component_library");
+  expect(names).toContain("inspect_assembly");
   expect(names).not.toContain("list_my_projects");
   expect((await mcpGet()).status).toBe(405);
 });
@@ -64,4 +66,22 @@ it("MCP rejects invalid and oversized tool arguments instead of executing", asyn
   );
   const d = await r.json();
   expect(d.result?.isError || d.error).toBeTruthy();
+});
+it("MCP assembly inspection does not imply patent or manufacturing clearance", async () => {
+  const { starterPart } = await import("../src/lib/cad/workbench");
+  const r = await mcp(
+    rpc("tools/call", {
+      name: "inspect_assembly",
+      arguments: {
+        title: "Prototype",
+        components: [starterPart("board")],
+        limitations: [],
+      },
+    }),
+  );
+  const d = await r.json();
+  expect(d.result.isError).not.toBe(true);
+  const report = JSON.parse(d.result.content[0].text);
+  expect(report.patentClearance).toBe("NOT ESTABLISHED");
+  expect(report.measurementsRequired).toHaveLength(1);
 });

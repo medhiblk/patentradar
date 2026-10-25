@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-25T12:16:26.661211+00:00",
+  "sources": [
+    {
+      "url": "https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf",
+      "httpStatus": 200,
+      "latencyMs": 4432,
+      "format": "application/pdf",
+      "page": 7,
+      "evidence": "The Raspberry Pi Pico is a single sided 51×21 mm 1 mm thick PCB",
+      "usage": "Factual dimensions with short attributed excerpt only. No vendor geometry copied. Complete occupied component/connector envelope not inferred."
+    },
+    {
+      "url": "https://store.arduino.cc/products/arduino-uno-rev3",
+      "httpStatus": 200,
+      "latencyMs": 682,
+      "format": "text/html",
+      "evidence": "Length 68.6 mm Width 53.4 mm Weight 25 g",
+      "usage": "Manufacturer footprint facts only; occupied height remains null. No live price imported. No vendor CAD copied."
+    }
+  ],
+  "licensing": "Original parametric code follows repository Apache-2.0. Manufacturer documents retain their own copyright and terms. No patent licence or product-design permission inferred."
+}

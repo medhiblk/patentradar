@@ -15,6 +15,8 @@ import {
   publicCompare,
 } from "@/lib/api/public";
 import { localExtract } from "@/lib/local-extract";
+import { AssemblySchema } from "@/lib/cad/schema";
+import { STARTER_PARTS, inspectAssembly } from "@/lib/cad/workbench";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 const output = (value: unknown) => ({
@@ -34,11 +36,36 @@ export async function POST(req: Request) {
     );
   }
   const server = new McpServer(
-    { name: "patentradar", version: "1.1.0" },
+    { name: "patentradar", version: "1.2.0" },
     {
       instructions:
         "Patent intelligence with partial source coverage. Use only short non-confidential concepts for public search and obtain user approval to share queries. Never infer infringement or novelty from relevance or missing results.",
     },
+  );
+  server.registerTool(
+    "component_library",
+    {
+      description:
+        "List original editable geometry templates and linked manufacturer board footprints. No downloaded supplier CAD, live prices or patent clearance.",
+      inputSchema: z.object({}).strict(),
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
+    async () =>
+      output({
+        parts: STARTER_PARTS,
+        templateCodeLicense: "Apache-2.0",
+        patentClearance: "NOT ESTABLISHED",
+      }),
+  );
+  server.registerTool(
+    "inspect_assembly",
+    {
+      description:
+        "Inspect supplied assembly parameters: missing dimensions, spatial housing fit, known user-entered purchase costs and unverified rights evidence. No external calls, geometry build or legal clearance.",
+      inputSchema: AssemblySchema,
+      annotations: { readOnlyHint: true, openWorldHint: false },
+    },
+    async (args) => output(inspectAssembly(args)),
   );
   server.registerTool(
     "provider_status",

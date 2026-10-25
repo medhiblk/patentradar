@@ -29,12 +29,30 @@ export const openapi = {
   openapi: "3.1.0",
   info: {
     title: "PatentRadar API",
-    version: "1.1.0",
+    version: "1.2.0",
     description:
       "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. CAD/private operations require configured native runtime, persistent account storage and a scoped developer token. No legal FTO conclusions.",
   },
   servers: [{ url: "/", description: "Current host" }],
   paths: {
+    "/api/v1/cad/catalog": {
+      get: {
+        operationId: "getComponentLibrary",
+        summary:
+          "Read starter templates and manufacturer footprint sources; no clearance or live pricing",
+        responses: {
+          "200": {
+            description:
+              "Original template metadata with external source references",
+          },
+        },
+      },
+    },
+    "/api/v1/cad/inspect": post(
+      "inspectAssembly",
+      "Check supplied parameters, envelope fit, known purchase costs and unverified rights; no legal clearance",
+      AssemblySchema,
+    ),
     "/api/v1/health": {
       get: {
         operationId: "getHealth",

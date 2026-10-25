@@ -16,6 +16,8 @@ npm run build
 npm run start
 ```
 
+The [parts workbench](docs/engineering/WORKBENCH.md) adds a sourced board-footprint library, purchased-component references and user-entered prices, custom housing pockets, envelope checks, mixed STEP/parametric assemblies, explicit fusion and individual STL export. Reopen editable parameter JSON and export a costed parts CSV. No live Amazon pricing or patent clearance is inferred.
+
 For CAD runtime installation, private storage, input limits and tested capabilities see [engineering delivery](docs/engineering/DELIVERY.md). For application/data licensing, see [notices](NOTICES.md).
 
 ---

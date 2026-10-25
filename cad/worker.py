@@ -48,7 +48,13 @@ def run(data):
     v=d.get(k)
     if not isinstance(v,(int,float)) or not math.isfinite(v) or not 0<v<=2000:raise ValueError('Missing or invalid dimension '+k)
     return v
-   if shape=='box':model=cq.Workplane('XY').box(dim('length'),dim('width'),dim('height'))
+   if shape=='box':
+    l,w,h=dim('length'),dim('width'),dim('height');model=cq.Workplane('XY').box(l,w,h)
+    pocket=p.get('pocket')
+    if pocket:
+     wall,floor=pocket['wall'],pocket['floor']
+     if not (isinstance(wall,(int,float)) and isinstance(floor,(int,float)) and 0.2<=wall<min(l,w)/2 and 0.2<=floor<h):raise ValueError('Invalid pocket dimensions')
+     cutter=cq.Workplane('XY').box(l-2*wall,w-2*wall,h-floor+1).translate((0,0,(floor+1)/2));model=model.cut(cutter)
    elif shape in ['cylinder','tube']:
     outer=dim('diameter')/2;wp=cq.Workplane('XY').circle(outer)
     if shape=='tube':
