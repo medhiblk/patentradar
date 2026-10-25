@@ -1,0 +1,45 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "sourceCommit": "a3cbeac28dc964af099da4c30af0c5a8128db911",
+  "deploymentId": "dpl_NMpML1nRzbHVEuSFPvF1fX9wWWdv",
+  "state": "READY",
+  "startedAt": "2026-10-25T15:26:19.004Z",
+  "productionBrowserChecks": [
+    {
+      "name": "private attachments survive refresh and sign-in, remain isolated, and reopen in analysis and CAD",
+      "passed": true,
+      "durationMs": 22563
+    },
+    {
+      "name": "guided demo builds real editable CAD from the synthetic source PDF",
+      "passed": true,
+      "durationMs": 11957
+    },
+    {
+      "name": "real measured PDF generates CAD, edits geometry and downloads STEP",
+      "passed": true,
+      "durationMs": 12844
+    },
+    {
+      "name": "sign in explains validation, submits with Enter and restores the account page",
+      "passed": true,
+      "durationMs": 8492
+    },
+    {
+      "name": "lightweight home explains the workflow without loading research or CAD",
+      "passed": true,
+      "durationMs": 2120
+    },
+    {
+      "name": "mobile menu closes with Escape and deep links support refresh and Back",
+      "passed": true,
+      "durationMs": 3603
+    }
+  ],
+  "productionHome": {
+    "javascriptEncodedBytes": 149169,
+    "resourceCount": 11,
+    "initialApiRequests": 0
+  },
+  "testData": "Synthetic measured PDF and reserved test accounts. No customer documents/credentials used. Attachment test project/files deleted. No patent search results fabricated."
+}

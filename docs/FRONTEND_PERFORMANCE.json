@@ -1,0 +1,40 @@
+{
+  "sourceCommit": "a3cbeac28dc964af099da4c30af0c5a8128db911",
+  "method": "Fresh Chromium context, desktop 1440x1000, network idle, encoded resource bytes; not a Lighthouse score.",
+  "baseline": {
+    "javascriptEncodedBytes": 366695,
+    "resourceCount": 15,
+    "initialProviderHealthRequests": 1
+  },
+  "current": {
+    "javascriptEncodedBytes": 145436,
+    "resourceCount": 11,
+    "initialApiRequests": 0
+  },
+  "javascriptReductionPercent": 60.34,
+  "validation": {
+    "unitIntegrationTests": 98,
+    "browserTests": 18,
+    "browserFailures": 0,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "privateBuildTraceEntries": 0,
+    "freshGithubClone": {
+      "npmCi": "passed",
+      "typecheck": "passed",
+      "productionBuild": "passed",
+      "npmStart": "passed",
+      "homeStatus": 200,
+      "healthStatus": 200,
+      "environmentFileRequired": false,
+      "sourceCommit": "a3cbeac28dc964af099da4c30af0c5a8128db911",
+      "demoStatus": 200,
+      "sampleDocumentStatus": 200
+    },
+    "dockerRuntime": "configuration provided; image not built in this task",
+    "codespaces": "devcontainer provided; a Codespace was not provisioned",
+    "privateBuildTraceManifests": 35
+  },
+  "baselineSourceCommit": "46ff9ade3dd1fff0d51d4bd230601c4a9e774d6c"
+}
