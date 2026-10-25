@@ -12,6 +12,7 @@ playwright-report/
 __pycache__/
 *.pyc
 /public/cad-kernel/
+/public/document-kernel/
 # Local confidential attachment/data stores, including custom volume paths.
 **/private-files/
 **/patentradar.sqlite*

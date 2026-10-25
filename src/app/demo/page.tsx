@@ -8,6 +8,7 @@ import { ProductTour } from "@/components/demo/product-tour";
 import "./demo.css";
 import { Button } from "@/components/ui/button";
 import { loadExampleDocument } from "@/lib/demo/example-document";
+import { sourceFileError, SOURCE_ACCEPT } from "@/lib/cad/source-files";
 const Studio = dynamic(
   () =>
     import("@/components/engineering-studio").then((m) => m.EngineeringStudio),
@@ -23,6 +24,19 @@ export default function Demo() {
   const [revision, setRevision] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [dragging, setDragging] = useState(false);
+  function openSource(source: File | undefined) {
+    if (!source || busy) return;
+    const invalid = sourceFileError(source);
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
+    setError("");
+    setFile(source);
+    if (!opened) setRevision((v) => v + 1);
+    setOpened(true);
+  }
   const workspace = useRef<HTMLDivElement>(null);
   const consumed = useCallback(() => {
     setFile(null);
@@ -85,7 +99,30 @@ export default function Demo() {
   return (
     <>
       <AppNavigation page="Demo" />
-      <main className="developer-page demo-page" id="main-content">
+      <main
+        className={
+          "developer-page demo-page" + (dragging ? " is-dragging" : "")
+        }
+        id="main-content"
+        onDragOver={(event) => {
+          if (Array.from(event.dataTransfer.types).includes("Files")) {
+            event.preventDefault();
+            setDragging(true);
+          }
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDropCapture={() => setDragging(false)}
+        onDrop={(event) => {
+          if (!Array.from(event.dataTransfer.types).includes("Files")) return;
+          event.preventDefault();
+          setDragging(false);
+          if (event.dataTransfer.files.length !== 1) {
+            setError("Drop one source document at a time.");
+            return;
+          }
+          openSource(event.dataTransfer.files[0]);
+        }}
+      >
         <div className="demo-opening">
           <header className="demo-intro">
             <span className="product-kicker">
@@ -124,6 +161,20 @@ export default function Demo() {
                 Download the source PDF
               </a>
             </div>
+            <label className="demo-source-drop">
+              <strong>Or drop the downloaded PDF here</strong>
+              <span>Choose a PDF, drawing or CAD file · up to 4 MB</span>
+              <input
+                aria-label="Demo source file"
+                type="file"
+                accept={SOURCE_ACCEPT}
+                disabled={busy}
+                onChange={(event) => {
+                  openSource(event.target.files?.[0]);
+                  event.currentTarget.value = "";
+                }}
+              />
+            </label>
             {error && (
               <p role="alert" className="notice error">
                 {error}

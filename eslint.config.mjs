@@ -6,6 +6,7 @@ export default defineConfig([
   ...ts,
   globalIgnores([
     "public/cad-kernel/**",
+    "public/document-kernel/**",
     ".next/**",
     "test-results/**",
     "playwright-report/**",

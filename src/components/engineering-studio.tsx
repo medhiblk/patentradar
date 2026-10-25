@@ -4,6 +4,12 @@ import { mergeAssembly } from "@/lib/cad/workbench";
 import { PartsWorkbench } from "./parts-workbench";
 import { PrivateWorkspace } from "./private-workspace";
 import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
+import {
+  sourceFileError,
+  SOURCE_ACCEPT,
+  isPdfSource,
+} from "@/lib/cad/source-files";
+import { studioRequest, StudioRequestError } from "@/lib/cad/studio-request";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
@@ -16,6 +22,23 @@ import {
   type ComponentSpec,
 } from "@/lib/cad/schema";
 import type { MeshPart } from "./cad-viewer";
+import { z } from "zod";
+const InterpretationSchema = z.object({
+  spec: AssemblySchema,
+  sourceName: z.string().max(500),
+  sourceHash: z.string().max(64),
+  notice: z.string().max(5000),
+});
+function zInterpretation(value: unknown) {
+  const parsed = InterpretationSchema.safeParse(value);
+  if (!parsed.success)
+    throw new StudioRequestError(
+      "The document service returned invalid data. Your source is kept; retry reading it.",
+      200,
+      true,
+    );
+  return parsed.data;
+}
 const Viewer = dynamic(() => import("./cad-viewer").then((m) => m.CADViewer), {
   ssr: false,
   loading: () => <div className="cad-canvas">Loading 3D workspace…</div>,
@@ -62,6 +85,21 @@ export function EngineeringStudio({
   guidedNavigation?: boolean;
 }) {
   const studio = useRef<HTMLDivElement>(null);
+  const [draggingSource, setDraggingSource] = useState(false);
+  function selectSource(source: File | undefined) {
+    if (!source || busy) return;
+    const error = sourceFileError(source);
+    if (error) {
+      setError(error);
+      return;
+    }
+    setError("");
+    setFile(source);
+    setNotice(
+      "Source selected. Read the document to identify its parts and measurements.",
+    );
+    guideTo("#studio-read-source");
+  }
   function guideTo(selector: string) {
     if (!guidedNavigation) return;
     requestAnimationFrame(() => {
@@ -244,18 +282,7 @@ export function EngineeringStudio({
     return () => clearTimeout(timer);
   }, [restoreDraft]);
   async function request(url: string, body: object | FormData) {
-    const r = await fetch(url, {
-      method: "POST",
-      ...(body instanceof FormData
-        ? { body }
-        : {
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          }),
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error || "Request failed");
-    return d;
+    return studioRequest(url, body);
   }
   async function run(label: string, fn: () => Promise<void>) {
     setBusy(label);
@@ -264,6 +291,7 @@ export function EngineeringStudio({
       await fn();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Operation failed");
+      guideTo('[role="alert"]');
     } finally {
       setBusy("");
     }
@@ -409,18 +437,43 @@ export function EngineeringStudio({
       form.set("text", text);
       form.set("consent", String(consent));
       form.set("goal", spec.goal || "");
-      const d = await request("/api/cad/interpret", form);
+      let result;
+      try {
+        result = zInterpretation(
+          await studioRequest(
+            "/api/cad/interpret",
+            form,
+            consent ? 65000 : 20000,
+          ),
+        );
+      } catch (error) {
+        if (
+          consent ||
+          !file ||
+          !isPdfSource(file) ||
+          !(error instanceof StudioRequestError) ||
+          !error.recoverable
+        )
+          throw error;
+        setBusy("Upload unavailable — reading the actual PDF on this device");
+        const { interpretPdfLocally } = await import(
+          "@/lib/cad/browser-document"
+        );
+        result = zInterpretation(
+          await interpretPdfLocally(file, spec.goal || ""),
+        );
+      }
       installParts({
-        ...d.spec,
-        components: d.spec.components.map((c: ComponentSpec) => ({
+        ...result.spec,
+        components: result.spec.components.map((c) => ({
           ...c,
-          sourceName: d.sourceName,
+          sourceName: result.sourceName,
         })),
       });
-      setSource({ name: d.sourceName, hash: d.sourceHash });
+      setSource({ name: result.sourceName, hash: result.sourceHash });
       setNotice(
-        d.spec.components.length
-          ? d.notice
+        result.spec.components.length
+          ? result.notice
           : "No reconstructable primitive with explicit mm dimensions was found. Add the required measurements below; no dimensions were invented.",
       );
     });
@@ -528,7 +581,30 @@ export function EngineeringStudio({
           <span>04</span> Export & investigate
         </a>
       </nav>
-      <section className="panel studio-source" id="studio-source">
+      <section
+        className={
+          "panel studio-source" + (draggingSource ? " is-dragging" : "")
+        }
+        id="studio-source"
+        onDragOver={(event) => {
+          if (Array.from(event.dataTransfer.types).includes("Files")) {
+            event.preventDefault();
+            setDraggingSource(true);
+          }
+        }}
+        onDragLeave={() => setDraggingSource(false)}
+        onDrop={(event) => {
+          if (!Array.from(event.dataTransfer.types).includes("Files")) return;
+          event.preventDefault();
+          event.stopPropagation();
+          setDraggingSource(false);
+          if (event.dataTransfer.files.length !== 1) {
+            setError("Drop one source document at a time.");
+            return;
+          }
+          selectSource(event.dataTransfer.files[0]);
+        }}
+      >
         <div className="section-heading">
           <span className="product-kicker">01 / YOUR STARTING POINT</span>
           <h2>What are we building?</h2>
@@ -556,8 +632,11 @@ export function EngineeringStudio({
               key={pickerVersion}
               aria-label="Engineering source file"
               type="file"
-              accept=".pdf,.png,.jpg,.jpeg,.step,.stp,.stl,.json"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              accept={SOURCE_ACCEPT}
+              onChange={(e) => {
+                selectSource(e.target.files?.[0]);
+                e.currentTarget.value = "";
+              }}
             />
           </label>
           <label className="grow">
@@ -570,6 +649,10 @@ export function EngineeringStudio({
             />
           </label>
         </div>
+        <p className="hint">
+          Drop a PDF, drawing or CAD file anywhere in this source panel, or
+          choose a file above.
+        </p>
         <label className="checkbox">
           <input
             type="checkbox"
@@ -640,7 +723,7 @@ export function EngineeringStudio({
         )}
       </details>
       {error && (
-        <p role="alert" className="notice error">
+        <p role="alert" tabIndex={-1} className="notice error">
           {error}
         </p>
       )}

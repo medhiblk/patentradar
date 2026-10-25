@@ -58,6 +58,8 @@ Try [the real US20080003142A1 case](https://patentradar-puce.vercel.app/demo/pat
 
 ## What works
 
+The [demo](https://patentradar-puce.vercel.app/demo) supports downloading and reuploading/dropping its PDF. Recoverable upload failures use actual on-device PDF text extraction when AI consent is off. [Upload recovery, limits and browser tests](docs/PDF_UPLOAD_RECOVERY.md).
+
 Research now shows **Where we searched**, the exact analysed patent shortlist and **Evidence behind this result** on each record. Queries, provider failures/empty replies, cache reuse, claim/abstract/title limitations, source passages and timestamps remain inspectable in the UI, private portfolio and PDF report. [Traceability details](docs/SEARCH_EVIDENCE.md).
 
 - PDF/text/image interpretation, component review, real measured geometry through OpenCascade WASM, STEP/STL import and export, purchased-part references and custom housings.

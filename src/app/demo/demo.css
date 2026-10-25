@@ -408,6 +408,11 @@
 .demo-page {
   max-width: 1400px;
 }
+.demo-source-drop { display: grid; gap: 9px; padding: 17px; border: 1px dashed #91a7eb; background: #f2f5ff; border-radius: 14px; margin-top: 20px; }
+.demo-source-drop strong { font-size: 13px; color: #213a67; }
+.demo-source-drop span { font-size: 11px; color: #506078; }
+.demo-source-drop input { max-width: 100%; font-size: 12px; }
+.demo-page.is-dragging .demo-source-drop, .studio-source.is-dragging { outline: 3px solid #3157e8; outline-offset: 3px; background: #edf2ff; }
 .demo-live-workspace,
 .demo-live-workspace #studio-model,
 .demo-live-workspace .cad-stage {

@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       hash = createHash("sha256").update(raw).digest("hex");
       sourceName = f.name;
       if (
-        f.type === "application/pdf" &&
+        (f.type === "application/pdf" || /\.pdf$/i.test(f.name)) &&
         raw.subarray(0, 5).toString() === "%PDF-"
       ) {
         pages = await pdfTextPages(new Uint8Array(raw));

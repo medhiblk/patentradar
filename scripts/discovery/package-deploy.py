@@ -2,7 +2,7 @@ import pathlib,json,base64
 root=pathlib.Path(__file__).resolve().parents[2];files=[]
 for base in ['src','public']:
  for p in sorted((root/base).rglob('*')):
-  if not p.is_file() or "cad-kernel" in p.parts:continue
+  if not p.is_file() or "cad-kernel" in p.parts or "document-kernel" in p.parts:continue
   rel=str(p.relative_to(root));b=p.read_bytes()
   try:files.append({'file':rel,'data':b.decode(),'encoding':'utf-8'})
   except UnicodeDecodeError:files.append({'file':rel,'data':base64.b64encode(b).decode(),'encoding':'base64'})

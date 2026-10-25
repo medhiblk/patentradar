@@ -7,6 +7,7 @@ PatentRadar original application code follows the Apache 2.0 licence selected in
 - replicad-opencascadejs 1.1.0 dynamically loaded module: LGPL-2.1-only. Unmodified loader/WASM, licence text and corresponding-source/build links are served under /cad-kernel/. Modules remain replaceable.
 - CadQuery: Apache 2.0 at project level; native OCCT/OCP, CasADi, solvers and bundled libraries have separate obligations. See `docs/engineering/OPEN_SOURCE.md` and upstream notices before redistributing native binaries.
 - PDFium/Pillow and the Node dependencies retain their respective upstream licences.
+- PDF.js 4.10.38: Apache-2.0. Unmodified legacy reader/worker and upstream licence are served under /document-kernel/ and loaded only for local PDF recovery.
 - Patent/research data retain source-specific rights and required attribution; CC-BY metadata rights do not establish rights to every linked full-text document.
 - Experimental providers with unclear reuse rights remain disabled by default.
 
