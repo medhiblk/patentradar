@@ -1,0 +1,58 @@
+[
+  {
+    "start": 0,
+    "end": 9,
+    "label": "The question",
+    "title": "Millions of patents.\nOne critical question.",
+    "subtitle": "Has someone already explored your idea?",
+    "narration": "Every breakthrough begins with an idea. But among millions of patents, someone may have explored something similar."
+  },
+  {
+    "start": 9,
+    "end": 17,
+    "label": "Meet PatentRadar",
+    "title": "A clearer signal.\nA smarter starting point.",
+    "subtitle": "Patent intelligence, powered by AI.",
+    "narration": "Meet PatentRadar. AI-powered research that turns complex patent discovery into actionable intelligence."
+  },
+  {
+    "start": 17,
+    "end": 28,
+    "label": "Your invention",
+    "title": "Start with\nyour invention.",
+    "subtitle": "An idea. A document. A new direction.",
+    "narration": "Describe your invention, upload technical documents, or add patents you know. PatentRadar turns technical concepts into a focused search strategy."
+  },
+  {
+    "start": 28,
+    "end": 40,
+    "label": "Discover",
+    "title": "Search beyond\nkeywords.",
+    "subtitle": "Discover connected innovations.",
+    "narration": "Search patent sources across jurisdictions. Connect related technologies and discover relevant prior art, even when inventions use different terminology."
+  },
+  {
+    "start": 40,
+    "end": 51,
+    "label": "Understand",
+    "title": "From documents\nto insights.",
+    "subtitle": "Follow the evidence. See what matters.",
+    "narration": "Compare technical features, explore relevant claims and inspect source evidence. Understand what deserves closer review, with your team or a patent professional."
+  },
+  {
+    "start": 51,
+    "end": 58,
+    "label": "Stay ahead",
+    "title": "Innovation\ndoesn’t stand still.",
+    "subtitle": "Neither should your research.",
+    "narration": "Follow new publications, monitor competitors and receive personalized updates on the technologies that matter."
+  },
+  {
+    "start": 58,
+    "end": 65,
+    "label": "Explore",
+    "title": "Before you build.\nKnow what exists.",
+    "subtitle": "PatentRadar",
+    "narration": "PatentRadar. Explore the inventions of today, before building the breakthroughs of tomorrow."
+  }
+]
