@@ -1,0 +1,278 @@
+{
+  "checkedAt": "2026-10-25T09:03:46Z",
+  "firstPatentSeconds": 2.952,
+  "elapsedSeconds": 5.393,
+  "events": [
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 1,
+      "timestamp": "2026-10-25T09:03:41.810Z",
+      "type": "started"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 2,
+      "timestamp": "2026-10-25T09:03:41.810Z",
+      "type": "provider_started",
+      "provider": "EPO EP1000000A1"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 3,
+      "timestamp": "2026-10-25T09:03:41.811Z",
+      "type": "provider_started",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 4,
+      "timestamp": "2026-10-25T09:03:41.811Z",
+      "type": "provider_started",
+      "provider": "DataCite"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 5,
+      "timestamp": "2026-10-25T09:03:41.811Z",
+      "type": "provider_started",
+      "provider": "HAL"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 6,
+      "timestamp": "2026-10-25T09:03:43.266Z",
+      "type": "provider_finished",
+      "provider": "DataCite"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 7,
+      "timestamp": "2026-10-25T09:03:43.266Z",
+      "type": "provider_started",
+      "provider": "arXiv"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 8,
+      "timestamp": "2026-10-25T09:03:43.635Z",
+      "type": "provider_finished",
+      "provider": "HAL"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 9,
+      "timestamp": "2026-10-25T09:03:43.636Z",
+      "type": "provider_started",
+      "provider": "Zenodo"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 10,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 11,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 12,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 13,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 14,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 15,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 16,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 17,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 18,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 19,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 20,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 21,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "candidate_upsert",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 22,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "provider_finished",
+      "provider": "OpenAIRE Graph"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 23,
+      "timestamp": "2026-10-25T09:03:44.559Z",
+      "type": "provider_started",
+      "provider": "Crossref"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 24,
+      "timestamp": "2026-10-25T09:03:44.759Z",
+      "type": "provider_finished",
+      "provider": "Zenodo"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 25,
+      "timestamp": "2026-10-25T09:03:44.759Z",
+      "type": "provider_started",
+      "provider": "OpenAlex"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 26,
+      "timestamp": "2026-10-25T09:03:44.806Z",
+      "type": "provider_finished",
+      "provider": "arXiv"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 27,
+      "timestamp": "2026-10-25T09:03:44.806Z",
+      "type": "provider_started",
+      "provider": "PubMed"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 28,
+      "timestamp": "2026-10-25T09:03:44.862Z",
+      "type": "candidate_upsert",
+      "provider": "EPO EP1000000A1"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 29,
+      "timestamp": "2026-10-25T09:03:44.862Z",
+      "type": "provider_finished",
+      "provider": "EPO EP1000000A1"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 30,
+      "timestamp": "2026-10-25T09:03:45.586Z",
+      "type": "provider_finished",
+      "provider": "Crossref"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 31,
+      "timestamp": "2026-10-25T09:03:45.829Z",
+      "type": "provider_finished",
+      "provider": "OpenAlex"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 32,
+      "timestamp": "2026-10-25T09:03:46.998Z",
+      "type": "provider_finished",
+      "provider": "PubMed"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 33,
+      "timestamp": "2026-10-25T09:03:46.999Z",
+      "type": "ranking_updated"
+    },
+    {
+      "schemaVersion": 1,
+      "searchId": "1c0198d7-d5bb-4581-86e0-ec6e262210ae",
+      "sequence": 34,
+      "timestamp": "2026-10-25T09:03:47.000Z",
+      "type": "completed"
+    }
+  ],
+  "patents": 13,
+  "papers": 30
+}

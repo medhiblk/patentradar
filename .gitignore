@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.data/
+test-results/
+playwright-report/
+*.tsbuildinfo
+
+!.env.registry.example
+.venv-cad/
+__pycache__/
+*.pyc
+/public/cad-kernel/

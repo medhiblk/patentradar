@@ -1,0 +1,118 @@
+import { z } from "zod";
+import { SearchInput, LookupInput, CompareInput } from "./public";
+import { AssemblySchema } from "../cad/schema";
+const post = (
+  operationId: string,
+  summary: string,
+  schema: z.ZodType,
+  extra: object = {},
+) => ({
+  post: {
+    operationId,
+    summary,
+    requestBody: {
+      required: true,
+      content: { "application/json": { schema: z.toJSONSchema(schema) } },
+    },
+    responses: {
+      "200": {
+        description: "Operation result; evidence retains source attribution.",
+      },
+      "400": { description: "Invalid input or sharing consent missing." },
+      "429": { description: "Rate limited; inspect Retry-After." },
+      "503": { description: "Provider or configured runtime unavailable." },
+    },
+    ...extra,
+  },
+});
+export const openapi = {
+  openapi: "3.1.0",
+  info: {
+    title: "PatentRadar API",
+    version: "1.1.0",
+    description:
+      "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. CAD/private operations require configured native runtime, persistent account storage and a scoped developer token. No legal FTO conclusions.",
+  },
+  servers: [{ url: "/", description: "Current host" }],
+  paths: {
+    "/api/v1/health": {
+      get: {
+        operationId: "getHealth",
+        responses: {
+          "200": {
+            description:
+              "Configuration and public capability status, not a live external probe.",
+          },
+        },
+      },
+    },
+    "/api/v1/providers": {
+      get: {
+        operationId: "getProviders",
+        responses: {
+          "200": { description: "Provider registry and dated observations." },
+        },
+      },
+    },
+    "/api/v1/search": post(
+      "searchPatents",
+      "Search public patent and research sources using approved concepts",
+      SearchInput,
+    ),
+    "/api/v1/search/stream": post(
+      "streamSearch",
+      "Stream source progress and patent upserts as newline-delimited JSON",
+      SearchInput,
+      {
+        responses: {
+          "200": {
+            description:
+              "NDJSON events; terminal completed includes the final result.",
+            content: { "application/x-ndjson": { schema: { type: "string" } } },
+          },
+          "400": { description: "Invalid input or missing sharing consent" },
+          "429": { description: "Rate limited" },
+        },
+      },
+    ),
+    "/api/v1/patents/lookup": post(
+      "lookupPatent",
+      "Retrieve exact EP A/B publication metadata and available claims",
+      LookupInput,
+    ),
+    "/api/v1/compare": post(
+      "compareFeatures",
+      "Explain lexical overlap in client-supplied patent evidence",
+      CompareInput,
+    ),
+    "/api/v1/cad/build": post(
+      "buildAssembly",
+      "Generate real solids and STEP/STL; authenticated, native runtime required",
+      AssemblySchema,
+      {
+        security: [{ DeveloperToken: [] }],
+        responses: {
+          "200": {
+            description:
+              "Real CadQuery geometry with base64 STEP/STL and mesh parts",
+          },
+          "401": {
+            description: "Developer token or signed-in session required",
+          },
+          "422": { description: "Required measurements missing" },
+          "503": { description: "Native CAD runtime unavailable" },
+        },
+      },
+    ),
+  },
+  components: {
+    securitySchemes: {
+      DeveloperToken: {
+        type: "http",
+        scheme: "bearer",
+        description:
+          "24-hour scoped token created in Account. Full private hosting requires a persistent database. Never put a token in a URL.",
+      },
+    },
+  },
+};

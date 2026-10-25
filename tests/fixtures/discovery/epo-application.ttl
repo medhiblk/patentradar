@@ -1,0 +1,66 @@
+@prefix patent: <http://data.epo.org/linked-data/def/patent/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix cpc:   <http://data.epo.org/linked-data/def/cpc/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix elda:  <http://www.epimorphics.com/vocabularies/lda#> .
+@prefix api:   <http://purl.org/linked-data/api/vocab#> .
+
+patent:applicationKind_A
+        rdfs:label  "patent application"@en .
+
+cpc:Y02E60-10  rdfs:label  "Y02E 60/10" ;
+        dcterms:title  "Energy storage using batteries" , "Energy storage using batteries"@en .
+
+<http://data.epo.org/linked-data/data/publication/EP/0037802/A3/->
+        rdfs:label                   "EP 0037802 A3" ;
+        patent:publicationAuthority  <http://data.epo.org/linked-data/id/st3/EP> ;
+        patent:publicationDate       "1981-10-21"^^xsd:date ;
+        patent:publicationKind       patent:publicationKind_A3 .
+
+<http://data.epo.org/linked-data/id/st3/EP>
+        rdfs:label  "European Patent Office (EPO)"@en .
+
+<http://data.epo.org/linked-data/data/simple-family/20340535>
+        patent:representativeFamilyMember
+                <http://data.epo.org/linked-data/id/application/EP/81850042> .
+
+patent:publicationKind_A2
+        rdfs:label  "A2" .
+
+<http://data.epo.org/linked-data/data/publication/EP/0037802/A2/->
+        rdfs:label                   "EP 0037802 A2" ;
+        patent:publicationAuthority  <http://data.epo.org/linked-data/id/st3/EP> ;
+        patent:publicationDate       "1981-10-14"^^xsd:date ;
+        patent:publicationKind       patent:publicationKind_A2 .
+
+cpc:H01M4-765  rdfs:label  "H01M 4/765" ;
+        dcterms:title  "{Tubular type or pencil type electrodes; tubular or multitubular sheaths or covers of insulating material for said tubular-type electrodes}" , "{Tubular type or pencil type electrodes; tubular or multitubular sheaths or covers of insulating material for said tubular-type electrodes}"@en .
+
+patent:publicationKind_A3
+        rdfs:label  "A3" .
+
+<http://data.epo.org/linked-data/id/application/EP/81850042>
+        patent:applicationAuthority     <http://data.epo.org/linked-data/id/st3/EP> ;
+        patent:applicationKind          patent:applicationKind_A ;
+        patent:applicationNumber        "81850042" ;
+        patent:applicationNumberEpodoc  "EP19810850042" ;
+        patent:applicationNumberOriginal
+                "81850042" ;
+        patent:classificationCPCAdditional
+                cpc:Y02E60-10 ;
+        patent:classificationCPCInventive
+                cpc:H01M4-765 ;
+        patent:familyMemberOf           <http://data.epo.org/linked-data/data/simple-family/20340535> ;
+        patent:filingDate               "1981-03-11"^^xsd:date ;
+        patent:publication              <http://data.epo.org/linked-data/data/publication/EP/0037802/A2/-> , <http://data.epo.org/linked-data/data/publication/EP/0037802/A3/-> .
+
+<https://lod.apps.epo.org/linked-data/elda-common/linked-data/doc/application/EP/81850042.ttl>
+        a                            api:ItemEndpoint , api:Page ;
+        api:definition               <https://lod.apps.epo.org/linked-data/elda-common/meta/linked-data/doc/application/_st3Code/_applicationNumber.ttl> ;
+        api:extendedMetadataVersion  <https://lod.apps.epo.org/linked-data/elda-common/linked-data/doc/application/EP/81850042.ttl?_metadata=all> ;
+        elda:notice                  [ rdfs:label
+                          "Provided by the European Patent Office." ] ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <http://data.epo.org/linked-data/id/application/EP/81850042> .

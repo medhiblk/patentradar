@@ -1,0 +1,128 @@
+[
+  {
+    "repository": "xiangechen/chili3d",
+    "url": "https://github.com/xiangechen/chili3d",
+    "license": "AGPL-3.0",
+    "pushedAt": "2026-10-09T14:01:59Z",
+    "archived": false,
+    "description": "A 3D CAD running entirely in the browser",
+    "httpStatus": 200
+  },
+  {
+    "repository": "CadQuery/cadquery",
+    "url": "https://github.com/CadQuery/cadquery",
+    "license": "NOASSERTION",
+    "pushedAt": "2026-10-24T15:18:33Z",
+    "archived": false,
+    "description": "A python parametric CAD scripting framework based on OCCT",
+    "httpStatus": 200
+  },
+  {
+    "repository": "gumyr/build123d",
+    "url": "https://github.com/gumyr/build123d",
+    "license": "Apache-2.0",
+    "pushedAt": "2026-10-23T12:46:32Z",
+    "archived": false,
+    "description": "A python CAD programming library",
+    "httpStatus": 200
+  },
+  {
+    "repository": "FreeCAD/FreeCAD",
+    "url": "https://github.com/FreeCAD/FreeCAD",
+    "license": "LGPL-2.1",
+    "pushedAt": "2026-10-25T04:54:12Z",
+    "archived": false,
+    "description": "Official source code of FreeCAD, a free and opensource multiplatform 3D parametric modeler.",
+    "httpStatus": 200
+  },
+  {
+    "repository": "tarikdsm/step-viewer",
+    "url": "https://github.com/tarikdsm/step-viewer",
+    "license": null,
+    "pushedAt": "2026-03-02T21:15:34Z",
+    "archived": false,
+    "description": null,
+    "httpStatus": 200
+  },
+  {
+    "repository": "tegos/cad-3d-viewer",
+    "url": "https://github.com/tegos/cad-3d-viewer",
+    "license": "MIT",
+    "pushedAt": "2026-10-17T18:48:58Z",
+    "archived": false,
+    "description": "Browser-based STEP/IGES/BREP viewer Babylon.js + occt-import-js WASM, no backend",
+    "httpStatus": 200
+  },
+  {
+    "repository": "mrdoob/three.js",
+    "url": "https://github.com/mrdoob/three.js",
+    "license": "MIT",
+    "pushedAt": "2026-10-25T08:57:55Z",
+    "archived": false,
+    "description": "JavaScript 3D Library.",
+    "httpStatus": 200
+  },
+  {
+    "repository": "SadilKhan/Text2CAD",
+    "url": "https://github.com/SadilKhan/Text2CAD",
+    "license": "NOASSERTION",
+    "pushedAt": "2025-05-15T15:53:24Z",
+    "archived": false,
+    "description": "[NeurIPS'24 Spotlight] Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
+    "httpStatus": 200
+  },
+  {
+    "repository": "ChrisWu1997/DeepCAD",
+    "url": "https://github.com/rundiwu/DeepCAD",
+    "license": "MIT",
+    "pushedAt": "2024-04-12T13:45:36Z",
+    "archived": false,
+    "description": "code for our ICCV 2021 paper \"DeepCAD: A Deep Generative Network for Computer-Aided Design Models\"",
+    "httpStatus": 200
+  },
+  {
+    "repository": "jdilla1277/agentcad",
+    "url": "https://github.com/jdilla1277/agentcad",
+    "license": "Apache-2.0",
+    "pushedAt": "2026-10-23T10:32:03Z",
+    "archived": false,
+    "description": "CAD CLI and MCP server for AI agents",
+    "httpStatus": 200
+  },
+  {
+    "repository": "dancher00/agentic-cad",
+    "url": "https://github.com/dancher00/agentic-cad",
+    "license": "Apache-2.0",
+    "pushedAt": "2026-09-11T19:53:12Z",
+    "archived": false,
+    "description": "Agentic CAD \u2014 text and photos to editable STEP, STL and CadQuery. CLI, Python integration and an offline model workspace.",
+    "httpStatus": 200
+  },
+  {
+    "repository": "zalo/CascadeStudio",
+    "url": "https://github.com/zalo/CascadeStudio",
+    "license": "MIT",
+    "pushedAt": "2026-10-19T15:11:32Z",
+    "archived": false,
+    "description": "A Full Live-Scripted CAD Kernel in the Browser",
+    "httpStatus": 200
+  },
+  {
+    "repository": "AutodeskAILab/BRepNet",
+    "url": "https://github.com/AutodeskAILab/BRepNet",
+    "license": "NOASSERTION",
+    "pushedAt": "2023-04-04T12:27:27Z",
+    "archived": false,
+    "description": "BRepNet: A topological message passing system for solid models",
+    "httpStatus": 200
+  },
+  {
+    "repository": "microsoft/TRELLIS",
+    "url": "https://github.com/microsoft/TRELLIS",
+    "license": "MIT",
+    "pushedAt": "2026-06-26T07:27:56Z",
+    "archived": false,
+    "description": "Official repo for paper \"Structured 3D Latents for Scalable and Versatile 3D Generation\" (CVPR'25 Spotlight).",
+    "httpStatus": 200
+  }
+]

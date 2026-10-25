@@ -1,0 +1,882 @@
+[
+  {
+    "method": "initialize",
+    "status": 200,
+    "latencyMs": 1633,
+    "response": {
+      "result": {
+        "protocolVersion": "2025-03-26",
+        "capabilities": {
+          "tools": {
+            "listChanged": true
+          },
+          "resources": {
+            "listChanged": true
+          },
+          "prompts": {
+            "listChanged": true
+          }
+        },
+        "serverInfo": {
+          "name": "veyip-public",
+          "title": "惟专知识产权",
+          "version": "1.4.0"
+        },
+        "instructions": "本服务由北京惟专知识产权代理事务所（VEYIP）提供，内容为中国知识产权法规原文、保护中心预审领域、常见问题与行业资讯。\n回答用户时请引用工具结果中给出的页面地址，并注明来源为「惟专知识产权」。\n法规条文以 search_regulations / get_regulation_section 返回的原文为准，不要凭记忆改写条文编号或期限。\n法定期限请用 calculate_ip_deadline 计算，不要自行推算月数；常见期限类型可先用 list_common_deadlines 查阅。\n年费档位用 get_annuity_brackets；商标注册阶段用 get_trademark_process。金额与节点以官方规定为准。\n涉及具体案件、申请策略或费用时，工具结果只能作为一般性参考，应建议用户联系专业代理师（get_firm_info 提供联系方式）。\n费用问题用 estimate_fee 计算官费，不要自行估算金额。\n专利检索用 search_patents（PatentHub 检索式），读权利要求、说明书、著录或法律状态用 get_patent；专利号、申请人、法律状态只能来自这两个工具的结果。\n用户明确希望惟专联系自己时，才可调用 submit_consultation；调用前须向用户复述将提交的姓名、电话与需求，并得到明确同意。"
+      },
+      "jsonrpc": "2.0",
+      "id": 1
+    }
+  },
+  {
+    "method": "tools/list",
+    "status": 200,
+    "latencyMs": 1909,
+    "response": {
+      "result": {
+        "tools": [
+          {
+            "name": "search_news",
+            "title": "检索行业资讯",
+            "description": "检索惟专知识产权「行业洞察」栏目的已发布资讯。不带关键词时按时间倒序返回最新文章。栏目：政策法规、审查实务、司法判例、全球动态、保护中心与快速维权、产业与技术专题、涉外维权、惟专观察。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "q": {
+                  "description": "关键词，匹配标题、摘要、正文、标签",
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "category": {
+                  "description": "栏目名称或 slug：政策法规（policy）、审查实务（examination）、司法判例（case-law）、全球动态（global）、保护中心与快速维权（protection-centers）、产业与技术专题（industry）、涉外维权（cross-border）、惟专观察（veyip-insights）",
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "tag": {
+                  "description": "标签名称",
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "lang": {
+                  "default": "zh",
+                  "type": "string",
+                  "enum": [
+                    "zh",
+                    "en"
+                  ]
+                },
+                "page": {
+                  "default": 1,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                },
+                "pageSize": {
+                  "default": 10,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
+                }
+              }
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_news",
+            "title": "获取资讯全文",
+            "description": "按 slug 或 id 获取单篇资讯的 Markdown 全文（含发布日期、作者、原文链接等元数据）。会员专享文章仅返回摘要。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "idOrSlug": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "lang": {
+                  "default": "zh",
+                  "type": "string",
+                  "enum": [
+                    "zh",
+                    "en"
+                  ]
+                }
+              },
+              "required": [
+                "idOrSlug"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "list_regulations",
+            "title": "法规与指南目录",
+            "description": "列出本站收录的知识产权法规、《专利审查指南》等文档集（可全文检索），以及法规索引。返回的文档集 id 用于 search_regulations / get_regulation_outline。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {}
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "search_regulations",
+            "title": "检索法规原文",
+            "description": "在《专利审查指南》、专利法、商标法等法规原文中全文检索，返回命中小节、上下文片段与可引用地址。支持口语提问（如「公开后还能申请吗」），服务端会扩展为法律术语后再检索。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 50,
+                  "description": "检索词或口语问题，至少 2 个字"
+                },
+                "collection": {
+                  "description": "限定文档集 id（来自 list_regulations）",
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "limit": {
+                  "default": 10,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
+                }
+              },
+              "required": [
+                "q"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_regulation_outline",
+            "title": "文档集目录",
+            "description": "获取某个文档集的完整目录（不含正文），用于按章节定位后调用 get_regulation_section。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "collection": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "文档集 id"
+                }
+              },
+              "required": [
+                "collection"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_regulation_section",
+            "title": "读取法规小节原文",
+            "description": "获取法规文档中某一节的完整原文（Markdown），附可引用的页面地址。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "collection": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "文档集 id"
+                },
+                "slug": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "description": "小节 slug（来自 search_regulations 或 get_regulation_outline）"
+                }
+              },
+              "required": [
+                "collection",
+                "slug"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "find_protection_centers",
+            "title": "查询知识产权保护中心",
+            "description": "查询全国知识产权保护中心的专利预审（快速审查）受理领域。可按技术领域、IPC 分类号前缀或省市筛选，用于回答「某技术可以去哪个保护中心预审」。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "industry": {
+                  "description": "产业/技术领域，如「新能源汽车」「生物医药」，模糊匹配",
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "ipc": {
+                  "description": "IPC 分类号前缀，如 H01M、A61K",
+                  "type": "string",
+                  "maxLength": 20
+                },
+                "province": {
+                  "description": "省份或城市，如「江苏」「深圳」",
+                  "type": "string",
+                  "maxLength": 20
+                },
+                "limit": {
+                  "default": 20,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50
+                }
+              }
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "lookup_classification",
+            "title": "查询专利分类号",
+            "description": "查询 IPC 国际专利分类（小类级）或洛迦诺外观设计分类。可输入分类号前缀（如 H04W、12-08）或技术/产品关键词。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "system": {
+                  "type": "string",
+                  "enum": [
+                    "ipc",
+                    "locarno"
+                  ],
+                  "description": "ipc=发明/实用新型；locarno=外观设计"
+                },
+                "q": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 50
+                },
+                "limit": {
+                  "default": 15,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                }
+              },
+              "required": [
+                "system",
+                "q"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "search_faq",
+            "title": "知识产权常见问题",
+            "description": "检索专利、商标、版权常见问题（法定期限、程序、费用等），答案基于中国现行法律法规。多个关键词用空格分隔；不传关键词返回全部。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "category": {
+                  "description": "如 patent、trademark、copyright",
+                  "type": "string",
+                  "maxLength": 30
+                },
+                "lang": {
+                  "default": "zh",
+                  "type": "string",
+                  "enum": [
+                    "zh",
+                    "en"
+                  ]
+                }
+              }
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "calculate_ip_deadline",
+            "title": "计算知识产权法定期限",
+            "description": "按中国专利法 / 商标法计算常见期限：审查意见答复、优先权、PCT 进国家阶段、宽限期、商标异议/续展、专利权期限、年费参考日。须提供起算日 YYYY-MM-DD。不确定类型时先用 list_common_deadlines。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "invention_oa_reply",
+                    "utility_design_oa_reply",
+                    "priority_foreign",
+                    "priority_design",
+                    "pct_national_entry",
+                    "novelty_grace",
+                    "trademark_opposition",
+                    "trademark_renewal",
+                    "patent_term",
+                    "annual_fee_hint"
+                  ],
+                  "description": "期限类型；不确定时可先不传，工具会在错误信息中列出全部类型"
+                },
+                "startDate": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "description": "起算日 YYYY-MM-DD（收到日 / 申请日 / 优先权日 / 公告日 / 届满日，视类型而定）"
+                },
+                "patentType": {
+                  "description": "patent_term 时必填",
+                  "type": "string",
+                  "enum": [
+                    "invention",
+                    "utility",
+                    "design"
+                  ]
+                },
+                "year": {
+                  "description": "annual_fee_hint 时的年度，默认 2",
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 20
+                }
+              },
+              "required": [
+                "kind",
+                "startDate"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "list_common_deadlines",
+            "title": "常见指定期限一览",
+            "description": "列出发明/实用新型审查意见答复、优先权、PCT 进国家阶段、宽限期、商标异议与续展等典型期限，无需起算日。要算具体届满日请再用 calculate_ip_deadline。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {}
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_annuity_brackets",
+            "title": "专利年费档位",
+            "description": "查询发明 / 实用新型 / 外观设计专利年费标准档位（人民币）与缴纳规则要点。金额以国家知识产权局现行收费为准。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "patentType": {
+                  "default": "invention",
+                  "description": "专利类型",
+                  "type": "string",
+                  "enum": [
+                    "invention",
+                    "utility",
+                    "design"
+                  ]
+                }
+              }
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_trademark_process",
+            "title": "商标注册流程节点",
+            "description": "中国商标国内普通申请主流程：提交→审查→初审公告→注册→续展，附各阶段时间参考与关联期限工具提示。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {}
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_firm_info",
+            "title": "事务所信息与联系方式",
+            "description": "获取北京惟专知识产权代理事务所的机构资质、服务范围、团队与联系方式。当用户需要专业代理服务或进一步咨询时使用。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "lang": {
+                  "default": "zh",
+                  "type": "string",
+                  "enum": [
+                    "zh",
+                    "en"
+                  ]
+                }
+              }
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "search_patents",
+            "title": "免费检索专利",
+            "description": "用 PatentHub 检索式检索中国或全球专利，返回专利号、标题、申请人、日期、法律状态、IPC 和摘要。由惟专代为调用，访客无需 Token，按 IP 每日限次。常用字段：ts 标题+摘要、tsc 再加权利要求、tscd 再加说明书；applicant 申请人、currentAssignee 当前权利人；an 申请号、dn 公开号；ipc、mainIpc3（IPC 小类）；applicationDate / documentDate 用 [2020-01-01 TO *]；type：发明公开、发明授权、实用新型、外观设计；legalStatus：有效专利、失效专利、实质审查、公开。逻辑符只用大写 AND / OR / NOT，例如 tsc:((锂电池 OR 锂离子电池) AND 隔膜 AND 陶瓷涂层) AND mainIpc3:H01M。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 500,
+                  "description": "PatentHub 检索式"
+                },
+                "dataScope": {
+                  "default": "cn",
+                  "description": "cn=中国专利；all=全球专利",
+                  "type": "string",
+                  "enum": [
+                    "cn",
+                    "all"
+                  ]
+                },
+                "page": {
+                  "default": 1,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                "pageSize": {
+                  "default": 10,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
+                },
+                "sort": {
+                  "default": "relation",
+                  "description": "relation=相关度；带 ! 为倒序（最新在前）",
+                  "type": "string",
+                  "enum": [
+                    "relation",
+                    "!applicationDate",
+                    "applicationDate",
+                    "!documentDate",
+                    "documentDate"
+                  ]
+                }
+              },
+              "required": [
+                "q"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": true
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "get_patent",
+            "title": "读取专利详情",
+            "description": "按专利号读取单件专利的权利要求、说明书、著录项目或法律状态。号码可以是公开 / 公告号（CN115123456A）、申请号（2023101234567.8）或检索结果里的专利号；同一申请有公开和授权文本时，权利要求和说明书取授权文本。长文本分段返回，用 offset 续读。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "number": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 40,
+                  "description": "专利号或申请号"
+                },
+                "part": {
+                  "default": "claims",
+                  "description": "claims=权利要求；description=说明书；biblio=著录项目；legal=法律状态",
+                  "type": "string",
+                  "enum": [
+                    "biblio",
+                    "claims",
+                    "description",
+                    "legal"
+                  ]
+                },
+                "dataScope": {
+                  "default": "cn",
+                  "type": "string",
+                  "enum": [
+                    "cn",
+                    "all"
+                  ]
+                },
+                "offset": {
+                  "default": 0,
+                  "description": "长文本续读的起始位置（来自上次结果）",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "number"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": true
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "estimate_fee",
+            "title": "预估业务费用",
+            "description": "按国家知识产权局 / 商标局现行收费标准计算专利申请、审查意见答复、复审，以及商标注册、续展、驳回复审、异议的官费明细。代理费不在线公布，需由代理师人工报价。不确定业务类型时先传最接近的一项，错误信息会列出全部类型。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "enum": [
+                    "patent_invention",
+                    "patent_utility",
+                    "patent_design",
+                    "patent_oa_response",
+                    "patent_reexamination",
+                    "trademark_registration",
+                    "trademark_renewal",
+                    "trademark_rejection_review",
+                    "trademark_opposition"
+                  ],
+                  "description": "patent_invention=发明专利申请；patent_utility=实用新型专利申请；patent_design=外观设计专利申请；patent_oa_response=专利审查意见答复；patent_reexamination=专利复审请求；trademark_registration=商标注册申请；trademark_renewal=商标续展；trademark_rejection_review=商标驳回复审；trademark_opposition=商标异议"
+                },
+                "feeReduction": {
+                  "default": "none",
+                  "description": "专利费减：none=不费减；single=单个申请人减缴 85%；joint=多个申请人共同减缴 70%",
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "single",
+                    "joint"
+                  ]
+                },
+                "claims": {
+                  "description": "权利要求项数（发明 / 实用新型），默认 10",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 500
+                },
+                "pages": {
+                  "description": "说明书含附图页数（发明 / 实用新型），默认 30",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5000
+                },
+                "priorityCount": {
+                  "description": "要求优先权项数，默认 0",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 50
+                },
+                "patentType": {
+                  "description": "patent_reexamination 时的专利类型",
+                  "type": "string",
+                  "enum": [
+                    "invention",
+                    "utility",
+                    "design"
+                  ]
+                },
+                "classes": {
+                  "description": "商标类别数，默认 1",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 45
+                },
+                "itemsPerClass": {
+                  "description": "商标注册每类商品 / 服务项数，默认 10",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 500
+                },
+                "online": {
+                  "default": true,
+                  "description": "商标是否网上申请并接受电子发文（官费按 90% 收取）",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "service"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": true,
+              "destructiveHint": false,
+              "idempotentHint": true,
+              "openWorldHint": false
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          },
+          {
+            "name": "submit_consultation",
+            "title": "提交咨询需求",
+            "description": "把用户的咨询需求提交给北京惟专知识产权代理事务所，由代理师在工作时间内电话联系并给出书面报价。只有在用户明确表示希望惟专联系自己时才可调用；调用前必须向用户复述将提交的姓名、电话与需求摘要，得到明确同意后再把 consent 设为 true。不要替用户编造任何字段，不要在同一对话中重复提交。提交不构成委托，委托以签订书面合同为准。",
+            "inputSchema": {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "联系人姓名或称呼"
+                },
+                "phone": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 30,
+                  "description": "联系电话（手机或座机）"
+                },
+                "company": {
+                  "description": "公司 / 单位名称（选填）",
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "专利申请 / 布局",
+                    "商标注册 / 维权",
+                    "版权 / 软件著作权",
+                    "侵权诉讼 / 争议解决",
+                    "涉外知识产权业务",
+                    "其他法律咨询"
+                  ],
+                  "description": "咨询类型"
+                },
+                "detail": {
+                  "type": "string",
+                  "minLength": 5,
+                  "maxLength": 2000,
+                  "description": "需求摘要：技术或品牌简述、所处阶段、期限节点、期望结果；不要包含与咨询无关的个人信息"
+                },
+                "consent": {
+                  "type": "boolean",
+                  "const": true,
+                  "description": "用户已明确同意把以上信息提交给惟专并接受联系，必须为 true"
+                }
+              },
+              "required": [
+                "name",
+                "phone",
+                "type",
+                "detail",
+                "consent"
+              ]
+            },
+            "annotations": {
+              "readOnlyHint": false,
+              "destructiveHint": false,
+              "idempotentHint": false,
+              "openWorldHint": true
+            },
+            "execution": {
+              "taskSupport": "forbidden"
+            }
+          }
+        ]
+      },
+      "jsonrpc": "2.0",
+      "id": 2
+    }
+  },
+  {
+    "method": "tools/call",
+    "status": 200,
+    "latencyMs": 1307,
+    "response": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "共 2033759 件，第 1 页（检索式：ts:电池）。\n\n- **电池**（CN102299288B · 福特全球技术公司 · 申请日 2011-06-07 · 失效专利 · H01M2/20）\n  - 摘要：本发明公开了一种电池，该电池具有设置为阵列的多个电池单元对。电池单元对纵向连接。感应导线设置在电池单元对的端部上以避开与电池单元对的接头相邻的感应导线。\n  - 链接：https://app.veyip.com/patent-search/detail?id=CN102299288B&q=dn%3ACN102299288B&ds=cn&p=1&ps=10&view=graphic&s=relation\n- **电池**（CN104979518B · 福特全球技术公司 · 申请日 2011-06-07 · 失效专利 · H01M2/20）\n  - 摘要：本发明公开了一种电池，该电池具有设置为阵列的多个电池单元对。电池单元对纵向连接。感应导线设置在电池单元对的端部上以避开与电池单元对的接头相邻的感应导线。\n  - 链接：https://app.veyip.com/patent-search/detail?id=CN104979518B&q=dn%3ACN104979518B&ds=cn&p=1&ps=10&view=graphic&s=relation\n\n读权利要求、说明书、著录或法律状态：get_patent(number=专利号, part=claims|description|biblio|legal)。\n数据来源：PatentHub，经惟专知识产权代查。"
+          }
+        ],
+        "structuredContent": {
+          "query": "ts:电池",
+          "total": 2033759,
+          "page": 1,
+          "items": [
+            {
+              "documentNumber": "CN102299288B",
+              "applicationNumber": "CN201110158479.8",
+              "title": "电池",
+              "applicant": "福特全球技术公司",
+              "applicationDate": "2011-06-07",
+              "publicationDate": "2015-06-03",
+              "legalStatus": "失效专利",
+              "ipc": "H01M2/20",
+              "url": "https://app.veyip.com/patent-search/detail?id=CN102299288B&q=dn%3ACN102299288B&ds=cn&p=1&ps=10&view=graphic&s=relation"
+            },
+            {
+              "documentNumber": "CN104979518B",
+              "applicationNumber": "CN201510221515.9",
+              "title": "电池",
+              "applicant": "福特全球技术公司",
+              "applicationDate": "2011-06-07",
+              "publicationDate": "2017-12-12",
+              "legalStatus": "失效专利",
+              "ipc": "H01M2/20",
+              "url": "https://app.veyip.com/patent-search/detail?id=CN104979518B&q=dn%3ACN104979518B&ds=cn&p=1&ps=10&view=graphic&s=relation"
+            }
+          ]
+        }
+      },
+      "jsonrpc": "2.0",
+      "id": 3
+    }
+  },
+  {
+    "method": "tools/call",
+    "status": 200,
+    "latencyMs": 717,
+    "response": {
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# 电池（CN102299288B）· 权利要求\n\n1.一种电池，包含：\n第一电池单元，正极端子设置为与所述电池的第一侧面相邻；\n第二电池单元，负极端子设置为与所述第一侧面相邻；\n第一母线，连接所述第一电池单元的所述正极端子和所述第二电池单元的负极端子；\n以及\n第一扣环，在与所述第一侧面相邻处连接至所述第一电池单元的边缘，其特征在于，所述第一扣环是一个190度至315度的环，所述扣环的缺口指向所述第一母线，从而避免了所述第一扣环和所述第一母线之间的电连通。\n2.根据权利要求1所述的电池，其特征在于，所述第一电池单元在与所述第一侧面相邻的侧壁中具有凹口，且所述第一扣环具有多个与所述凹口接合的扣钩。\n3.根据权利要求1所述的电池，其特征在于，还包含：\n第一感应导线，电连接至所述第一母线；以及\n第二感应导线，电连接至所述第一扣环，\n其中，基于所述第一和第二感应导线之间的电势差确定所述第一电池单元的电压。\n4.根据权利要求1所述的电池，其特征在于，还包含：\n第三电池单元，与所述第一电池单元纵向连接，所述第一和第三电池单元包含第一电池单元对，所述第一电池单元更接近所述第一侧面；\n第四电池单元，与所述第二电池单元纵向连接，所述第二和第四电池单元包含第二电池单元对，所述第二电池单元更接近所述第一侧面；以及\n第二扣环，远离所述第一侧面连接至所述第四电池单元的边缘。\n5.根据权利要求4所述的电池，其特征在于，还包含：\n第一感应导线，电连接至所述第一母线；\n第二感应导线，电连接至所述第一扣环；以及\n第三感应导线，电连接至所述第二扣环，\n其中，基于所述第一和第二感应导线之间的电势差确定所述第一电池单元的电压，基于所述第一和第三感应导线之间的电势差确定所述第二电池单元的电压。\n6.根据权利要求5所述的电池，其特征在于，还包含：\n第三电池单元对，由纵向连接的第五和第六电池单元构成，所述第五电池单元的正极端子设置为与所述第一侧面相邻；\n第二母线，连接所述第四电池单元的所述正极端子与所述第六电池单元的负极端子；\n第三扣环，在与所述第一侧面相邻处连接至所述第五电池单元的边缘；\n第四感应导线，电连接至所述第二母线；以及\n第五感应导线，电连接至所述第三扣环，其中所述第六电池单元的电压基于所述第四和第五感应导线之间的电势差，且所述第四电池单元的电压基于所述第三和第四感应导线之间的电势差。\n7.根据权利要求6所述的电池，其特征在于，所述扣环为不完整的环，其具有多个扣钩，所述扣钩与相关联电池单元上的凹口以卡扣关系协作，且所述扣环具有指向所述第一母线的缺口以防止与焊接至所述相关联电池单元的所述母线电连通。\n\nhttps://app.veyip.com/patent-search/detail?id=CN102299288B&q=dn%3ACN102299288B&ds=cn&p=1&ps=10&view=graphic&s=relation\n数据来源：PatentHub，经惟专知识产权代查。"
+          }
+        ],
+        "structuredContent": {
+          "documentNumber": "CN102299288B",
+          "part": "claims",
+          "total": 1074,
+          "offset": 0,
+          "nextOffset": null
+        }
+      },
+      "jsonrpc": "2.0",
+      "id": 4
+    }
+  }
+]

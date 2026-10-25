@@ -1,0 +1,10 @@
+import {Client} from '@modelcontextprotocol/sdk/client/index.js';
+import {StreamableHTTPClientTransport} from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import {writeFile} from 'node:fs/promises';
+const base=process.env.PATENTRADAR_URL||'http://localhost:3000';const checks=[];
+for(const path of ['/api/v1/health','/api/v1/providers','/api/v1/openapi.json','/.well-known/mcp.json','/developers']){const r=await fetch(base+path);checks.push({path,status:r.status});if(!r.ok)throw Error(path+' failed');}
+const client=new Client({name:'patentradar-connectivity-verifier',version:'1.0.0'});await client.connect(new StreamableHTTPClientTransport(new URL(base+'/api/mcp')));const tools=await client.listTools();checks.push({mcpServer:client.getServerVersion(),tools:tools.tools.map(t=>t.name)});
+const extracted=await client.callTool({name:'extract_technical_profile',arguments:{text:'A rotating shaft drives a pump through a sealed bearing.'}});if(extracted.isError)throw Error('MCP extraction failed');checks.push({tool:'extract_technical_profile',success:true});
+const lookup=await client.callTool({name:'lookup_patent',arguments:{publicationNumber:'EP1000000A1',publicationDate:'20000517'}});if(lookup.isError)throw Error('Real EPO lookup failed');const records=JSON.parse(lookup.content[0].text);checks.push({tool:'lookup_patent',publications:records.patents.map(p=>p.publicationNumber),sources:records.patents.map(p=>p.source),success:true});
+const r=await fetch(base+'/api/v1/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:'microfluidic',shareQuery:true})});const result=await r.json();if(!r.ok||!result.patents?.length)throw Error('Real versioned patent search did not return patents');checks.push({path:'/api/v1/search',status:r.status,patents:result.patents.length,papers:result.papers.length,sources:[...new Set(result.patents.map(p=>p.source))]});
+await client.close();const record={base,checkedAt:new Date().toISOString(),checks};console.log(JSON.stringify(record,null,2));if(process.env.PATENTRADAR_VERIFY_OUTPUT)await writeFile(process.env.PATENTRADAR_VERIFY_OUTPUT,JSON.stringify(record,null,2));

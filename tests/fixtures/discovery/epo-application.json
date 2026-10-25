@@ -1,0 +1,15 @@
+{ "format" : "linked-data-api", "version" : "0.2", "result" : {"_about" : "https://lod.apps.epo.org/linked-data/elda-common/linked-data/doc/application/EP/81850042.json", "definition" : "https://lod.apps.epo.org/linked-data/elda-common/meta/linked-data/doc/application/_st3Code/_applicationNumber.json", "extendedMetadataVersion" : "https://lod.apps.epo.org/linked-data/elda-common/linked-data/doc/application/EP/81850042.json?_metadata=all", "notice" : {"label" : "Provided by the European Patent Office."}
+    , "primaryTopic" : {"_about" : "http://data.epo.org/linked-data/id/application/EP/81850042", "applicationAuthority" : {"_about" : "http://data.epo.org/linked-data/id/st3/EP", "label" : "European Patent Office (EPO)"}
+      , "applicationKind" : {"_about" : "http://data.epo.org/linked-data/def/patent/applicationKind_A", "label" : "patent application"}
+      , "applicationNumber" : "81850042", "applicationNumberEpodoc" : "EP19810850042", "applicationNumberOriginal" : "81850042", "classificationCPCAdditional" : {"_about" : "http://data.epo.org/linked-data/def/cpc/Y02E60-10", "label" : "Y02E 60/10", "title" : ["Energy storage using batteries", "Energy storage using batteries"]}
+      , "classificationCPCInventive" : {"_about" : "http://data.epo.org/linked-data/def/cpc/H01M4-765", "label" : "H01M 4/765", "title" : ["{Tubular type or pencil type electrodes; tubular or multitubular sheaths or covers of insulating material for said tubular-type electrodes}", "{Tubular type or pencil type electrodes; tubular or multitubular sheaths or covers of insulating material for said tubular-type electrodes}"]}
+      , "family" : {"_about" : "http://data.epo.org/linked-data/data/simple-family/20340535", "representativeFamilyMember" : "http://data.epo.org/linked-data/id/application/EP/81850042"}
+      , "filingDate" : "Wed, 11 Mar 1981", "publication" : [{"_about" : "http://data.epo.org/linked-data/data/publication/EP/0037802/A2/-", "label" : "EP 0037802 A2", "publicationAuthority" : {"_about" : "http://data.epo.org/linked-data/id/st3/EP", "label" : "European Patent Office (EPO)"}
+        , "publicationDate" : "Wed, 14 Oct 1981", "publicationKind" : {"_about" : "http://data.epo.org/linked-data/def/patent/publicationKind_A2", "label" : "A2"}
+      }
+      , {"_about" : "http://data.epo.org/linked-data/data/publication/EP/0037802/A3/-", "label" : "EP 0037802 A3", "publicationAuthority" : {"_about" : "http://data.epo.org/linked-data/id/st3/EP", "label" : "European Patent Office (EPO)"}
+        , "publicationDate" : "Wed, 21 Oct 1981", "publicationKind" : {"_about" : "http://data.epo.org/linked-data/def/patent/publicationKind_A3", "label" : "A3"}
+      }
+      ]}
+    , "type" : ["http://purl.org/linked-data/api/vocab#ItemEndpoint", "http://purl.org/linked-data/api/vocab#Page"]}
+}

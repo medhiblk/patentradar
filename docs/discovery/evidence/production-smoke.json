@@ -1,0 +1,180 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "results": [
+    {
+      "provider": "datacite",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 1492,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:17.116Z"
+    },
+    {
+      "provider": "arxiv",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 1608,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:17.244Z"
+    },
+    {
+      "provider": "zenodo",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 2383,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:18.019Z"
+    },
+    {
+      "provider": "hal",
+      "operation": "search",
+      "httpStatus": 400,
+      "latencyMs": 21819,
+      "error": "Unable to process request. Check inputs and provider availability.",
+      "checkedAt": "2026-10-25T00:40:37.452Z"
+    },
+    {
+      "provider": "doe",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 1438,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:38.891Z"
+    },
+    {
+      "provider": "nasa",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 2231,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:39.684Z"
+    },
+    {
+      "provider": "inspire",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 2337,
+      "records": 4,
+      "category": "research",
+      "checkedAt": "2026-10-25T00:40:39.789Z"
+    },
+    {
+      "provider": "openaire",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 5048,
+      "records": 16,
+      "category": "patents-and-research",
+      "checkedAt": "2026-10-25T00:40:42.501Z"
+    },
+    {
+      "provider": "wikidata",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 830,
+      "records": 1,
+      "category": "organization-entity",
+      "checkedAt": "2026-10-25T00:40:43.332Z"
+    },
+    {
+      "provider": "ror",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 948,
+      "records": 6,
+      "category": "organization",
+      "checkedAt": "2026-10-25T00:40:43.449Z"
+    },
+    {
+      "provider": "gleif",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 1063,
+      "records": 5,
+      "category": "organization",
+      "checkedAt": "2026-10-25T00:40:43.565Z"
+    },
+    {
+      "provider": "fr-company",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 1173,
+      "records": 5,
+      "category": "organization",
+      "checkedAt": "2026-10-25T00:40:43.675Z"
+    },
+    {
+      "provider": "opencitations",
+      "operation": "citations",
+      "httpStatus": 200,
+      "latencyMs": 609,
+      "records": 9,
+      "category": "scientific-citations",
+      "checkedAt": "2026-10-25T00:40:44.285Z"
+    },
+    {
+      "provider": "rcsb",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 649,
+      "records": 1,
+      "category": "structure-metadata",
+      "checkedAt": "2026-10-25T00:40:44.324Z"
+    },
+    {
+      "provider": "pubchem",
+      "operation": "patent-references",
+      "httpStatus": 200,
+      "latencyMs": 693,
+      "records": 100,
+      "category": "patent-references-only",
+      "checkedAt": "2026-10-25T00:40:44.369Z"
+    },
+    {
+      "provider": "pubchem",
+      "operation": "search",
+      "httpStatus": 200,
+      "latencyMs": 741,
+      "records": 1,
+      "category": "compound",
+      "checkedAt": "2026-10-25T00:40:44.416Z"
+    },
+    {
+      "provider": "opencitations",
+      "operation": "references",
+      "httpStatus": 200,
+      "latencyMs": 1360,
+      "records": 9,
+      "category": "scientific-citations",
+      "checkedAt": "2026-10-25T00:40:45.776Z"
+    }
+  ],
+  "flow": {
+    "httpStatus": 200,
+    "patents": 12,
+    "papers": 30,
+    "sources": [
+      "OpenAIRE Graph / Lens-derived patent metadata (CC-BY)",
+      "OpenAIRE Graph (CC-BY metadata)",
+      "DataCite (CC0 metadata)",
+      "HAL (CC0 metadata)",
+      "arXiv (CC0 metadata)",
+      "Zenodo (CC0 metadata)",
+      "Crossref",
+      "OpenAlex",
+      "PubMed / NCBI"
+    ],
+    "warnings": [
+      "OpenAIRE patent metadata is a literature-linked subset of Lens-derived records, not a complete world patent database. Preserve OpenAIRE CC-BY attribution and upstream provenance. No results or low relevance do not establish novelty or freedom to operate.",
+      "Google publication-page enrichment and the Europe PMC patent archive require explicit policy opt-in. Licence-uncertain providers are not enabled by default. EPO exact publication retrieval remains available.",
+      "Ranking measures shared technical vocabulary, not infringement probability. Applicant names identify parties to review, not confirmed competitors. Expert claim construction and legal-status checks remain necessary."
+    ],
+    "reportStatus": 200,
+    "pdfHeader": "%PDF-"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-25T09:33:32Z",
+  "httpStatus": 200,
+  "providersExecuted": [
+    "Local sourced patent index"
+  ],
+  "patents": 12,
+  "externalSharingConsent": false,
+  "completed": true
+}

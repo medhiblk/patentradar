@@ -1,0 +1,272 @@
+{
+  "profile": {
+    "title": "Microfluidic device research",
+    "domain": "Laboratory instrumentation",
+    "operatingPrinciple": "Liquid handling through small channels.",
+    "technicalFeatures": [
+      {
+        "name": "Microfluidic cavities",
+        "description": "A polymer substrate contains cavities for fluid handling."
+      }
+    ],
+    "searchKeywords": [
+      "microfluidic"
+    ]
+  },
+  "mode": "PARTIAL",
+  "patents": [
+    {
+      "id": "epmc:US2012070886",
+      "publicationNumber": "US20120070886A1",
+      "applicationNumber": "US201113304843",
+      "title": "MICROFLUIDIC DEVICE AND METHOD OF MANUFACTURING THE MICROFLUIDIC DEVICE",
+      "abstract": "A microfluidic device having a substrate with an array of curvilinear cavities. The substrate of the microfluidic device is preferably fabricated of a polymer such as polydimethylsiloxane (PDMS). The microfluidic device is manufactured using a gas expansion molding (GEM) technique.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2012070886",
+      "retrievedAt": "2026-10-24T17:24:58.232Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2012100552",
+      "publicationNumber": "US20120100552A1",
+      "applicationNumber": "US201113277137",
+      "title": "Microfluidic Liquid Heating Method And Apparatus",
+      "abstract": "Systems and methods for avoiding problems due to over-pressurization in a closed microfluidic device when the contained fluid is heated, by providing a well-defined volume for expansion of the liquid contents during heating, such as in one embodiment filling the expansion volume with air, and in other embodiments, filling the expansion volume with vapor-phase fluid from the liquid in the microfluidic device before the device is sealed and in yet other embodiments providing structures to maintain uniform temperatures over the entire closed volume in the microfluidic device.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2012100552",
+      "retrievedAt": "2026-10-24T17:24:58.234Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:WO2012037030",
+      "publicationNumber": "WO2012037030A2",
+      "applicationNumber": "WO2011US51224",
+      "title": "METHOD AND DEVICE FOR ISOLATING CELLS FROM HETEROGENEOUS SOLUTION USING MICROFLUIDIC TRAPPING VORTICES",
+      "abstract": "A method of isolating cells includes providing a microfluidic device having at least one microfluidic channel coupled to an inlet and an outlet, the at least one microfluidic channel comprises at least one expansion region disposed along the length thereof. The at least one expansion region is an abrupt increase in a cross-sectional dimension of the at least one microfluidic channel configured to generate a vortex within the at least one expansion region in response to fluid flow. A solution containing a population of cells at least some of which have diameters = 10 [mu]m flows into the inlet. A portion of cells is trapped within vortex created within the at least one expansion region. The trapped cells may then released from the expansion region.",
+      "applicants": [],
+      "jurisdiction": "WO",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/WO2012037030",
+      "retrievedAt": "2026-10-24T17:24:58.234Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2012046639",
+      "publicationNumber": "US20120046639A1",
+      "applicationNumber": "US201113213990",
+      "title": "MICROFLUIDIC FREE INTERFACE DIFFUSION TECHNIQUES",
+      "abstract": "A static fluid and a second fluid are placed into contact along a microfluidic free interface and allowed to mix by diffusion without convective flow across the interface. In accordance with one embodiment of the present invention, the fluids are static and initially positioned on either side of a closed valve structure in a microfluidic channel having a width that is tightly constrained in at least one dimension. The valve is then opened, and no-slip layers at the sides of the microfluidic channel suppress convective mixing between the two fluids along the resulting interface. Applications for microfluidic free interfaces in accordance with embodiments of the present invention include, but are not limited to, protein crystallization studies, protein solubility studies, determination of properties of fluidics systems, and a variety of biological assays such as diffusive immunoassays, substrate turnover assays, and competitive binding assays.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2012046639",
+      "retrievedAt": "2026-10-24T17:24:58.234Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2011312081",
+      "publicationNumber": "US20110312081A1",
+      "applicationNumber": "US201113150137",
+      "title": "REAGENT DISPENSING APPARATUS FOR ARRAY OF MICROFLUIDIC DEVICES",
+      "abstract": "A reagent dispensing apparatus for loading reagents into a fixed array of microfluidic devices, each microfluidic device having a digital memory for data related to the reagents loaded into the microfluidic device, the reagent dispensing apparatus having a plurality of reagent vials each of the vials having an integrated circuit with memory storing data regarding the reagent in the vial, and a droplet dispenser, a mounting surface for detachably mounting the fixed array of microfluidic devices for movement relative to the vials, and, a control processor for operative control of the vials and the mounting surface, wherein, the control processor is configured to activate the droplet dispenser of the vial selected, move the vial into registration within one or more of the microfluidic devices within the fixed array and download the data from the integrated circuit to the digital memory of the one or more microfluidic devices.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2011312081",
+      "retrievedAt": "2026-10-24T17:24:58.234Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2012070833",
+      "publicationNumber": "US20120070833A1",
+      "applicationNumber": "US201113240347",
+      "title": "LATERAL FLOW MICROFLUIDIC ASSAYING DEVICE AND RELATED METHOD",
+      "abstract": "Provided herein is a microfluidic device and related method for controlling flow of different fluid components of a fluid. The microfluidic device comprises an input channel, focusing channel and an assaying channel. The microfluidic device is adapted to separate a fluid into at least two fluid components, and is further adapted to detect a target material comprised within one of the fluid components. The method comprises providing a channel, the channel having a dimension which is a function of a dimension of one of the fluid components and deliver the fluid through the channel at a set flow rate.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2012070833",
+      "retrievedAt": "2026-10-24T17:24:58.235Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:WO2012040493",
+      "publicationNumber": "WO2012040493A2",
+      "applicationNumber": "WO2011US52803",
+      "title": "A LATERAL FLOW MICROFLUIDIC ASSAYING DEVICE AND RELATED METHOD",
+      "abstract": "Provided herein is a microfluidic device and related method for controlling flow of different fluid components of a fluid. The microfluidic device comprises an input channel, focusing channel and an assaying channel. The microfluidic device is adapted to separate a fluid into at least two fluid components, and is further adapted to detect a target material comprised within one of the fluid components. The method comprises providing a channel, the channel having a dimension which is a function of a dimension of one of the fluid components and deliver the fluid through the channel at a set flow rate.",
+      "applicants": [],
+      "jurisdiction": "WO",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/WO2012040493",
+      "retrievedAt": "2026-10-24T17:24:58.235Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2011244559",
+      "publicationNumber": "US20110244559A1",
+      "applicationNumber": "US201113158957",
+      "title": "Fabrication Method of Microfluidic Circuit, and Microfluidic Circuit Fabricated by Method Thereof",
+      "abstract": "A fabrication method of a microfluidic circuit is provided, dispensable of mask registration, absent of deviation in mask positioning, and inexpensive in fabrication cost. The fabrication method of a microfluidic circuit has a light transmissive substrate stacked on a light absorptive substrate, and the light transmissive substrate welded with the light absorptive substrate for bonding by directing light through the light transmissive substrate. The microfluidic circuit includes a microchannel at the bottom face of the light transmissive substrate and/or at the top face of the light absorptive substrate. The method includes the step of forming, at the light transmissive substrate, a light attenuation region attenuating transmittance of light towards the microchannel when light is directed through the light transmissive substrate.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2011244559",
+      "retrievedAt": "2026-10-24T17:24:58.235Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:US2012064612",
+      "publicationNumber": "US20120064612A1",
+      "applicationNumber": "US201113225280",
+      "title": "MICROFLUIDIC DEVICES FOR FLUID MANIPULATION AND ANALYSIS",
+      "abstract": "The present invention relates to microfluidic devices and methods for manipulating and analyzing fluid samples. The disclosed microfluidic devices utilize a plurality of microfluidic channels, inlets, valves, filter, pumps, liquid barriers and other elements arranged in various configurations to manipulate the flow of a fluid sample in order to prepare such sample for analysis.",
+      "applicants": [],
+      "jurisdiction": "US",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/US2012064612",
+      "retrievedAt": "2026-10-24T17:24:58.235Z",
+      "queries": [
+        "microfluidic"
+      ]
+    },
+    {
+      "id": "epmc:WO2012047015",
+      "publicationNumber": "WO2012047015A2",
+      "applicationNumber": "WO2011KR07367",
+      "title": "MULTIPLEX MICROFLUIDIC DEVICE FOR SELECTING NUCLEIC ACID APTAMERS, AND HIGH THROUGHPUT SELECTION METHOD FOR NUCLEIC ACID APTAMERS USING SAME",
+      "abstract": "The present invention relates to a multiplex microfluidic device for selecting nucleic acid aptamers, and a high throughput selection method for nucleic acid aptamers using the same, and more specifically, to a multiplex microfluidic device (SELEX lap-on-a-chip) in which a conventional aptamer development method for a single target is converted into an improved multiplex platform, and a high throughput selection method for nucleic acid aptamers in which the method is linked with high throughput sequencing. According to the present invention, the multiplex microfluidic device can simultaneously detect each aptamer for a plurality of targets and remarkably reduces the processing amount and processing time compared with a conventional multiplex method. In particular, the target coupling/separation/amplification process round can be greatly reduced and an automated process can carry out a selection process of aptamers by linking the device of the present invention with high throughput sequencing, and thus the device is very useful.",
+      "applicants": [],
+      "jurisdiction": "WO",
+      "source": "Europe PMC patent archive",
+      "sourceUrl": "https://europepmc.org/article/PAT/WO2012047015",
+      "retrievedAt": "2026-10-24T17:24:58.235Z",
+      "queries": [
+        "microfluidic"
+      ]
+    }
+  ],
+  "papers": [
+    {
+      "id": "10.1088/1361-6439/ae93cb/data2",
+      "title": "Microfluidic Holder",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1088/1361-6439/ae93cb/data2",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "10.1016/b978-0-12-823846-2.00017-1",
+      "title": "Microfluidic-based plasmonic biosensors",
+      "year": 2023,
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1016/b978-0-12-823846-2.00017-1",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "10.1016/b978-0-12-818791-3.00014-0",
+      "title": "Smartphone-based microfluidic devices",
+      "year": 2021,
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1016/b978-0-12-818791-3.00014-0",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "10.1385/1-59259-997-4:27",
+      "title": "Laser Ablation as a Fabrication Technique for Microfluidic Devices",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1385/1-59259-997-4:27",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "10.1385/1-59259-997-4:157",
+      "title": "Microfluidic Ethanol Biobatteries on a Microchip",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1385/1-59259-997-4:157",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "10.1016/b978-0-12-818791-3.00007-3",
+      "title": "Microfluidic paper-based devices",
+      "year": 2021,
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1016/b978-0-12-818791-3.00007-3",
+      "retrievedAt": "2026-10-24T17:24:57.414Z"
+    },
+    {
+      "id": "https://openalex.org/W2056584136",
+      "title": "Microfluidics-a review",
+      "year": 1993,
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1088/0960-1317/3/4/002",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    },
+    {
+      "id": "https://openalex.org/W352770608",
+      "title": "Electrokinetics in Microfluidics",
+      "year": 2004,
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1016/s1573-4285(04)x8022-4",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    },
+    {
+      "id": "https://openalex.org/W1489707918",
+      "title": "Fundamentals and Applications of Microfluidics",
+      "year": 2002,
+      "source": "OpenAlex",
+      "sourceUrl": "https://openalex.org/W1489707918",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    },
+    {
+      "id": "https://openalex.org/W2086187432",
+      "title": "The origins and the future of microfluidics",
+      "year": 2006,
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1038/nature05058",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    },
+    {
+      "id": "https://openalex.org/W4388393581",
+      "title": "Introduction to Microfluidics",
+      "year": 2005,
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1093/oso/9780198568643.001.0001",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    },
+    {
+      "id": "https://openalex.org/W2065293530",
+      "title": "Microfluidic tectonics: A comprehensive construction platform for microfluidic systems",
+      "year": 2000,
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1073/pnas.250273097",
+      "retrievedAt": "2026-10-24T17:24:57.664Z"
+    }
+  ],
+  "warnings": [
+    "Europe PMC covers a limited historical patent archive, especially life sciences. It is not a complete or current global patent search. Claims, applicants and legal status are not supplied by this adapter; abstracts are used for comparison.",
+    "Public patent keyword search uses the limited Europe PMC archive. Enter an EP publication number and date to supplement it with EPO publication evidence.",
+    "Coverage is incomplete. Applicant analytics represent only retrieved records. Semantic ranking and legal status are not implemented."
+  ],
+  "queries": [
+    "microfluidic"
+  ]
+}

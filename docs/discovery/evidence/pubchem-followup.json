@@ -1,0 +1,7 @@
+{
+  "httpStatus": 200,
+  "latencyMs": 1612,
+  "checkedAt": "2026-10-25T00:02:51.163601+00:00",
+  "testUrl": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/123/xrefs/PatentID/JSON",
+  "count": 354
+}

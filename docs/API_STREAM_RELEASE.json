@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "events": 36,
+  "firstPatentSeconds": 1.284,
+  "totalSeconds": 20.985,
+  "completed": true,
+  "patents": 13,
+  "papers": 30
+}

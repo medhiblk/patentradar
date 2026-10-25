@@ -1,0 +1,59 @@
+[
+  {
+    "path": "/api/health/providers",
+    "provider": null,
+    "status": 200,
+    "latencyMs": 798,
+    "checkedAt": "2026-10-25T00:49:27Z",
+    "eligibility": {
+      "endpoints": 80,
+      "providerFamilies": 26,
+      "tiers": {
+        "A": 55,
+        "B": 1,
+        "C": 20,
+        "D": 4
+      },
+      "note": "Verification is a dated observation; Tier A applies only to the declared metadata/retrieval scope, licence and quota. Endpoint count is not provider count."
+    },
+    "epoPublication": [
+      {
+        "id": "epo-publication",
+        "name": "EPO Publication Server",
+        "capabilities": [
+          "patent-lookup",
+          "full-text",
+          "claims"
+        ],
+        "authentication": "Public",
+        "documentation": "https://data.epo.org/publication-server/rest/v1.2",
+        "detail": "EP publication number + publication date required; XML retrieval, not keyword search.",
+        "configured": true,
+        "status": "UNTESTED",
+        "rateLimit": "Bounded requests; 10s timeout; one backoff retry; five-minute cache. Provider quotas still apply.",
+        "tier": "A",
+        "license": "EPO publication-service terms; patent documents may include third-party rights; preserve attribution.",
+        "enabledByDefault": true
+      }
+    ]
+  },
+  {
+    "path": "/api/intelligence",
+    "provider": null,
+    "status": 200,
+    "latencyMs": 946,
+    "checkedAt": "2026-10-25T00:49:28Z",
+    "responseKeys": [
+      "summary",
+      "endpoints",
+      "operations"
+    ]
+  },
+  {
+    "path": "/api/intelligence",
+    "provider": "hal",
+    "status": 503,
+    "checkedAt": "2026-10-25T00:49:57Z",
+    "note": "Final isolated follow-up returned HTTP503; earlier aggregate workflow succeeded. No uptime guarantee."
+  }
+]

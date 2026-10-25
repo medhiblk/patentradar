@@ -1,0 +1,135 @@
+{
+  "checkedAt": "2026-10-24T16:36:57.311Z",
+  "httpStatus": 200,
+  "mode": "PARTIAL",
+  "patents": [
+    {
+      "publicationNumber": "EP1000000A1",
+      "title": "Apparatus for manufacturing green bricks for the brick manufacturing industry",
+      "claims": 11,
+      "source": "EPO Publication Server",
+      "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+      "retrievedAt": "2026-10-24T16:36:56.403Z"
+    }
+  ],
+  "papers": [
+    {
+      "title": "brick mould | brick mold, n.²",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1093/oed/5794431835",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "brick mould | brick mold, n.¹",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.1093/oed/5327032818",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "The Brick Mould",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.3362/9781835760420",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "brick mould",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.5040/9781350122741.1000335",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "Riverside Brick and Manufacturing Company/Hammond-Baton Rouge Brick Company Records",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.18785/fa.m108",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "Conveyor Roll Manufacturing Conveyor Roll Manufacturing",
+      "source": "Crossref",
+      "sourceUrl": "https://doi.org/10.21070/pels.v7i0.1483",
+      "retrievedAt": "2026-10-24T16:36:56.251Z"
+    },
+    {
+      "title": "Portable Bricks Transfer Conveyor Belt",
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.22214/ijraset.2022.42486",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    },
+    {
+      "title": "Performance assessment on manufacturing of unfired bricks using industrial wastes",
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.1051/e3sconf/202339903001",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    },
+    {
+      "title": "Industrial Operation Feasibility for Red Gypsum-Based Brick Manufacturing",
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.24203/ajas.v7i4.5874",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    },
+    {
+      "title": "Potters Kiln Bricks: Using Manual Brick Making Machine",
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.7176/jep/10-11-04",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    },
+    {
+      "title": "Melted Polyethylene Terephthalate Plastic Waste as a Binder in the Manufacture of Sand Bricks",
+      "source": "OpenAlex",
+      "sourceUrl": "https://doi.org/10.55164/ajstr.v28i4.256661",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    },
+    {
+      "title": "Design of a modern brick plant",
+      "source": "OpenAlex",
+      "sourceUrl": "https://openalex.org/W2290265278",
+      "retrievedAt": "2026-10-24T16:36:56.418Z"
+    }
+  ],
+  "warnings": [
+    "Coverage is incomplete. Applicant analytics represent only retrieved records. Semantic ranking and legal status are not implemented."
+  ],
+  "providers": [
+    {
+      "id": "epo-publication",
+      "name": "EPO Publication Server",
+      "capabilities": [
+        "patent-lookup",
+        "full-text",
+        "claims"
+      ],
+      "authentication": "Public",
+      "documentation": "https://data.epo.org/publication-server/rest/v1.2",
+      "detail": "EP publication number + publication date required; XML retrieval, not keyword search.",
+      "configured": true,
+      "status": "UNTESTED",
+      "rateLimit": "Bounded requests; 10s timeout; one backoff retry; five-minute cache. Provider quotas still apply."
+    },
+    {
+      "id": "crossref",
+      "name": "Crossref",
+      "capabilities": [
+        "scientific-search"
+      ],
+      "authentication": "Public polite REST",
+      "documentation": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+      "detail": "Keyword search and DOI resolution.",
+      "configured": true,
+      "status": "UNTESTED",
+      "rateLimit": "Bounded requests; 10s timeout; one backoff retry; five-minute cache. Provider quotas still apply."
+    },
+    {
+      "id": "openalex",
+      "name": "OpenAlex",
+      "capabilities": [
+        "scientific-search"
+      ],
+      "authentication": "API key supported; anonymous availability may change",
+      "documentation": "https://docs.openalex.org",
+      "detail": "Anonymous request verified in this environment; runtime failures handled.",
+      "configured": true,
+      "status": "UNTESTED",
+      "rateLimit": "Bounded requests; 10s timeout; one backoff retry; five-minute cache. Provider quotas still apply."
+    }
+  ]
+}

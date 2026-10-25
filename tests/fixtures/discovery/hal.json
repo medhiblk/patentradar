@@ -1,0 +1,18 @@
+{
+  "response": {
+    "numFound": 4297,
+    "start": 0,
+    "maxScore": 6.1922264,
+    "numFoundExact": true,
+    "docs": [
+      {
+        "title_s": [
+          "Standardized and modular microfluidic platform for fast Lab on Chip system development"
+        ],
+        "halId_s": "cea-02183835",
+        "uri_s": "https://cea.hal.science/cea-02183835v1",
+        "producedDateY_i": 2018
+      }
+    ]
+  }
+}

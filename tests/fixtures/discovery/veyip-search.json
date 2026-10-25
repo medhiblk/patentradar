@@ -1,0 +1,37 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "共 2033759 件，第 1 页（检索式：ts:电池）。\n\n- **电池**（CN102299288B · 福特全球技术公司 · 申请日 2011-06-07 · 失效专利 · H01M2/20）\n  - 摘要：本发明公开了一种电池，该电池具有设置为阵列的多个电池单元对。电池单元对纵向连接。感应导线设置在电池单元对的端部上以避开与电池单元对的接头相邻的感应导线。\n  - 链接：https://app.veyip.com/patent-search/detail?id=CN102299288B&q=dn%3ACN102299288B&ds=cn&p=1&ps=10&view=graphic&s=relation\n- **电池**（CN104979518B · 福特全球技术公司 · 申请日 2011-06-07 · 失效专利 · H01M2/20）\n  - 摘要：本发明公开了一种电池，该电池具有设置为阵列的多个电池单元对。电池单元对纵向连接。感应导线设置在电池单元对的端部上以避开与电池单元对的接头相邻的感应导线。\n  - 链接：https://app.veyip.com/patent-search/detail?id=CN104979518B&q=dn%3ACN104979518B&ds=cn&p=1&ps=10&view=graphic&s=relation\n\n读权利要求、说明书、著录或法律状态：get_patent(number=专利号, part=claims|description|biblio|legal)。\n数据来源：PatentHub，经惟专知识产权代查。"
+    }
+  ],
+  "structuredContent": {
+    "query": "ts:电池",
+    "total": 2033759,
+    "page": 1,
+    "items": [
+      {
+        "documentNumber": "CN102299288B",
+        "applicationNumber": "CN201110158479.8",
+        "title": "电池",
+        "applicant": "福特全球技术公司",
+        "applicationDate": "2011-06-07",
+        "publicationDate": "2015-06-03",
+        "legalStatus": "失效专利",
+        "ipc": "H01M2/20",
+        "url": "https://app.veyip.com/patent-search/detail?id=CN102299288B&q=dn%3ACN102299288B&ds=cn&p=1&ps=10&view=graphic&s=relation"
+      },
+      {
+        "documentNumber": "CN104979518B",
+        "applicationNumber": "CN201510221515.9",
+        "title": "电池",
+        "applicant": "福特全球技术公司",
+        "applicationDate": "2011-06-07",
+        "publicationDate": "2017-12-12",
+        "legalStatus": "失效专利",
+        "ipc": "H01M2/20",
+        "url": "https://app.veyip.com/patent-search/detail?id=CN104979518B&q=dn%3ACN104979518B&ds=cn&p=1&ps=10&view=graphic&s=relation"
+      }
+    ]
+  }
+}

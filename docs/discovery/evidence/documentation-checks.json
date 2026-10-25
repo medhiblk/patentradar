@@ -1,0 +1,360 @@
+[
+  {
+    "provider": "arxiv",
+    "url": "https://info.arxiv.org/help/api/tou.html",
+    "checkedAt": "2026-10-25T00:17:43.345688+00:00",
+    "status": 200,
+    "contentType": "text/html",
+    "policySignals": [
+      {
+        "term": "CC0",
+        "snippet": " use descriptive metadata 1 about arXiv e-prints under the terms of the Creative Commons Universal (CC0 1.0) Public Domain Declaration . Metadata are provided by authors, volunteer moderators, arXiv staff, and external partners. You agree to abide by the arXiv Code of Conduct in all of your interactions with arXiv staff a"
+      },
+      {
+        "term": "Creative Commons",
+        "snippet": "ases, submitters have provided permission in advance by submitting their e-print under a permissive Creative Commons license. The vast majority of e-prints are submitted under the arXiv.org non-exclusive right to distribute . For more information about licenses, see https://arxiv.org/help/license. You are free to use descriptive metad"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "SE OR OTHER DEALINGS IN THE SOFTWARE. --> Table of contents Terms of Use for arXiv APIs Limitations Rate limits Things that you can (and should!) do Things that you must not do Terms of Use for arXiv APIs Our mission is to provide rapid dissemination of scientific results at no cost to authors or readers. Providing free Applicat"
+      }
+    ]
+  },
+  {
+    "provider": "veyip",
+    "url": "https://www.veyip.com/ai",
+    "checkedAt": "2026-10-25T00:17:43.346380+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "zyb",
+    "url": "https://yun.zyb.cloud/apiView.shtml",
+    "checkedAt": "2026-10-25T00:17:43.346706+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "crossref",
+    "url": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/access-and-authentication/",
+    "checkedAt": "2026-10-25T00:17:43.346999+00:00",
+    "status": 200,
+    "contentType": "text/html",
+    "policySignals": [
+      {
+        "term": "Creative Commons",
+        "snippet": "PI Learning Hub Community forum Join Contact Jobs Blog The content of this site is licensed under a Creative Commons Attribution 4.0 International License Accessibility Privacy $(document).ready(function(){$(\".new-arrow\").hover(function(){$(\".up-arrow\").toggleClass(\"move-arrow\")})}) (function(e,t,n,s,o){e[t]=e[t]||{},e[t][n]=e[t][n]||"
+      },
+      {
+        "term": "authentication",
+        "snippet": "ame\\\": \\\"REST API\\\",\\n \\\"position\\\": 4\\n },\\n {\\n \\\"@type\\\": \\\"ListItem\\\",\\n \\\"name\\\": \\\"Access and authentication\\\",\\n \\\"position\\\": 5\\n }\\n ]\\n}\" Access and authentication - Crossref Menu Home Home Join Members Documentation Forum Blog Contact Get involved Overview Become a member Events Service providers Special programs Working "
+      },
+      {
+        "term": "rate limit",
+        "snippet": "n the request header as Crossref-Plus-API-Token: Bearer [API key] The option you choose affects the rate limits. We recommend the polite option so that we can contact you if there is an issue. Metadata Plus is our premium service that offers higher rate limits and priority support, and is designed for those who wish to integrate"
+      }
+    ]
+  },
+  {
+    "provider": "datacite",
+    "url": "https://support.datacite.org/docs/rest-api",
+    "checkedAt": "2026-10-25T00:17:44.226743+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": [
+      {
+        "term": "CC-BY",
+        "snippet": "ny documentation page URL to get its markdown version. Jump to Content 🏳️ Feedback Home All content CC-BY Home Guides API Reference 🏳️ Feedback Home All content CC-BY ℹ️ Contact us! Log In Guides ℹ️ Contact us! Log In Home Guides API Reference DataCite REST API Getting Started How to Get Started Quick Start Guides Testing G"
+      },
+      {
+        "term": "authentication",
+        "snippet": "create a DOI with MDS API was successful, but the DOIs aren’t resolving. What do I do? What type of authentication does the REST API use? What is the &quot;identifiers&quot; attribute in the REST API? How do I set up a query with the DataCite API to search the metadata catalogue for affiliation information? How can I use the DataCit"
+      },
+      {
+        "term": "rate limit",
+        "snippet": " enrichments Harvesting DataCite DOI Metadata Construct a Query to Search DOI Metadata DataCite API Rate Limits Upcoming Changes DataCite Event Data Changes DataCite GraphQL API Deprecation DataCite REST API &quot;affiliation&quot; and &quot;publisher&quot; Default Change DataCite API Deprecation Guide DataCite Metadata Guides a"
+      },
+      {
+        "term": "public API",
+        "snippet": "Is Pagination Queries and filtering Retrieving a random sample of DOIs Tracking metadata provenance Public API (No authentication) The Public API is accessed without authentication. We recommend using the Public API to retrieve and search for DOI metadata. The Public API only returns DOIs in Findable state, excluding draft recor"
+      },
+      {
+        "term": "no API key",
+        "snippet": ".\"},\"apiConfig\":{\"allRequests\":\"All Requests\",\"allRequestsFilter\":\"All Requests\",\"apiKeysNotFound\":\"No API keys found.\",\"apiKeysNotSynced\":\"API keys are not synced with this developer hub.\",\"apiRequests\":\"API Requests\",\"authentication\":\"Authentication\",\"credentials\":\"Credentials\",\"dayFilter\":\"Last 24 Hours\",\"emptyStatePrompt\":\"M"
+      }
+    ]
+  },
+  {
+    "provider": "doe",
+    "url": "https://www.osti.gov/api/v1/docs",
+    "checkedAt": "2026-10-25T00:17:44.450971+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "epmc",
+    "url": "https://europepmc.org/RestfulWebService",
+    "checkedAt": "2026-10-25T00:17:44.889640+00:00",
+    "status": 200,
+    "contentType": "text/html;charset=UTF-8",
+    "policySignals": [
+      {
+        "term": "public API",
+        "snippet": "at=dc Privacy Notice We advise that you read our Privacy Notice before using this API. By using our public API you agree to accept the terms of the Privacy Notice . /* \").attr(\"role\", \"status\").text(\"Loading interactive API documentation…\") ); jQuery.getJSON(apiDocsUrl).done(function (spec) { // Adapt the document before Swagger"
+      }
+    ]
+  },
+  {
+    "provider": "epo-linked",
+    "url": "https://www.epo.org/en/searching-for-patents/data/linked-open-data",
+    "checkedAt": "2026-10-25T00:17:45.232027+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "policySignals": [
+      {
+        "term": "Creative Commons",
+        "snippet": "e and is governed by a fair use policy. License The EPO grants usage of Linked open EP data under \" Creative Commons Attribution 4.0 International Public\" License &nbsp;( further information ). Fair use policy Linked open EP data provides a reference data service.&nbsp; It provides data about resources (patent applications, publicatio"
+      }
+    ]
+  },
+  {
+    "provider": "epo-publication",
+    "url": "https://data.epo.org/publication-server/help",
+    "checkedAt": "2026-10-25T00:17:45.343609+00:00",
+    "status": 200,
+    "contentType": "text/html;charset=UTF-8",
+    "policySignals": []
+  },
+  {
+    "provider": "fr-company",
+    "url": "https://recherche-entreprises.api.gouv.fr/docs/",
+    "checkedAt": "2026-10-25T00:17:46.270207+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "gleif",
+    "url": "https://www.gleif.org/en/lei-data/gleif-api",
+    "checkedAt": "2026-10-25T00:17:46.319752+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "policySignals": []
+  },
+  {
+    "provider": "hal",
+    "url": "https://api.archives-ouvertes.fr/docs",
+    "checkedAt": "2026-10-25T00:17:47.782327+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "policySignals": []
+  },
+  {
+    "provider": "cern",
+    "url": "https://inspirehep.net/help/knowledge-base/rest-api/",
+    "checkedAt": "2026-10-25T00:17:48.579648+00:00",
+    "status": 404,
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "provider": "jstage",
+    "url": "https://www.jstage.jst.go.jp/static/pages/WebAPI/-char/ja",
+    "checkedAt": "2026-10-25T00:17:49.696199+00:00",
+    "status": 200,
+    "contentType": "text/html;charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "nasa",
+    "url": "https://sti.nasa.gov/harvesting-data/",
+    "checkedAt": "2026-10-25T00:17:49.842435+00:00",
+    "status": 404,
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "provider": "ncbi",
+    "url": "https://www.ncbi.nlm.nih.gov/books/NBK25497/",
+    "checkedAt": "2026-10-25T00:17:49.871347+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "openaire",
+    "url": "https://graph.openaire.eu/docs/10.1.0/apis/terms/",
+    "checkedAt": "2026-10-25T00:17:50.819635+00:00",
+    "status": 200,
+    "contentType": "text/html",
+    "policySignals": [
+      {
+        "term": "CC-BY",
+        "snippet": "nary Centre for Mathematical and Computational Modelling (ICM). License ​ OpenAIRE Graph license is CC-BY: the records returned by the service can be freely re-used by commercial and non-commercial partners under CC-BY license, hence as long as OpenAIRE is acknowledged as a data source. Previous Broker API Next Guide for au"
+      },
+      {
+        "term": "authentication",
+        "snippet": "e the latest version ( 11.2.0 ). Public APIs Terms of use Version: 10.1.0 On this page Terms of use Authentication &amp; limits ​ The OpenAIRE APIs are free-to-use by any third-party service and can be accessed over HTTPS both by authenticated and unauthenticated requests. The rate limit for the former type of requests is up to 7200"
+      },
+      {
+        "term": "unauthenticated",
+        "snippet": "are free-to-use by any third-party service and can be accessed over HTTPS both by authenticated and unauthenticated requests. The rate limit for the former type of requests is up to 7200 requests per hour, while the latter is up to 60 requests per hour. To make an authenticated request, you must first register . Then, you can go to t"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "arty service and can be accessed over HTTPS both by authenticated and unauthenticated requests. The rate limit for the former type of requests is up to 7200 requests per hour, while the latter is up to 60 requests per hour. To make an authenticated request, you must first register . Then, you can go to the personal access token "
+      },
+      {
+        "term": "public API",
+        "snippet": "3 7.1.2 7.1.1 7.1.0 7.0.0 6.2.2 6.1.1 6.0.0 5.2.0 5.1.3 5.1.2 5.1.1 5.1.0 5.0.0 Overview Data model Public APIs Graph API Search API ScholeXplorer API Dspace &amp; EPrints API Broker API Terms of use Guide for authenticated requests APIs specification changelog Downloads Graph production workflow Relevant publications License Ve"
+      }
+    ]
+  },
+  {
+    "provider": "openalex",
+    "url": "https://help.openalex.org/api/authentication/",
+    "checkedAt": "2026-10-25T00:17:51.085419+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": [
+      {
+        "term": "authentication",
+        "snippet": " Authentication | OpenAlex Help Center .breadcrumbs[data-astro-cid-vx4iavld]{margin-bottom:.6rem}ol[data-astro-cid-vx4iavld]{color:var(--muted);flex-wrap:wrap;align-items:center;margin:0;padding:0;font-size:.82rem;list-style:none;displ"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "rsor paging past the first page. This page covers getting a key, sending it, and staying inside the rate limits. For what the API costs and how billing works — that’s a separate concern — see Pricing , with worked numbers on the Example costs page. Getting an API key It’s free, and there are two ways to get one: On the website. "
+      },
+      {
+        "term": "no API key",
+        "snippet": "s — and what typical activity actually uses — see Example costs . Who’s calling Requests per second No API key 10 Free API key, or prepaid usage 30 Annual plan 50 A few heavy request types have lower limits of their own: semantic search is 1 request per second, and searches with more than 5 OR / AND / NOT operators are limited t"
+      }
+    ]
+  },
+  {
+    "provider": "opencitations",
+    "url": "https://api.opencitations.net/index/v2",
+    "checkedAt": "2026-10-25T00:17:51.137554+00:00",
+    "status": 200,
+    "contentType": "text/html",
+    "policySignals": [
+      {
+        "term": "CC0",
+        "snippet": "us: 50%; background-color: #595959; margin-right: 0.8em; } .code_200::before { background-color: #00cc00; } .code_404::before { background-color: #cccc00; } .code_500::before { background-color: #cc0000; } Menu The REST API for OpenCitations Index DESCRIPTION PARAMETERS OPERATIONS /citation/{oci} /citation-count/{id} /ven"
+      },
+      {
+        "term": "Creative Commons",
+        "snippet": "citations.net/index/v2 Contact: contact@opencitations.net License: This document is licensed with a Creative Commons Attribution 4.0 International License , while the REST API itself has been created using RAMOSE , the Restful API Manager Over SPARQL Endpoints created by Silvio Peroni , which is licensed with an ISC license . Descript"
+      }
+    ]
+  },
+  {
+    "provider": "pubchem",
+    "url": "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest",
+    "checkedAt": "2026-10-25T00:17:51.292226+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": []
+  },
+  {
+    "provider": "rcsb",
+    "url": "https://search.rcsb.org/",
+    "checkedAt": "2026-10-25T00:17:51.718991+00:00",
+    "status": 200,
+    "contentType": "text/html;charset=UTF-8",
+    "policySignals": []
+  },
+  {
+    "provider": "ror",
+    "url": "https://ror.readme.io/docs/rest-api",
+    "checkedAt": "2026-10-25T00:17:52.212967+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": [
+      {
+        "term": "authentication",
+        "snippet": "\"apiKeysNotSynced\":\"API keys are not synced with this developer hub.\",\"apiRequests\":\"API Requests\",\"authentication\":\"Authentication\",\"credentials\":\"Credentials\",\"dayFilter\":\"Last 24 Hours\",\"emptyStatePrompt\":\"Make a request to see them here or \\u003ca>Try It\\u003c/a>!\",\"error\":\"Error\",\"errorRequestsFilter\":\"400 & 500\",\"gettingStarte"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "arge-scale programmatic matching of complex, unstructured text strings to ROR IDs. Registration and rate limits No registration is currently required to use the ROR API, but note that the rate limit is a maximum of 2000 requests in a 5-minute period per IP address, and API traffic can be quite heavy at popular times like midnigh"
+      },
+      {
+        "term": "no API key",
+        "snippet": ".\"},\"apiConfig\":{\"allRequests\":\"All Requests\",\"allRequestsFilter\":\"All Requests\",\"apiKeysNotFound\":\"No API keys found.\",\"apiKeysNotSynced\":\"API keys are not synced with this developer hub.\",\"apiRequests\":\"API Requests\",\"authentication\":\"Authentication\",\"credentials\":\"Credentials\",\"dayFilter\":\"Last 24 Hours\",\"emptyStatePrompt\":\"M"
+      }
+    ]
+  },
+  {
+    "provider": "semantic",
+    "url": "https://www.semanticscholar.org/product/api/license",
+    "checkedAt": "2026-10-25T00:17:52.640947+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": [
+      {
+        "term": "Creative Commons",
+        "snippet": " such as open access works from publicly available sources, works under a public use license (e.g., Creative Commons), and works licensed by AI2 from others (collectively, “ Third Party Content ”). In addition to the S2 Data Licenses, any underlying Third Party Content may be subject to separate license terms by the respective third p"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "ns, enhancements, bug fixes, patches, or other error corrections to the API in its sole discretion. Rate Limits. You will not attempt to exceed or circumvent limitations on access, calls, and use of the API (&quot; Rate Limits &quot;). If you exceed the Rate Limits or AI2 reasonably believes that you have attempted to circumvent"
+      }
+    ]
+  },
+  {
+    "provider": "tipo",
+    "url": "https://cloud.tipo.gov.tw/S220/opdata/detail/PatentPub",
+    "checkedAt": "2026-10-25T00:17:53.240877+00:00",
+    "status": 200,
+    "contentType": "text/html",
+    "policySignals": []
+  },
+  {
+    "provider": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Wikidata:Data_access",
+    "checkedAt": "2026-10-25T00:17:53.531855+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=UTF-8",
+    "policySignals": [
+      {
+        "term": "CC0",
+        "snippet": "idata offers a wide range of general data about everything under the sun. All that data is licensed CC0 , \"No rights reserved\", for the public domain. Changes to APIs and other methods of accessing Wikidata are subject to the Stable Interface Policy . Data sources on this page are not guaranteed to be stable interfaces. W"
+      },
+      {
+        "term": "Creative Commons",
+        "snippet": "structured data from the main, Property, Lexeme, and EntitySchema namespaces is available under the Creative Commons CC0 License ; text in the other namespaces is available under the Creative Commons Attribution-ShareAlike License ; additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy . Priv"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "further requests for a while (see the Retry-After response header). Please also refer to the global rate limits set for all Wikimedia APIs. When available (such as with the Wikidata Query Service), set the lowest timeout that makes sense for your data. When using the MediaWiki Action API, make liberal use of the maxlag parameter"
+      }
+    ]
+  },
+  {
+    "provider": "zenodo",
+    "url": "https://developers.zenodo.org/",
+    "checkedAt": "2026-10-25T00:17:53.532626+00:00",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "policySignals": [
+      {
+        "term": "CC-BY",
+        "snippet": "ind the available license IDs via our /api/licenses endpoint . Defaults to cc-zero for datasets and cc-by for everything else. embargo_date date Yes, if access_right is &quot;embargoed&quot; . When the deposited files will be made automatically made publicly available by the system. Defaults to current date. access_conditio"
+      },
+      {
+        "term": "Creative Commons",
+        "snippet": "ed license applies to all files in this deposition, but not to the metadata which is licensed under Creative Commons Zero . You can find the available license IDs via our /api/licenses endpoint . Defaults to cc-zero for datasets and cc-by for everything else. embargo_date date Yes, if access_right is &quot;embargoed&quot; . When the d"
+      },
+      {
+        "term": "authentication",
+        "snippet": "ow to supply the credentials required.\" , \"status\" : 401 } We will try to access the API without an authentication token: All API access requires an access token, so create one. ACCESS_TOKEN = ' ChangeMe ' headers = { ' Authorization ' : f ' Bearer { ACCESS_TOKEN } ' } r = requests . get ( ' https://zenodo.org/api/deposit/deposition"
+      },
+      {
+        "term": "rate limit",
+        "snippet": "request header Content-Type . Error response included. 429 Too Many Requests Request failed, due to rate limiting. Error response included. 500 Internal Server Error Request failed, due to an internal server error. Error response NOT included. Don&rsquo;t worry, Zenodo admins have been notified and will be dealing with the probl"
+      }
+    ]
+  }
+]

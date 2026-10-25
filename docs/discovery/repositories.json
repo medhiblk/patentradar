@@ -1,0 +1,294 @@
+[
+  {
+    "repository": "CNIPA-AI/patent-data-parser",
+    "url": "https://github.com/CNIPA-AI/patent-data-parser",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-04-08T08:09:35Z",
+    "lastUpdate": "2026-09-17T05:09:15Z",
+    "archived": false,
+    "description": "专利文献 XML 解析工具，支持 CNIPA / WIPO ST.36 格式，提取著录项、权利要求、说明书等结构化数据。",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/CNIPA-AI/patent-data-parser/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "CNIPA",
+      "WIPO",
+      "Local XML"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "deeparchi-ai/patent-mcp-server",
+    "url": "https://github.com/deeparchi-ai/patent-mcp-server",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-09-30T03:32:53Z",
+    "lastUpdate": "2026-10-09T09:02:23Z",
+    "archived": false,
+    "description": "MCP Server for global patent data retrieval and analysis, powered by Google Patents Public Datasets on BigQuery. MIT.",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/deeparchi-ai/patent-mcp-server/master/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "Google BigQuery",
+      "Local model"
+    ],
+    "credentialMention": true
+  },
+  {
+    "repository": "djfksjd/patent-search-skill",
+    "url": "https://github.com/djfksjd/patent-search-skill",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-07-31T03:55:13Z",
+    "lastUpdate": "2026-10-02T15:12:54Z",
+    "archived": false,
+    "description": "🇰🇷 발명 선행기술조사 에이전트 스킬 [Claude Code·Codex·agy(Antigravity)·Cursor·Gemini CLI·Grok Build 지원] KIPRIS+Google Patents 기반 특허성·예비 FTO 분리 조사 + claim chart + 청구항 차별화 가이드",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/djfksjd/patent-search-skill/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "WIPO",
+      "KIPRIS",
+      "Local XML"
+    ],
+    "credentialMention": true
+  },
+  {
+    "repository": "Tech-curator/korean-patent-mcp",
+    "url": "https://github.com/Tech-curator/korean-patent-mcp",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2025-12-16T12:40:34Z",
+    "lastUpdate": "2026-07-29T07:08:06Z",
+    "archived": false,
+    "description": null,
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/Tech-curator/korean-patent-mcp/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "KIPRIS",
+      "Local model"
+    ],
+    "credentialMention": true
+  },
+  {
+    "repository": "nuri428/mcp_kipris",
+    "url": "https://github.com/nuri428/mcp_kipris",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-08-07T20:39:33Z",
+    "lastUpdate": "2026-08-07T20:39:37Z",
+    "archived": false,
+    "description": "mcp server for kipris plus, for search patent in http://kipris.or.kr",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/nuri428/mcp_kipris/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "WIPO",
+      "KIPRIS",
+      "Local XML",
+      "Local model"
+    ],
+    "credentialMention": true
+  },
+  {
+    "repository": "ChloePark85/kipris-cli",
+    "url": "https://github.com/ChloePark85/kipris-cli",
+    "httpStatus": 200,
+    "license": "MIT-0",
+    "lastPush": "2026-05-04T01:22:51Z",
+    "lastUpdate": "2026-05-04T01:22:55Z",
+    "archived": false,
+    "description": "Korean Patent / Trademark / Design search CLI — wraps KIPRIS Plus OpenAPI (특허청). Returns JSONL.",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/ChloePark85/kipris-cli/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "KIPRIS"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "satoh-ip-tools/jplatpat-dual-view",
+    "url": "https://github.com/satoh-ip-tools/jplatpat-dual-view",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-07-22T08:53:13Z",
+    "lastUpdate": "2026-07-22T08:52:39Z",
+    "archived": false,
+    "description": "J-PlatPatの文献表示を「請求の範囲」「詳細な説明」の2列表示にする非公式ブラウザ拡張",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/satoh-ip-tools/jplatpat-dual-view/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "J-PlatPat",
+      "JPO"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "parkerhancock/patent_client",
+    "url": "https://github.com/parkerhancock/patent_client",
+    "httpStatus": 200,
+    "license": "NOASSERTION",
+    "lastPush": "2026-04-24T15:24:41Z",
+    "lastUpdate": "2026-10-19T14:33:11Z",
+    "archived": true,
+    "description": "A collection of ORM-style clients to public patent data",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/parkerhancock/patent_client/master/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO",
+      "EPO OPS",
+      "Local model"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "ip-tools/python-epo-ops-client",
+    "url": "https://github.com/ip-tools/python-epo-ops-client",
+    "httpStatus": 200,
+    "license": "Apache-2.0",
+    "lastPush": "2026-10-23T13:23:10Z",
+    "lastUpdate": "2026-10-19T18:42:03Z",
+    "archived": false,
+    "description": "Python client for EPO OPS, the European Patent Office's Open Patent Services API.",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/ip-tools/python-epo-ops-client/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "EPO OPS",
+      "Local XML",
+      "Local model"
+    ],
+    "credentialMention": true
+  },
+  {
+    "repository": "google/patents-public-data",
+    "url": "https://github.com/google/patents-public-data",
+    "httpStatus": 200,
+    "license": "Apache-2.0",
+    "lastPush": "2024-06-17T21:48:06Z",
+    "lastUpdate": "2026-10-12T00:09:45Z",
+    "archived": true,
+    "description": "Patent analysis using the Google Patents Public Datasets on BigQuery",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/google/patents-public-data/master/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "Google BigQuery",
+      "Local model"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "grobidOrg/grobid",
+    "url": "https://github.com/grobidOrg/grobid",
+    "httpStatus": 200,
+    "license": "Apache-2.0",
+    "lastPush": "2026-10-24T23:36:19Z",
+    "lastUpdate": "2026-10-24T17:50:38Z",
+    "archived": false,
+    "description": "A machine learning software for extracting information from scholarly documents",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/grobidOrg/grobid/master/README.md",
+    "readmeStatus": 404,
+    "readmeError": "HTTP Error 404: Not Found"
+  },
+  {
+    "repository": "AI-Growth-Lab/PatentSBERTa",
+    "url": "https://github.com/AI-Growth-Lab/PatentSBERTa",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2024-11-03T06:43:49Z",
+    "lastUpdate": "2026-09-04T07:37:40Z",
+    "archived": false,
+    "description": "PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/AI-Growth-Lab/PatentSBERTa/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO",
+      "Embeddings",
+      "Local model"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "LGAI-Research/PANORAMA",
+    "url": "https://github.com/LGAI-Research/PANORAMA",
+    "httpStatus": 200,
+    "license": "NOASSERTION",
+    "lastPush": "2025-10-22T04:47:02Z",
+    "lastUpdate": "2026-09-17T00:47:34Z",
+    "archived": false,
+    "description": "PANORAMA: A dataset of U.S. patent examination records designed to capture the complete patent examination process",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/LGAI-Research/PANORAMA/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "hopped/uspto-patents-parsing-tools",
+    "url": "https://github.com/hopped/uspto-patents-parsing-tools",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2014-05-29T15:08:31Z",
+    "lastUpdate": "2026-06-18T16:59:36Z",
+    "archived": false,
+    "description": "Some parsing tools for USPTO patents (google.com/googlebooks/uspto-patents.html)",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/hopped/uspto-patents-parsing-tools/master/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO",
+      "Local XML"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "max-planck-innovation-competition/go-uspto",
+    "url": "https://github.com/max-planck-innovation-competition/go-uspto",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2025-08-05T12:06:38Z",
+    "lastUpdate": "2025-08-13T05:48:36Z",
+    "archived": true,
+    "description": "Retrieve the latest patents as xml from the USPTO",
+    "defaultBranch": "master",
+    "readmeUrl": "https://raw.githubusercontent.com/max-planck-innovation-competition/go-uspto/master/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO",
+      "Local XML"
+    ],
+    "credentialMention": false
+  },
+  {
+    "repository": "patent-dev/dpma-connect-plus",
+    "url": "https://github.com/patent-dev/dpma-connect-plus",
+    "httpStatus": 200,
+    "license": "MIT",
+    "lastPush": "2026-09-22T19:59:09Z",
+    "lastUpdate": "2026-09-22T19:59:11Z",
+    "archived": false,
+    "description": "A Go client library for the German Patent Office's DPMA Connect Plus API",
+    "defaultBranch": "main",
+    "readmeUrl": "https://raw.githubusercontent.com/patent-dev/dpma-connect-plus/main/README.md",
+    "readmeStatus": 200,
+    "sourceMentions": [
+      "USPTO",
+      "EPO OPS",
+      "DPMA",
+      "Local XML",
+      "Local model"
+    ],
+    "credentialMention": false
+  }
+]
