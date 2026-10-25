@@ -70,8 +70,13 @@ test("guided demo builds real editable CAD from the synthetic source PDF", async
     page.getByLabel(
       "Describe your invention. We’ll find the closest existing technologies.",
     ),
-  ).toHaveValue(/width 55 mm/);
+  ).toHaveValue(/Component: Base plate/);
+  await expect(page.getByRole("region", { name: "Design iteration" })).toBeVisible();
   expect(externalCalls).toBe(0);
+  // The research brief describes functions. The actual edited measurement stays in the model.
+  await page.getByRole("button", { name: "Return to design iteration", exact: true }).click();
+  await expect(page.getByLabel("width (mm)", { exact: true })).toHaveValue("55");
+  await expect(page.getByRole("button", { name: "Export STEP assembly", exact: true })).toBeDisabled();
 });
 test("mobile sample recovers from failed preloading and opens the next usable action", async ({
   page,

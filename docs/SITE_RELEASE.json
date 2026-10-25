@@ -25,6 +25,16 @@
       ],
       "externalMatchingMocked": false,
       "pdfExportVerified": true
+    },
+    "legacyBrowserAcceptance": {
+      "passed": 13,
+      "failed": 0,
+      "scope": "navigation, ChatGPT connection, research workflow, source evidence, streaming"
+    },
+    "repairedLegacyBrowserAcceptance": {
+      "passed": 5,
+      "failed": 0,
+      "scope": "attachments, legacy source workflow and engineering design-state roundtrip"
     }
   },
   "data": {
@@ -37,13 +47,44 @@
       "claimsReturned": 11
     }
   },
-  "productionVerification": "pending",
-  "deployment": "pending",
+  "productionVerification": {
+    "checkedAt": "2026-10-25T20:44:31.185Z",
+    "httpAcceptance": {
+      "passed": 9,
+      "failed": 0,
+      "evidence": "docs/evaluation/production-blind-verification.json"
+    },
+    "browserAcceptance": {
+      "passed": 4,
+      "failed": 0,
+      "mocked": false,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "realPdfReport": true
+    }
+  },
+  "deployment": {
+    "id": "dpl_51Mmbv55qFMopfjwbBgH6nBXF6fj",
+    "state": "READY",
+    "url": "https://patentradar-puce.vercel.app/spot",
+    "gitSourceCommit": "cdcf886f8bcf7253dc48f9c15700b91b568d410f",
+    "method": "Vercel build cloned the public GitHub commit directly."
+  },
   "limits": [
     "Bounded reference index, not worldwide keyword discovery.",
     "Publication identity, reproduced text and lexical technical overlap are distinct.",
     "Eligible EP exact lookup requires actual publication number/date and user authorization.",
     "Scanned/image-only PDFs require OCR; no false-clearance result.",
     "No claim of novelty, infringement, legal status or freedom to operate."
-  ]
+  ],
+  "implementationCommit": "534469e3740eeb1b6bb9b8234d9e262f4f66a65a",
+  "githubActions": {
+    "run": "https://github.com/medhiblk/patentradar/actions/runs/40231909194",
+    "nativeCad": "passed",
+    "installTypesLintUnitSdkBuildPrivacy": "passed",
+    "browser": "Previous run:30passed/3stale legacy expectations. Those3 files repaired; all5 tests across them now pass locally. NewCIrun triggered by this commit."
+  },
+  "deploymentAutomation": "Production deployment directly from the public GitHub commit verified. Automatic push-webhook linkage was not established: the link helper returned409 for the existing project, which was preserved."
 }

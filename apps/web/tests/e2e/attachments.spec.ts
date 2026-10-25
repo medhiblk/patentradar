@@ -79,11 +79,11 @@ test("private attachments survive refresh and sign-in, remain isolated, and reop
     timeout: 60000,
   });
   await page
-    .getByRole("button", { name: "Extract technical features", exact: true })
+    .getByRole("button", { name: "Comprendre mon document", exact: true })
     .click();
-  await expect(
-    page.getByLabel("Feature 1 description", { exact: true }),
-  ).toHaveValue(/Base plate|80/, { timeout: 60000 });
+  // Extractive profiles include the document heading first; verify the actual body passage too.
+  await expect.poll(async () => page.getByLabel(/^Feature \d+ description$/).evaluateAll(fields =>
+    fields.map(field => (field as HTMLTextAreaElement).value).join("\n")), { timeout: 60000 }).toMatch(/Base plate 80 x 50 x 6 mm/);
   await page.goto("/files");
   await page
     .getByRole("button", { name: `Use ${filename} in 3D Studio`, exact: true })

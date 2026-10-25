@@ -1,0 +1,435 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "checkedAt": "2026-10-25T20:44:31.185Z",
+  "runMode": "complete-suite",
+  "passed": true,
+  "checks": [
+    {
+      "name": "live-original-pdf-source",
+      "passed": true,
+      "latencyMs": 4294,
+      "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20200108/patents/EP3590450NWA1/document.pdf",
+      "httpStatus": 200,
+      "contentType": "application/pdf",
+      "sourceLatencyMs": 4294,
+      "sha256": "fcc1798819a8c9499a5062082252867b74b5d05ee6e316f62a6b4097937bafbf"
+    },
+    {
+      "name": "neutral-filename-pdf-recognition",
+      "passed": true,
+      "latencyMs": 2539,
+      "uploadName": "technical-document.pdf",
+      "sha256": "fcc1798819a8c9499a5062082252867b74b5d05ee6e316f62a6b4097937bafbf",
+      "identity": {
+        "kind": "patent-publication",
+        "basis": "source-text",
+        "confidence": "high",
+        "candidatePublications": [
+          {
+            "publicationNumber": "EP3590450A1",
+            "jurisdiction": "EP",
+            "kindCode": "A1",
+            "role": "document-publication",
+            "confidence": "high",
+            "evidence": [
+              {
+                "page": 1,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 1,
+                "quote": "P 3 590 450 A1 \n*EP003590450A1* \n(11)   EP 3 590 450 A1",
+                "basis": "source-text",
+                "label": "publication-number"
+              },
+              {
+                "page": 2,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 3,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 4,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 5,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 6,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              },
+              {
+                "page": 7,
+                "quote": "EP 3 590 450 A1",
+                "basis": "source-text"
+              }
+            ],
+            "publicationDate": "20200108",
+            "publicationDateEvidence": {
+              "page": 1,
+              "quote": "(43)   Date of publication: \n08.01.2020",
+              "label": "(43)",
+              "basis": "source-text"
+            },
+            "title": "ATTACHMENT POSITION CONFIRMATION MEMBER, OSTEOTOMY ASSISTANCE KIT, AND POSITION DETECTION PROGRAM",
+            "titleEvidence": {
+              "page": 1,
+              "quote": "(54)   ATTACHMENT POSITION CONFIRMATION MEMBER, OSTEOTOMY ASSISTANCE KIT, AND\nPOSITION DETECTION PROGRAM \n",
+              "label": "(54)   ",
+              "basis": "source-text"
+            }
+          },
+          {
+            "publicationNumber": "JP2017008630",
+            "jurisdiction": "JP",
+            "role": "mentioned-reference",
+            "confidence": "low",
+            "evidence": [
+              {
+                "page": 1,
+                "quote": "JP2017/008630 \n",
+                "basis": "source-text"
+              }
+            ]
+          },
+          {
+            "publicationNumber": "WO2018158962",
+            "jurisdiction": "WO",
+            "role": "mentioned-reference",
+            "confidence": "low",
+            "evidence": [
+              {
+                "page": 1,
+                "quote": "WO 2018/158962 ",
+                "basis": "source-text"
+              }
+            ]
+          },
+          {
+            "publicationNumber": "WO2015072187",
+            "jurisdiction": "WO",
+            "role": "mentioned-reference",
+            "confidence": "low",
+            "evidence": [
+              {
+                "page": 2,
+                "quote": "WO2015-072187",
+                "basis": "source-text"
+              }
+            ]
+          }
+        ],
+        "primary": {
+          "publicationNumber": "EP3590450A1",
+          "jurisdiction": "EP",
+          "kindCode": "A1",
+          "role": "document-publication",
+          "confidence": "high",
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 1,
+              "quote": "P 3 590 450 A1 \n*EP003590450A1* \n(11)   EP 3 590 450 A1",
+              "basis": "source-text",
+              "label": "publication-number"
+            },
+            {
+              "page": 2,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 3,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 4,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 5,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 6,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            },
+            {
+              "page": 7,
+              "quote": "EP 3 590 450 A1",
+              "basis": "source-text"
+            }
+          ],
+          "publicationDate": "20200108",
+          "publicationDateEvidence": {
+            "page": 1,
+            "quote": "(43)   Date of publication: \n08.01.2020",
+            "label": "(43)",
+            "basis": "source-text"
+          },
+          "title": "ATTACHMENT POSITION CONFIRMATION MEMBER, OSTEOTOMY ASSISTANCE KIT, AND POSITION DETECTION PROGRAM",
+          "titleEvidence": {
+            "page": 1,
+            "quote": "(54)   ATTACHMENT POSITION CONFIRMATION MEMBER, OSTEOTOMY ASSISTANCE KIT, AND\nPOSITION DETECTION PROGRAM \n",
+            "label": "(54)   ",
+            "basis": "source-text"
+          }
+        },
+        "limitation": "Identity extracted from the document front page; it does not establish official retrieval, legal status or ownership. Referenced publications are not automatically similar patents."
+      },
+      "match": {
+        "publicationNumber": "EP3590450A1",
+        "rank": 1,
+        "matchType": "same-publication",
+        "relevance": 100,
+        "evidenceCount": 7,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20200108/patents/EP3590450NWA1/document.xml"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      },
+      "lookupTraces": []
+    },
+    {
+      "name": "second-neutral-filename-historical-pdf",
+      "passed": true,
+      "latencyMs": 1581,
+      "uploadName": "second-technical-document.pdf",
+      "sha256": "8d9eb030d8fd7bf8819659b21ab2fa79d7873e709280d4b1157aab7bf108dc03",
+      "match": {
+        "publicationNumber": "EP1000590A1",
+        "rank": 1,
+        "matchType": "same-publication",
+        "relevance": 100,
+        "evidenceCount": 7,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000590NWA1/document.xml"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      }
+    },
+    {
+      "name": "metadata-redacted-source-recognition",
+      "passed": true,
+      "latencyMs": 851,
+      "textSha256": "0cacd74f02ffee063c694b17c1122dbd9457951d567501473d8db7f0495fb37e",
+      "textCharacters": 61350,
+      "match": {
+        "publicationNumber": "EP3590450A1",
+        "rank": 1,
+        "matchType": "same-publication",
+        "relevance": 100,
+        "evidenceCount": 6,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20200108/patents/EP3590450NWA1/document.xml"
+      },
+      "interpretation": "Identifier/title metadata were removed. The returned method distinguishes lexical overlap from verbatim same-document recognition; this is not an independent semantic-search benchmark."
+    },
+    {
+      "name": "technical-paraphrase:EP3590450A1",
+      "passed": true,
+      "latencyMs": 915,
+      "label": "Osteotomy attachment confirmation \u2014 independently phrased technical description",
+      "match": {
+        "publicationNumber": "EP3590450A1",
+        "rank": 1,
+        "matchType": "technical-overlap",
+        "relevance": 34,
+        "evidenceCount": 1,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20200108/patents/EP3590450NWA1/document.xml"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      }
+    },
+    {
+      "name": "technical-paraphrase:EP1000590A1",
+      "passed": true,
+      "latencyMs": 726,
+      "label": "Recapturable vascular support \u2014 independently phrased technical description",
+      "match": {
+        "publicationNumber": "EP1000590A1",
+        "rank": 1,
+        "matchType": "technical-overlap",
+        "relevance": 27,
+        "evidenceCount": 1,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000590NWA1/document.xml"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      }
+    },
+    {
+      "name": "technical-paraphrase:EP1000594A1",
+      "passed": true,
+      "latencyMs": 1086,
+      "label": "Femoral fixation \u2014 French description matching the original French claims",
+      "match": {
+        "publicationNumber": "EP1000594A1",
+        "rank": 1,
+        "matchType": "technical-overlap",
+        "relevance": 58,
+        "evidenceCount": 1,
+        "source": "EPO Publication Server \u2014 indexed public reference corpus",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000594NWA1/document.xml"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      }
+    },
+    {
+      "name": "unrelated-negative",
+      "passed": true,
+      "latencyMs": 1909,
+      "matches": 0,
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus"
+        ],
+        "mode": "reference-index",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      }
+    },
+    {
+      "name": "outside-index-live-ep-lookup",
+      "passed": true,
+      "latencyMs": 6549,
+      "uploadName": "external-technical-document.pdf",
+      "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.pdf",
+      "sourceHttpStatus": 200,
+      "sha256": "de482eb24ffa2dc4bdd8203864130f2902b8ddfdfefa4c78816168c5107f1bed",
+      "sourceBytes": 373300,
+      "match": {
+        "publicationNumber": "EP1000000A1",
+        "rank": 1,
+        "matchType": "same-publication",
+        "relevance": 100,
+        "evidenceCount": 7,
+        "source": "EPO Publication Server",
+        "sourceUrl": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml"
+      },
+      "claimCount": 11,
+      "lookupTrace": {
+        "id": "EPO EP1000000A1",
+        "name": "EPO EP1000000A1",
+        "category": "patent",
+        "method": "publication-lookup",
+        "documentation": "https://data.epo.org/publication-server",
+        "coverage": "Exact EP publication lookup with a supplied publication date; not unrestricted keyword search.",
+        "queries": [
+          "EP1000000A1"
+        ],
+        "status": "succeeded",
+        "patentsRetrieved": 1,
+        "papersRetrieved": 0,
+        "patentNumbers": [
+          "EP1000000A1"
+        ],
+        "requests": [
+          {
+            "provider": "epo-publication",
+            "endpoint": "https://data.epo.org/publication-server/rest/v1.2/publication-dates/20000517/patents/EP1000000NWA1/document.xml",
+            "observedAt": "2026-10-25T20:44:51.451Z",
+            "servedFrom": "network",
+            "httpStatus": 200
+          }
+        ],
+        "startedAt": "2026-10-25T20:44:51.450Z",
+        "completedAt": "2026-10-25T20:44:52.005Z"
+      },
+      "coverage": {
+        "indexedPatentCount": 18,
+        "queriedSources": [
+          "Indexed public medtech reference corpus",
+          "EPO EP1000000A1"
+        ],
+        "mode": "reference-index-and-live-lookup",
+        "limitations": [
+          "Publicly sourced indexed patent records only; this is not a live worldwide patent keyword search.",
+          "Same-publication recognition is separate from technical overlap. Scores are lexical/index-recognition signals, never infringement probabilities.",
+          "No uploaded document text was sent to a third-party AI or scientific service."
+        ]
+      },
+      "interpretation": "Document was not present in the bounded reference index. Its number/date were extracted from the uploaded bytes and used for an authenticated-free exact EPO publication lookup; this does not demonstrate worldwide keyword or semantic search."
+    }
+  ],
+  "evaluation": {
+    "curatedPositivesAvailable": 3,
+    "curatedNegativesAvailable": 1,
+    "positiveCasesExecuted": 3,
+    "positiveCasesPassed": 3,
+    "caveat": "Small curated evaluation against the disclosed reference index. Not a recall, precision, worldwide novelty or freedom-to-operate claim."
+  }
+}
