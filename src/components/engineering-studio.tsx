@@ -566,6 +566,7 @@ export function EngineeringStudio({
       <details className="private-file-drawer">
         <summary>Keep source files in a private project</summary>
         <PrivateWorkspace
+          allowPatentAnalysis={false}
           pendingFile={file}
           onUseFile={async (source) => {
             if (/\.txt$/i.test(source.name)) {

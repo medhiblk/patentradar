@@ -9,7 +9,7 @@ for base in ['src','public']:
 for name in ['package.json','package-lock.json','tsconfig.json','next-env.d.ts','next.config.ts','postcss.config.mjs','eslint.config.mjs','.gitignore','README.md','.env.example']:
  p=root/name
  if p.exists():files.append({'file':name,'data':p.read_text(),'encoding':'utf-8'})
-for name in ['scripts/prepare-cad-assets.mjs','cad/worker.py','cad/requirements.txt','docs/API_MCP.md','NOTICES.md']:
+for name in ['scripts/prepare-cad-assets.mjs','scripts/check-private-build.mjs','cad/worker.py','cad/requirements.txt','docs/API_MCP.md','NOTICES.md']:
  p=root/name
  if p.exists():files.append({'file':name,'data':p.read_text(),'encoding':'utf-8'})
 fragments=[]

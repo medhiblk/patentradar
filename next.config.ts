@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   serverExternalPackages: ["pdfjs-dist"],
+  outputFileTracingExcludes: {
+    "/api/**": ["./.data/**/*", "**/private-files/**/*", "**/patentradar.sqlite*"],
+  },
   outputFileTracingIncludes: {
     "/api/v1/guide": ["./docs/API_MCP.md"],
     "/api/cad/*": ["./cad/worker.py"],

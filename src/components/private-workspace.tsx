@@ -24,6 +24,7 @@ type FileRow = {
   status: string;
 };
 type Props = {
+  allowPatentAnalysis?: boolean;
   pendingFile?: File | null;
   onUseFile?: (file: File, target: "analysis" | "cad") => void | Promise<void>;
   onAnalyze?: (project: {
@@ -47,7 +48,12 @@ export async function loadPrivateFile(projectId: string, id: string) {
     { type: r.headers.get("Content-Type") || "application/octet-stream" },
   );
 }
-export function PrivateWorkspace({ pendingFile, onUseFile, onAnalyze }: Props) {
+export function PrivateWorkspace({
+  pendingFile,
+  onUseFile,
+  onAnalyze,
+  allowPatentAnalysis = true,
+}: Props) {
   const router = useRouter();
   const [account, setAccount] = useState<{ email: string } | null>(null),
     [projects, setProjects] = useState<Project[]>([]),
@@ -516,19 +522,20 @@ export function PrivateWorkspace({ pendingFile, onUseFile, onAnalyze }: Props) {
                         >
                           Download {f.name}
                         </a>
-                        {/\.(pdf|txt)$/i.test(f.name) && (
-                          <Button
-                            variant="outline"
-                            disabled={!!busy}
-                            onClick={() =>
-                              run("Loading private document", () =>
-                                openAttachment(f, "analysis"),
-                              )
-                            }
-                          >
-                            Use {f.name} for patent analysis
-                          </Button>
-                        )}
+                        {allowPatentAnalysis &&
+                          /\.(pdf|txt)$/i.test(f.name) && (
+                            <Button
+                              variant="outline"
+                              disabled={!!busy}
+                              onClick={() =>
+                                run("Loading private document", () =>
+                                  openAttachment(f, "analysis"),
+                                )
+                              }
+                            >
+                              Use {f.name} for patent analysis
+                            </Button>
+                          )}
                         <Button
                           variant="outline"
                           disabled={!!busy}

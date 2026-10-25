@@ -1,0 +1,52 @@
+{
+  "sourceCommit": "2fd6ecbbc86cf6e926f757f111cd208c9dbcf075",
+  "deploymentId": "dpl_2jarnMSVRHTiLgy3uP2Q8VqnCgbt",
+  "storeAccess": "private",
+  "productionCredentialOnly": true,
+  "ci": "https://github.com/medhiblk/patentradar/actions/runs/40201514417",
+  "ciConclusion": "success",
+  "apiProof": {
+    "base": "https://patentradar-puce.vercel.app",
+    "checkedAt": "2026-10-25T14:20:09.777Z",
+    "passed": true,
+    "backend": "blob",
+    "originalBytes": 1075,
+    "sha256": "a3b0aba88f46488e2a8cc26dad4b3b90f0e391a9460cbe277829fe2e612f208b",
+    "upload": true,
+    "identicalDownload": true,
+    "anonymousStatus": 401,
+    "crossAccountStatus": 404,
+    "loggedOutStatus": 401,
+    "freshLoginRetainsOriginal": true,
+    "deletedProjectStatus": 404,
+    "publicObjectUrlReturned": false,
+    "aiOrPatentSearchPerformed": false,
+    "input": "Synthetic measured PDF fixture only; test project/files deleted. Reserved .example.test account records remain, with generated credentials never logged."
+  },
+  "browserProof": {
+    "startedAt": "2026-10-25T14:22:19.306Z",
+    "checks": [
+      {
+        "name": "private attachments survive refresh and sign-in, remain isolated, and reopen in analysis and CAD",
+        "status": "passed",
+        "durationMs": 18212
+      }
+    ]
+  },
+  "local": {
+    "unitIntegrationTests": 96,
+    "browserTests": 14,
+    "productionBuild": "passed",
+    "lint": "passed",
+    "privateBuildTrace": {
+      "manifestsChecked": 34,
+      "privateEntriesFound": 0
+    }
+  },
+  "remainingLimits": [
+    "4 MB per original, 20/project, 50 files and 100 MB/account",
+    "MVP authentication: no verified email, password reset, MFA, or account deletion",
+    "No malware scanning or automated stale-upload reconciliation",
+    "Private Blob JSON index is for bounded small portfolios; local patent FTS/native CAD remain separate runtimes"
+  ]
+}

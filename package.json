@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "postinstall": "node scripts/prepare-cad-assets.mjs"
+    "postinstall": "node scripts/prepare-cad-assets.mjs",
+    "check:private-build": "node scripts/check-private-build.mjs"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^9.5.0",
