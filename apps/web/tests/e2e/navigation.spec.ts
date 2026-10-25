@@ -49,11 +49,11 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
   // The adaptive design/project workspace remains directly available.
   await page.goto("/workspace");
   await expect(
-    page.getByRole("heading", { name: /Partez de ce que vous avez/ }),
+    page.getByRole("heading", { name: /Start with what you have/ }),
   ).toBeVisible();
   await page
     .getByRole("navigation", { name: "Workspace navigation" })
-    .getByRole("link", { name: "Mes projets" })
+    .getByRole("link", { name: "My projects" })
     .click();
   await expect(page).toHaveURL(/#projects$/);
   await expect(

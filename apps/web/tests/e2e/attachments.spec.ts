@@ -79,7 +79,7 @@ test("private attachments survive refresh and sign-in, remain isolated, and reop
     timeout: 60000,
   });
   await page
-    .getByRole("button", { name: "Comprendre mon document", exact: true })
+    .getByRole("button", { name: "Extract technical features", exact: true })
     .click();
   // Extractive profiles include the document heading first; verify the actual body passage too.
   await expect.poll(async () => page.getByLabel(/^Feature \d+ description$/).evaluateAll(fields =>

@@ -164,7 +164,9 @@ export default function Demo() {
             <label className="demo-source-drop">
               <strong>Or drop the downloaded PDF here</strong>
               <span>Choose a PDF, drawing or CAD file · up to 4 MB</span>
+              <span className="english-file-action">Choose document</span>
               <input
+                className="english-file-native"
                 aria-label="Demo source file"
                 type="file"
                 accept={SOURCE_ACCEPT}

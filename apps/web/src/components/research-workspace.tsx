@@ -349,9 +349,9 @@ export default function Dashboard({
       setQuery(d.profile.searchKeywords[0] || "");
       setMode(d.mode);
       const coverage = d.ingestion && Array.isArray(d.ingestion.analyzedPages)
-        ? `Pages lues : ${d.ingestion.analyzedPages.join(", ")} sur ${d.ingestion.pageCount}.` +
-          (d.ingestion.imagePages?.length ? ` Images soumises à l’IA : pages ${d.ingestion.imagePages.join(", ")}.` : "") +
-          (d.ingestion.truncated ? " Analyse partielle : certaines pages ou du texte n’ont pas été traités." : "")
+        ? `Pages read: ${d.ingestion.analyzedPages.join(", ")} of ${d.ingestion.pageCount}.` +
+          (d.ingestion.imagePages?.length ? ` Images submitted to AI: pages ${d.ingestion.imagePages.join(", ")}.` : "") +
+          (d.ingestion.truncated ? " Partial analysis: some pages or text were not processed." : "")
         : "";
       setNotice([d.notice, coverage].filter(Boolean).join(" "));
       setReviewed(true);
@@ -391,7 +391,7 @@ export default function Dashboard({
         }),
       });
       if (!response.ok) {
-        let message = `Recherche indisponible (HTTP ${response.status}). Vos données sont conservées.`;
+        let message = `Search unavailable (HTTP ${response.status}). Your input has been retained.`;
         try {
           const data = JSON.parse(await response.text());
           if (typeof data.error === "string") message = data.error;
@@ -723,7 +723,7 @@ export default function Dashboard({
                   const draft = design ? designResearchDraft(design.spec) : null;
                   if (draft) {
                     setProfile(draft.profile); setQuery(draft.query); setProjectTitle(draft.profile.title);
-                    setNotice("Caractéristiques reprises de votre assemblage. Vérifiez les fonctions et les concepts avant de lancer la recherche.");
+                    setNotice("Features loaded from your assembly. Review the functions and concepts before searching.");
                   }
                   setReviewed(!!draft);
                   spotRouter.push("/spot?from=design");
@@ -792,16 +792,16 @@ export default function Dashboard({
               </div>
             )}
             {retryPrivateDocument && <section className="notice">
-              <p>Votre référence documentaire est conservée. Reconnectez-vous si nécessaire, puis reprenez l’ouverture.</p>
-              <Button variant="outline" onClick={() => window.location.reload()}>Reprendre le document privé</Button>
+              <p>Your document reference has been retained. Sign in again if needed, then reopen it.</p>
+              <Button variant="outline" onClick={() => window.location.reload()}>Reopen private document</Button>
             </section>}
             {designReturn && page !== "Engineering Studio" && (
               <section className="notice" aria-label="Design iteration">
                 <strong>Investigate, then iterate.</strong>
                 <p>
                   Review the technical concepts before sharing search queries.
-                  Votre assemblage et les fichiers STEP importés restent disponibles dans cet onglet.
-                  Un rechargement nécessite une sauvegarde privée ou une réimportation des originaux.
+                  Your assembly and imported STEP files remain available in this tab.
+                  After a reload, reopen a private save or reimport the original files.
                 </p>
                 <Button
                   variant="outline"
@@ -941,16 +941,16 @@ export default function Dashboard({
                     </span>
                     <span className="stage-line" />
                     <span className={reviewed ? "active" : ""}>
-                      <i>02</i> Ce que nous comprenons
+                      <i>02</i> Review the features
                     </span>
                     <span className="stage-line" />
                     <span>
-                      <i>03</i> Les preuves
+                      <i>03</i> Inspect the evidence
                     </span>
                   </div>
                   <div className="analysis-grid">
                     <details className="panel" open={!reviewed}>
-                      <summary className="mb-4 cursor-pointer font-medium">01 / Document ou idée d’origine</summary>
+                      <summary className="mb-4 cursor-pointer font-medium">01 / Source document or idea</summary>
                       <div className="panel-heading">
                         <h3>
                           01 /{" "}
@@ -995,8 +995,10 @@ export default function Dashboard({
                           {file ? file.name : "Drop your next idea here"}
                         </strong>
                         <span>Drag a PDF here, or choose a file below</span>
-                        <small>PDF · jusqu’à 4 Mo · 80 pages · scans avec analyse IA consentie</small>
+                        <small>PDF · up to 4 MB · 80 pages · scanned pages require approved AI processing</small>
+                        <span className="english-file-action">Choose PDF</span>
                         <input
+                          className="english-file-native"
                           aria-label="Technical PDF"
                           type="file"
                           accept=".pdf,application/pdf"
@@ -1074,12 +1076,12 @@ export default function Dashboard({
                         }
                         onClick={extract}
                       >
-                        Comprendre mon document <ArrowRight size={16} />
+                        Extract technical features <ArrowRight size={16} />
                       </Button>
                     </details>
                     <section className="panel">
                       <div className="panel-heading">
-                        <h3>02 / Vérifier puis rechercher</h3>
+                        <h3>02 / Review and search</h3>
                         <span className="badge amber">{mode}</span>
                       </div>
                       {notice && <div className="notice">{notice}</div>}
@@ -1185,7 +1187,7 @@ export default function Dashboard({
                           {mode === "LIVE" && (
                             <>
                               <label>
-                                Concepts qui seront envoyés aux sources publiques
+                                Search concepts shared with public sources
                                 <input
                                   value={query}
                                   maxLength={150}
@@ -1271,7 +1273,7 @@ export default function Dashboard({
                             }
                             onClick={() => research()}
                           >
-                            Trouver les brevets proches <ArrowRight size={16} />
+                            Find related patents <ArrowRight size={16} />
                           </Button>
                         </motion.div>
                       )}
@@ -1287,10 +1289,10 @@ export default function Dashboard({
                       : "Results include only successfully retrieved evidence. Literature results are not patents."}
                   </div>
                   {result && (
-                    <section className="notice" aria-label="Couverture brevet disponible">
-                      <strong>{searchAvailability(result).outcome === "patents-found" ? "Publications brevet retrouvées" : "État de la recherche brevet"}</strong>
+                    <section className="notice" aria-label="Patent source coverage">
+                      <strong>{searchAvailability(result).outcome === "patents-found" ? "Patent publications retrieved" : "Patent search status"}</strong>
                       <p>{searchAvailability(result).message}</p>
-                      <p>Revendications disponibles : {searchAvailability(result).claimsAvailable} · Résumés disponibles : {searchAvailability(result).abstractAvailable}. Une absence de résultat ne constitue pas une autorisation de fabriquer.</p>
+                      <p>Publications with claims: {searchAvailability(result).claimsAvailable} · Publications with abstracts: {searchAvailability(result).abstractAvailable}. No result does not establish permission to manufacture.</p>
                     </section>
                   )}
                   {result && (

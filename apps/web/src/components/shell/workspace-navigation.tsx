@@ -3,15 +3,15 @@ import { Plus, FolderOpen, UserRound, BellRing, ArrowUpRight } from "lucide-reac
 import { useRouter } from "next/navigation";
 import { workspaceHref } from "@/lib/navigation";
 const sections = [
-  { page: "Workspace", label: "Nouveau projet", href: "/workspace", icon: Plus },
-  { page: "My Inventions", label: "Mes projets", href: workspaceHref("My Inventions"), icon: FolderOpen },
-  { page: "Alerts", label: "Veille", href: "/alerts", icon: BellRing },
+  { page: "Workspace", label: "New project", href: "/workspace", icon: Plus },
+  { page: "My Inventions", label: "My projects", href: workspaceHref("My Inventions"), icon: FolderOpen },
+  { page: "Alerts", label: "Monitoring", href: "/alerts", icon: BellRing },
 ] as const;
 const resources = [
-  { page: "Engineering Studio", label: "Studio 3D", href: "/engineering" },
-  { page: "Patent Search", label: "Recherche brevet avancée", href: workspaceHref("Patent Search") },
-  { page: "Reports", label: "Rapports", href: workspaceHref("Reports") },
-  { page: "API Providers", label: "Sources de données", href: workspaceHref("API Providers") },
+  { page: "Engineering Studio", label: "3D Studio", href: "/engineering" },
+  { page: "Patent Search", label: "Advanced patent research", href: workspaceHref("Patent Search") },
+  { page: "Reports", label: "Reports", href: workspaceHref("Reports") },
+  { page: "API Providers", label: "Data sources", href: workspaceHref("API Providers") },
 ] as const;
 export function WorkspaceNavigation({ page, onNavigate }: {
   page: string;
@@ -25,7 +25,7 @@ export function WorkspaceNavigation({ page, onNavigate }: {
   }
   return (
     <aside className="workspace-sidebar formaproof-project-navigation">
-      <a className="workspace-sidebar-home" href="/workspace">VOTRE ESPACE</a>
+      <a className="workspace-sidebar-home" href="/workspace">YOUR WORKSPACE</a>
       <nav aria-label="Workspace navigation">
         {sections.map((item) => {
           const Icon = item.icon;
@@ -46,13 +46,13 @@ export function WorkspaceNavigation({ page, onNavigate }: {
         <div className="workspace-utilities">
           {onNavigate ? (
             <button type="button" onClick={() => onNavigate("Account & Monitoring")}>
-              <UserRound size={15} />Compte
+              <UserRound size={15} />Account
             </button>
           ) : (
-            <a href={workspaceHref("Account & Monitoring")}><UserRound size={15} />Compte</a>
+            <a href={workspaceHref("Account & Monitoring")}><UserRound size={15} />Account</a>
           )}
           <details>
-            <summary>Ressources & outils</summary>
+            <summary>Resources & tools</summary>
             <div>
               {resources.map((item) => onNavigate ? (
                 <button key={item.page} type="button" onClick={() => onNavigate(item.page)} aria-current={page === item.page ? "page" : undefined}>
@@ -61,7 +61,7 @@ export function WorkspaceNavigation({ page, onNavigate }: {
               ) : (
                 <a key={item.page} href={item.href} aria-current={page === item.page ? "page" : undefined}>{item.label}</a>
               ))}
-              <a href="/connect">Connexion ChatGPT</a>
+              <a href="/connect">Connect ChatGPT</a>
               <a href="/developers">API & MCP</a>
               <a href="https://github.com/medhiblk/patentradar" target="_blank" rel="noreferrer">
                 GitHub <ArrowUpRight size={12} />

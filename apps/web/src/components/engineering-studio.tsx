@@ -676,28 +676,28 @@ export function EngineeringStudio({
         }}
       >
         <div className="section-heading">
-          <span className="product-kicker">01 / VOTRE DOCUMENT</span>
-          <h2>Que voulez-vous construire ?</h2>
+          <span className="product-kicker">01 / YOUR DOCUMENT</span>
+          <h2>What would you like to build?</h2>
           <p>
-            Une pièce, un assemblage ou un boîtier sur mesure. Commencez par
-            votre document ou par des dimensions que vous connaissez.
+            A part, an assembly or a custom housing. Start with your document
+            or dimensions you already know.
           </p>
         </div>
         <label className="studio-source-goal" htmlFor="studio-representation-goal">
-          Que souhaitez-vous représenter ?
+          What would you like to represent?
           <textarea
             id="studio-representation-goal"
             maxLength={1000}
             value={spec.goal || ""}
             onChange={(e) => setSpec({ ...spec, goal: e.target.value })}
-            placeholder="Ex. : représenter l’arbre du moteur, assembler ses composants ou créer un boîtier pour ma carte électronique."
+            placeholder="For example: model a motor shaft, assemble its components or create a housing for an electronics board."
             rows={2}
           />
         </label>
         <div className="studio-source-fields">
           <div className="studio-source-field">
             <label className="studio-source-field-title" htmlFor="studio-source-document">
-              {file ? "Document sélectionné" : "Votre document technique"}
+              {file ? "Selected document" : "Your technical document"}
             </label>
             <div className="studio-source-upload">
               <input
@@ -715,32 +715,32 @@ export function EngineeringStudio({
               />
               <label className="studio-source-picker" htmlFor="studio-source-document">
                 <span className="studio-source-picker-action">
-                  {file ? "Choisir un autre document" : "Choisir un document"}
+                  {file ? "Choose another document" : "Choose a document"}
                 </span>
-                <span className="studio-source-picker-caption">ou le déposer dans ce panneau</span>
+                <span className="studio-source-picker-caption">or drop it into this panel</span>
               </label>
               <p className="studio-source-file-name">
-                {file ? file.name : "Aucun document sélectionné"}
+                {file ? file.name : "No document selected"}
               </p>
             </div>
             <p className="studio-source-file-help" id="studio-source-file-help">
-              PDF, PNG/JPEG, STEP/STL ou JSON · 4 Mo maximum.
+              PDF, PNG/JPEG, STEP/STL or JSON · Up to 4 MB.
             </p>
           </div>
           <label className="studio-source-field studio-source-text" htmlFor="studio-measured-specifications">
-            Ou saisissez des dimensions connues
+            Or enter known dimensions
             <textarea
               id="studio-measured-specifications"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Ex. : plaque de base de 80 × 50 × 6 mm. Indiquez les mesures réelles ; les dimensions manquantes ne seront pas inventées."
+              placeholder="For example: base plate 80 × 50 × 6 mm. Enter actual measurements; missing dimensions will not be invented."
               rows={5}
             />
           </label>
         </div>
         <p className="hint">
-          Vous pouvez déposer votre fichier n’importe où dans ce panneau.
-          Les pièces et les mesures seront à vérifier avant la création du modèle.
+          Drop your file anywhere in this panel. Review the parts and
+          measurements before generating the model.
         </p>
         <label className="checkbox">
           <input

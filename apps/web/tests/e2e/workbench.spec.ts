@@ -201,10 +201,10 @@ test("manual component list becomes editable parts with an explicit partial prev
   test.setTimeout(120000);
   await page.goto("/engineering");
   await page
-    .getByLabel("Que souhaitez-vous représenter ?", { exact: true })
+    .getByLabel("What would you like to represent?", { exact: true })
     .fill("Review the motor components");
   await page
-    .getByLabel("Ou saisissez des dimensions connues", { exact: true })
+    .getByLabel("Or enter known dimensions", { exact: true })
     .fill("Components\n1. Rotor\n2. Stator\n3. Drive shaft");
   await page
     .getByRole("button", {

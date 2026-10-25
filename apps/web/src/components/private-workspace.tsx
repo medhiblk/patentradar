@@ -423,7 +423,9 @@ export function PrivateWorkspace({
           >
             <label>
               Project attachments
+              <span className="english-file-action">Choose files</span>
               <input
+                className="english-file-native"
                 aria-label="Project attachments"
                 type="file"
                 multiple

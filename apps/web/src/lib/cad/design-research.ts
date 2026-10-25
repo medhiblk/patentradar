@@ -6,9 +6,9 @@ export function designResearchDraft(spec: AssemblySpec) {
   if (!parts.length) return null;
   const keywords = [...new Set(parts.map(p => p.name.trim()).filter(Boolean))].slice(0, 12).map(name => name.slice(0, 150));
   const profile = ProfileSchema.parse({
-    title: spec.title || "Conception à étudier", domain: "Conception mécanique — domaine à vérifier",
-    operatingPrinciple: spec.goal || "Fonctionnement à préciser à partir des composants sélectionnés.",
-    technicalFeatures: parts.map(p => ({ name: p.name, description: (p.description || "Composant de l’assemblage ; sa fonction doit être précisée avant la recherche.").slice(0, 1500) })),
+    title: spec.title || "Design to investigate", domain: "Mechanical design — review the domain",
+    operatingPrinciple: spec.goal || "Review the operating functions of the selected components.",
+    technicalFeatures: parts.map(p => ({ name: p.name, description: (p.description || "Assembly component; review its function before searching.").slice(0, 1500) })),
     searchKeywords: keywords,
   });
   return { profile, query: keywords.slice(0, 3).join(" ").slice(0, 150) };

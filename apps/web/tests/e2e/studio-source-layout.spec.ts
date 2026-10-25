@@ -6,18 +6,18 @@ for (const viewport of [{ width: 1280, height: 960 }, { width: 390, height: 844 
     await page.setViewportSize(viewport);
     await page.goto("/engineering");
     const panel = page.locator("#studio-source");
-    await expect(panel.getByRole("heading", { name: "Que voulez-vous construire ?" })).toBeVisible();
-    await expect(panel.getByLabel("Que souhaitez-vous représenter ?", { exact: true })).toBeVisible();
-    await expect(panel.getByLabel("Ou saisissez des dimensions connues", { exact: true })).toBeVisible();
-    await expect(panel.locator(".studio-source-picker-action")).toHaveText("Choisir un document");
-    await expect(panel.locator("#studio-source-file-help")).toHaveText("PDF, PNG/JPEG, STEP/STL ou JSON · 4 Mo maximum.");
+    await expect(panel.getByRole("heading", { name: "What would you like to build?" })).toBeVisible();
+    await expect(panel.getByLabel("What would you like to represent?", { exact: true })).toBeVisible();
+    await expect(panel.getByLabel("Or enter known dimensions", { exact: true })).toBeVisible();
+    await expect(panel.locator(".studio-source-picker-action")).toHaveText("Choose a document");
+    await expect(panel.locator("#studio-source-file-help")).toHaveText("PDF, PNG/JPEG, STEP/STL or JSON · Up to 4 MB.");
     const file = panel.getByLabel("Engineering source file", { exact: true });
     await file.focus();
     await expect(file).toBeFocused();
     const fileName = "manuel-" + "assemblage-mecanique-".repeat(8) + ".pdf";
     await file.setInputFiles({ name: fileName, mimeType: "application/pdf", buffer: await readFile("tests/fixtures/mechanical-dimensions.pdf") });
     await expect(panel.locator(".studio-source-file-name")).toHaveText(fileName);
-    await expect(panel.locator(".studio-source-picker-action")).toHaveText("Choisir un autre document");
+    await expect(panel.locator(".studio-source-picker-action")).toHaveText("Choose another document");
     const layout = await panel.locator(".studio-source-fields").evaluate((grid) => {
       const fields = Array.from(grid.children).map(element => element.getBoundingClientRect());
       return {
