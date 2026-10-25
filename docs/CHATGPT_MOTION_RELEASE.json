@@ -1,0 +1,100 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "sourceCommit": "6e2e4708f32d85dad641ed187fbda6a76034ae92",
+  "deploymentId": "dpl_7hxKC8DtFwP3FQx7uqFUdKwXPc7X",
+  "state": "READY",
+  "publicPages": [
+    "/",
+    "/demo",
+    "/connect"
+  ],
+  "workspaceEntry": "/workspace",
+  "productionBrowserChecks": [
+    {
+      "name": "private attachments survive refresh and sign-in, remain isolated, and reopen in analysis and CAD",
+      "passed": true,
+      "durationMs": 21794
+    },
+    {
+      "name": "home links to a usable ChatGPT connection guide and public MCP discovery",
+      "passed": true,
+      "durationMs": 5262
+    },
+    {
+      "name": "demo preloads its PDF and its motion preview supports pause and scene selection",
+      "passed": true,
+      "durationMs": 2295
+    },
+    {
+      "name": "guided demo builds real editable CAD from the synthetic source PDF",
+      "passed": true,
+      "durationMs": 11569
+    },
+    {
+      "name": "real measured PDF generates CAD, edits geometry and downloads STEP",
+      "passed": true,
+      "durationMs": 13206
+    },
+    {
+      "name": "sign in explains validation, submits with Enter and restores the account page",
+      "passed": true,
+      "durationMs": 7743
+    },
+    {
+      "name": "lightweight home explains the workflow without loading research or CAD",
+      "passed": true,
+      "durationMs": 3517
+    },
+    {
+      "name": "mobile menu closes with Escape and deep links support refresh and Back",
+      "passed": true,
+      "durationMs": 4264
+    }
+  ],
+  "mcpProof": {
+    "base": "https://patentradar-puce.vercel.app",
+    "checkedAt": "2026-10-25T15:53:59.749Z",
+    "passed": true,
+    "server": {
+      "name": "patentradar",
+      "version": "1.2.0"
+    },
+    "tools": [
+      "component_library",
+      "inspect_assembly",
+      "provider_status",
+      "search_patents",
+      "lookup_patent",
+      "compare_patent_features",
+      "extract_technical_profile"
+    ],
+    "componentLibraryItems": 10,
+    "method": "Official MCP SDK initialization, tool discovery and a real read-only tool call; no mocks.",
+    "externalProviderSearchPerformed": false,
+    "chatgptAccountInstallationPerformed": false
+  },
+  "local": {
+    "unitIntegrationTests": 100,
+    "browserWorkflowsPassed": 20,
+    "finalTargetedBrowserChecksPassed": 5,
+    "productionBuild": "passed",
+    "lint": "passed",
+    "privateBuildManifests": 37,
+    "privateFileEntriesFound": 0,
+    "home": {
+      "javascriptEncodedBytes": 145137,
+      "resourceCount": 11,
+      "initialApiRequests": 0,
+      "method": "Fresh local production browser context; not a Lighthouse score."
+    }
+  },
+  "chatgptSetup": {
+    "pluginsUrl": "https://chatgpt.com/plugins",
+    "mcpUrl": "https://patentradar-puce.vercel.app/api/mcp",
+    "authentication": "none for public tools",
+    "officialGuide": "https://developers.openai.com/api/docs/guides/custom-mcp-server",
+    "directoryListingClaimed": false,
+    "userAction": "Add the custom MCP server, review the tools and select the connection in your own ChatGPT account. Account/workspace permissions apply."
+  },
+  "testData": "Synthetic PDF and reserved test accounts only. Attachment test projects/files deleted. No customer credentials/documents accessed; no invented patent results."
+}
