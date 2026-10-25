@@ -1,0 +1,116 @@
+{
+  "checkedAt": "2026-10-25T16:50:17.166001+00:00",
+  "production": {
+    "url": "https://patentradar-puce.vercel.app",
+    "deploymentId": "dpl_4qZQgTN768A1TdjaHT4DCzNGcrAr",
+    "state": "READY",
+    "applicationCommit": "f25c4ef9621ed078bfedcde174a719b26421a143",
+    "repository": "https://github.com/medhiblk/patentradar",
+    "demoPath": "/demo/patent",
+    "alertsPath": "/alerts"
+  },
+  "verification": {
+    "unitIntegration": {
+      "passed": 105,
+      "filesPassed": 18,
+      "externalAPIsMocked": true
+    },
+    "localBrowser": {
+      "startTime": "2026-10-25T16:48:01.630Z",
+      "duration": 53744.616,
+      "expected": 21,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "productionBrowser": {
+      "startTime": "2026-10-25T16:49:06.544Z",
+      "duration": 39765.594,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0,
+      "externalAPIsMocked": false,
+      "scenarios": [
+        "Private attachments survive refresh and sign-in, remain isolated, reopen in analysis and CAD, and are deleted.",
+        "Real PDF excerpt checksum verification, edited design comparison, private portfolio save, sourced alert, review-state persistence, mobile overflow check and test-project deletion."
+      ]
+    },
+    "checksPassed": [
+      "TypeScript",
+      "ESLint",
+      "Next.js production build",
+      "Private build trace scan: 41 manifests, zero private entries"
+    ],
+    "realBlobVerification": {
+      "isolatedProbe": true,
+      "compressedResponse": {
+        "contentEncoding": "br",
+        "etagWeak": true,
+        "conditionalUpdate": "BlobPreconditionFailedError: ETag mismatch"
+      },
+      "correctedResponse": {
+        "acceptEncoding": "identity",
+        "contentEncoding": null,
+        "etagWeak": false,
+        "etagMatchesOriginalWrite": true,
+        "conditionalUpdate": "passed"
+      },
+      "fullRouteProbe": "Actual private Blob registration, project save, alert review update and project cleanup passed; no mocked storage response.",
+      "probeObjectsDeleted": true
+    },
+    "bugsFoundAndFixed": [
+      "Signed-in portfolio saving no longer depends on an asynchronous preflight authentication request.",
+      "Private document reads request the original uncompressed representation, retaining strong ETags for conditional updates."
+    ]
+  },
+  "referenceVerification": {
+    "url": "https://patentimages.storage.googleapis.com/89/d6/88/68356f0ae820d5/US20080003142A1.pdf",
+    "status": 200,
+    "contentType": "application/pdf",
+    "bytes": 8544706,
+    "sha256": "7f2fdf36b240bc60d0fb6745369acdbe11198910595f9690037b69214dca661c",
+    "retrievedAt": "2026-10-25T15:58:34.956Z",
+    "latencyMs": 3729
+  },
+  "referenceDocument": {
+    "url": "/examples/US20080003142A1-excerpt.pdf",
+    "name": "US20080003142A1-excerpt.pdf",
+    "bytes": 248150,
+    "sha256": "188c6038db121976a6a19bf52babe4f3d2e540c1d2dcfd700d056a1a4c4998f5",
+    "selectedOriginalPages": [
+      1,
+      2,
+      81
+    ],
+    "excerptPageCount": 4,
+    "originalPageCount": 83,
+    "originalBytes": 8544706,
+    "originalSha256": "7f2fdf36b240bc60d0fb6745369acdbe11198910595f9690037b69214dca661c"
+  },
+  "contrastMeasurements": {
+    "method": "Computed browser colors and relative-luminance contrast; targeted samples, not a complete accessibility certification.",
+    "bodyText": {
+      "foreground": "rgb(80, 96, 120)",
+      "background": "rgb(248, 250, 255)",
+      "ratio": 6.12
+    },
+    "primaryButton": {
+      "foreground": "#FFFFFF",
+      "background": "rgb(37, 84, 235)",
+      "ratio": 5.92
+    },
+    "alertText": {
+      "foreground": "rgb(154, 52, 18)",
+      "background": "rgb(255, 250, 244)",
+      "ratio": 7.04
+    }
+  },
+  "limitations": [
+    "Known-reference case uses one user-selected verified publication snapshot and claim excerpts; it is not a fresh worldwide discovery.",
+    "Similarity alerts use explained lexical technical-feature overlap, not an infringement probability or legal clearance.",
+    "Google reports Abandoned for this application; official status, related rights and enforceability were not independently established.",
+    "Alerts update with requested research saves and manual watch checks. Scheduled background checks and email delivery are not implemented.",
+    "The source excerpt includes a provenance cover plus original pages 1, 2 and 81, not the entire 83-page publication."
+  ]
+}
