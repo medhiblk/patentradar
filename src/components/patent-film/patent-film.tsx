@@ -7,55 +7,24 @@ import {
   Play,
   Radar,
   RotateCcw,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
-import narrationManifest from "../../../public/patent-film/narration.json";
 import { clampTime, duration, sceneAt, scenes, timecode } from "./timeline";
 import { FilmVisual } from "./visuals";
-import { FilmSound } from "./sound";
 import "./patent-film.css";
-
-const manifest: {
-  available: boolean;
-  src: string | null;
-  cues?: { start: number; end: number; text: string }[];
-} = narrationManifest;
 
 export function PatentFilm({ explore }: { explore: () => void }) {
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [sound, setSound] = useState(false);
   const [captions, setCaptions] = useState(true);
   const [reduced, setReduced] = useState(false);
-  const [revision, setRevision] = useState(0);
-  const failedAudio = useRef(false);
-  const [notice, setNotice] = useState("");
   const root = useRef<HTMLElement>(null);
   const currentTime = useRef(0);
-  const audio = useRef<HTMLAudioElement | null>(null);
-  const score = useRef<FilmSound | null>(null);
   const started = useRef(false);
-  const speechOwned = useRef(false);
   const index = sceneAt(time);
   const scene = scenes[index];
-  const caption =
-    sound && manifest.available && manifest.cues
-      ? manifest.cues.find((cue) => time >= cue.start && time < cue.end)
-          ?.text || ""
-      : scene.narration;
-
-  function cancelSpeech() {
-    if (speechOwned.current && "speechSynthesis" in window)
-      window.speechSynthesis.cancel();
-    speechOwned.current = false;
-  }
   function seek(next: number) {
     currentTime.current = clampTime(next);
     setTime(currentTime.current);
-    if (audio.current) audio.current.currentTime = currentTime.current;
-    cancelSpeech();
-    setRevision((value) => value + 1);
   }
 
   useEffect(() => {
@@ -96,10 +65,6 @@ export function PatentFilm({ explore }: { explore: () => void }) {
       media.removeEventListener("change", preference);
       document.removeEventListener("visibilitychange", visibility);
       observer.disconnect();
-      audio.current?.pause();
-      cancelSpeech();
-      score.current?.close();
-      score.current = null;
     };
   }, []);
 
@@ -111,17 +76,13 @@ export function PatentFilm({ explore }: { explore: () => void }) {
     const tick = (now: number) => {
       const delta = Math.min((now - previous) / 1000, 0.2);
       previous = now;
-      // Generated narration is the master clock; buffering never desynchronizes visuals.
-      const next =
-        sound && audio.current
-          ? audio.current.currentTime
-          : currentTime.current + delta;
+      const next = currentTime.current + delta;
       currentTime.current = clampTime(next);
       if (now - lastPaint >= 16 || next >= duration) {
         setTime(currentTime.current);
         lastPaint = now;
       }
-      if (next >= duration || (sound && audio.current?.ended)) {
+      if (next >= duration) {
         currentTime.current = duration;
         setTime(duration);
         setPlaying(false);
@@ -129,101 +90,13 @@ export function PatentFilm({ explore }: { explore: () => void }) {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [playing, sound]);
-
-  useEffect(() => {
-    score.current?.active(playing && sound);
-    const element = audio.current;
-    if (element) {
-      element.muted = !sound;
-      if (playing && sound)
-        void element.play().catch(() => {
-          setPlaying(false);
-          setSound(false);
-          setNotice(
-            "Audio could not play. Try Enable sound again, or use captions.",
-          );
-        });
-      else element.pause();
-    }
-    if (!playing || !sound) cancelSpeech();
-  }, [playing, sound]);
-
-  useEffect(() => {
-    if (!playing || !sound) return;
-    score.current?.cue(index === scenes.length - 1);
-    if (audio.current || !("speechSynthesis" in window)) return;
-    // Temporary browser narration uses chapter-level cues; voice duration varies by device.
-    const utterance = new SpeechSynthesisUtterance(scenes[index].narration);
-    utterance.lang = "en-US";
-    const voices = window.speechSynthesis.getVoices();
-    utterance.voice =
-      voices.find((v) => /^en[-_]US/i.test(v.lang)) ||
-      voices.find((v) => /^en/i.test(v.lang)) ||
-      null;
-    utterance.rate = 1.08;
-    utterance.onerror = (event) => {
-      if (event.error !== "canceled" && event.error !== "interrupted") {
-        setNotice("Browser voice unavailable · use captions or the transcript");
-      }
-    };
-    speechOwned.current = true;
-    window.speechSynthesis.speak(utterance);
-    return cancelSpeech;
-  }, [index, playing, sound, revision]);
+  }, [playing]);
 
   function togglePlay() {
     if (!playing && time >= duration) seek(0);
-    // Restart the current chapter on browser-voice resume, avoiding clipped sentences.
-    else if (!playing && sound && !audio.current) seek(scene.start);
-    void score.current?.resume().catch(() => {});
     setPlaying(!playing);
   }
-  function enableSound() {
-    if (sound) {
-      setSound(false);
-      return;
-    }
-    try {
-      if (!score.current && "AudioContext" in window)
-        score.current = new FilmSound();
-      void score.current?.resume().catch(() => {});
-      if (
-        manifest.available &&
-        manifest.src &&
-        !audio.current &&
-        !failedAudio.current
-      ) {
-        const element = new Audio(manifest.src);
-        element.preload = "auto";
-        element.onerror = () => {
-          failedAudio.current = true;
-          audio.current = null;
-          setSound(false);
-          setPlaying(false);
-          setNotice(
-            "Narration is unavailable. Enable sound again for a browser voice preview.",
-          );
-        };
-        audio.current = element;
-      }
-      seek(0);
-      setSound(true);
-      setPlaying(true);
-      setNotice(
-        audio.current
-          ? "AI-generated narration"
-          : "speechSynthesis" in window
-            ? "Browser voice preview · chapter timing may vary"
-            : "Voice unavailable in this browser · captions and soundscape enabled",
-      );
-    } catch {
-      setSound(false);
-      setNotice(
-        "Sound is unavailable in this browser. The full transcript is below.",
-      );
-    }
-  }
+
   return (
     <section
       ref={root}
@@ -278,7 +151,7 @@ export function PatentFilm({ explore }: { explore: () => void }) {
           </div>
         </div>
         <div className="pf-caption" aria-hidden={!captions}>
-          {captions ? caption : ""}
+          {captions ? scene.caption : ""}
         </div>
         <div className="pf-controls">
           <button
@@ -294,19 +167,9 @@ export function PatentFilm({ explore }: { explore: () => void }) {
             onClick={() => {
               seek(0);
               setPlaying(true);
-              void score.current?.resume().catch(() => {});
             }}
           >
             <RotateCcw size={16} />
-          </button>
-          <button
-            type="button"
-            onClick={enableSound}
-            className="pf-sound"
-            aria-pressed={sound}
-          >
-            {sound ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            <span>{sound ? "Mute" : "Enable sound"}</span>
           </button>
           <label className="pf-scrubber">
             <span className="pf-sr-only">Film position in seconds</span>
@@ -360,22 +223,16 @@ export function PatentFilm({ explore }: { explore: () => void }) {
         <span>
           Illustrative data throughout · Research guidance, not legal clearance.
         </span>
-        <span role="status">
-          {notice ||
-            (manifest.available
-              ? "AI-generated narration · sound off by default"
-              : "Browser voice preview available · studio narration pending")}
-        </span>
       </div>
       <details className="pf-transcript">
-        <summary>Read the film transcript</summary>
+        <summary>Read the walkthrough</summary>
         <ol>
           {scenes.map((item) => (
             <li key={item.start}>
               <strong>
                 {timecode(item.start)} — {item.label}
               </strong>
-              <p>{item.narration}</p>
+              <p>{item.caption}</p>
             </li>
           ))}
         </ol>

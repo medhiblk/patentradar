@@ -7,7 +7,7 @@ import {
   scenes,
 } from "../src/components/patent-film/timeline";
 describe("patent film editorial timeline", () => {
-  it("covers 65 seconds without gaps and switches at the narration cue boundaries", () => {
+  it("covers 65 seconds without gaps and switches at the chapter boundaries", () => {
     expect(duration).toBe(65);
     expect(scenes).toHaveLength(7);
     scenes.forEach((scene, index) => {
@@ -17,7 +17,7 @@ describe("patent film editorial timeline", () => {
         expect(sceneAt(scene.start - 0.001)).toBe(index - 1);
       }
       expect(scene.end).toBeGreaterThan(scene.start);
-      expect(scene.narration.length).toBeGreaterThan(20);
+      expect(scene.caption.length).toBeGreaterThan(20);
     });
     expect(sceneAt(65)).toBe(6);
   });
