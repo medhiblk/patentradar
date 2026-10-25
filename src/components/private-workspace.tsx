@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import { WorkspaceAuthForm } from "./workspace-auth-form";
 import { clearPrivateSessionView } from "@/lib/private-session";
 type Project = {
   id: string;
@@ -59,9 +60,7 @@ export function PrivateWorkspace({
     [projects, setProjects] = useState<Project[]>([]),
     [selected, setSelected] = useState(""),
     [files, setFiles] = useState<FileRow[]>([]);
-  const [email, setEmail] = useState(""),
-    [password, setPassword] = useState(""),
-    [title, setTitle] = useState(""),
+  const [title, setTitle] = useState(""),
     [description, setDescription] = useState(""),
     [chosen, setChosen] = useState<File[]>(pendingFile ? [pendingFile] : []);
   const [busy, setBusy] = useState(""),
@@ -228,67 +227,14 @@ export function PrivateWorkspace({
       )}
       {busy && <p role="status">{busy}…</p>}
       {!account ? (
-        <>
-          <p className="hint">
-            Sign in or create an account to store attachments.{" "}
-            {backend === "unavailable"
-              ? "Cloud storage is not configured."
-              : "Your files are not public links."}
-          </p>
-          <div className="parts-form-grid">
-            <label>
-              Workspace email
-              <input
-                type="email"
-                autoComplete="username"
-                maxLength={200}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
-            <label>
-              Workspace password
-              <input
-                type="password"
-                autoComplete="current-password"
-                minLength={12}
-                maxLength={200}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </label>
-          </div>
-          <div className="row wrap">
-            {(["login", "register"] as const).map((action) => (
-              <Button
-                key={action}
-                variant={action === "login" ? "default" : "outline"}
-                disabled={
-                  !!busy ||
-                  !email ||
-                  password.length < 12 ||
-                  backend === "unavailable"
-                }
-                onClick={() =>
-                  run(
-                    action === "login"
-                      ? "Signing in"
-                      : "Creating private account",
-                    async () => {
-                      await json("/api/vault", { action, email, password });
-                      setPassword("");
-                      await load();
-                    },
-                  )
-                }
-              >
-                {action === "login"
-                  ? "Sign in to workspace"
-                  : "Create workspace account"}
-              </Button>
-            ))}
-          </div>
-        </>
+        <WorkspaceAuthForm
+          disabledReason={
+            backend === "unavailable"
+              ? "Private cloud storage is unavailable. Please retry shortly."
+              : undefined
+          }
+          onAuthenticated={() => load()}
+        />
       ) : (
         <>
           <div className="row wrap">
@@ -307,7 +253,6 @@ export function PrivateWorkspace({
                   clearPrivateSessionView();
                   setTitle("");
                   setDescription("");
-                  setPassword("");
                   setFiles([]);
                   setUsage({ bytes: 0, files: 0 });
                   setChosen([]);

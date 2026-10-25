@@ -40,7 +40,12 @@ export async function GET(req: Request) {
       },
       { headers },
     );
-  } catch {
+  } catch (e) {
+    if (e instanceof Error && /Rate limit/.test(e.message))
+      return Response.json(
+        { error: "Too many requests. Wait one minute, then retry." },
+        { status: 429, headers: { ...headers, "Retry-After": "60" } },
+      );
     return Response.json(
       {
         error:
@@ -63,44 +68,104 @@ export async function POST(req: Request) {
         .enum(["register", "login", "logout", "save", "delete", "token"])
         .parse(b.action);
     if (action === "register" || action === "login") {
-      const email = z.email().max(200).parse(b.email).toLowerCase(),
-        password = z.string().min(12).max(200).parse(b.password);
-      if (action === "register") {
-        try {
-          await store.createAccount({
-            id: randomUUID(),
-            email,
-            password: passwordHash(password),
-          });
-        } catch {
-          return Response.json(
-            { error: "Unable to create account with these details." },
-            { status: 400, headers },
-          );
-        }
-      }
-      const row = await store.findAccount(email);
-      if (!row || !passwordMatches(password, row.password))
+      const parsedEmail = z
+        .string()
+        .trim()
+        .toLowerCase()
+        .pipe(z.email().max(200))
+        .safeParse(b.email);
+      if (!parsedEmail.success)
         return Response.json(
-          { error: "Invalid credentials" },
-          { status: 401, headers },
+          { error: "Enter a valid email address." },
+          { status: 400, headers },
         );
-      const token = randomBytes(32).toString("hex");
-      await store.createSession(sessionHash(token), {
-        userId: row.id,
-        email: row.email,
-        expires: Date.now() + 7 * 86400000,
-        scope: "full",
-      });
-      return Response.json(
-        { ok: true },
-        {
-          headers: {
-            ...headers,
-            "Set-Cookie": `pr_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${new URL(req.url).protocol === "https:" ? "; Secure" : ""}`,
+      const parsedPassword = z
+        .string()
+        .min(action === "register" ? 12 : 1)
+        .max(200)
+        .safeParse(b.password);
+      if (!parsedPassword.success)
+        return Response.json(
+          {
+            error:
+              action === "register"
+                ? "Choose a password with at least 12 characters (maximum 200)."
+                : "Enter your password (maximum 200 characters).",
           },
-        },
-      );
+          { status: 400, headers },
+        );
+      const email = parsedEmail.data,
+        password = parsedPassword.data;
+      if (privateBackend() === "unavailable")
+        return Response.json(
+          {
+            error:
+              "Private storage is temporarily unavailable. Please retry shortly.",
+          },
+          { status: 503, headers },
+        );
+      try {
+        if (action === "register") {
+          try {
+            await store.createAccount({
+              id: randomUUID(),
+              email,
+              password: passwordHash(password),
+            });
+          } catch (e) {
+            if (
+              !(e instanceof Conflict) &&
+              !/UNIQUE constraint failed/i.test(
+                e instanceof Error ? e.message : "",
+              )
+            )
+              throw e;
+            return Response.json(
+              {
+                error:
+                  "An account with these details cannot be created. If you already registered, choose Sign in to workspace.",
+              },
+              { status: 409, headers },
+            );
+          }
+        }
+        const row = await store.findAccount(email);
+        if (!row || !passwordMatches(password, row.password))
+          return Response.json(
+            {
+              error:
+                "Email or password not recognized. Check your details. First visit? Choose Create workspace account.",
+            },
+            { status: 401, headers },
+          );
+        const token = randomBytes(32).toString("hex");
+        await store.createSession(sessionHash(token), {
+          userId: row.id,
+          email: row.email,
+          expires: Date.now() + 7 * 86400000,
+          scope: "full",
+        });
+        return Response.json(
+          { ok: true },
+          {
+            headers: {
+              ...headers,
+              "Set-Cookie": `pr_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${new URL(req.url).protocol === "https:" ? "; Secure" : ""}`,
+            },
+          },
+        );
+      } catch {
+        console.error(
+          JSON.stringify({ event: "vault.auth.storage_failure", action }),
+        );
+        return Response.json(
+          {
+            error:
+              "The private account service is temporarily unavailable. Your details have not been cleared; retry shortly.",
+          },
+          { status: 503, headers },
+        );
+      }
     }
     const u = await requireUser(req);
     if (action === "logout") {
@@ -166,6 +231,11 @@ export async function POST(req: Request) {
   } catch (e) {
     const message = e instanceof Error ? e.message : "";
     const signIn = message.startsWith("Sign in");
+    if (/Rate limit/.test(message))
+      return Response.json(
+        { error: "Too many requests. Wait one minute, then retry." },
+        { status: 429, headers: { ...headers, "Retry-After": "60" } },
+      );
     return Response.json(
       {
         error: signIn

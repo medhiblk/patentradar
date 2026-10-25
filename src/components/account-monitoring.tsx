@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { WorkspaceAuthForm } from "./workspace-auth-form";
 import { Button } from "./ui/button";
 import type { Profile } from "@/lib/model";
 import { clearPrivateSessionView } from "@/lib/private-session";
@@ -27,9 +28,7 @@ export function AccountMonitoring({
     seedPublications: { publicationNumber: string }[];
   }) => void;
 }) {
-  const [email, setEmail] = useState(""),
-    [password, setPassword] = useState(""),
-    [account, setAccount] = useState<{ email: string } | null>(null),
+  const [account, setAccount] = useState<{ email: string } | null>(null),
     [items, setItems] = useState<Item[]>([]),
     [usage, setUsage] = useState<{ calls: number; dailyLimit: number } | null>(
       null,
@@ -41,7 +40,7 @@ export function AccountMonitoring({
     [newsletter, setNewsletter] = useState(""),
     [token, setToken] = useState("");
   async function load() {
-    const r = await fetch("/api/vault"),
+    const r = await fetch("/api/vault", { cache: "no-store" }),
       d = await r.json();
     if (!r.ok) throw new Error(d.error);
     setAccount(d.user);
@@ -60,11 +59,15 @@ export function AccountMonitoring({
         }),
         d = await r.json();
       if (!r.ok) throw new Error(d.error);
-      if ((b as { action?: string }).action === "logout")
+      if ((b as { action?: string }).action === "logout") {
         clearPrivateSessionView();
+        setToken("");
+        setNewsletter("");
+        setItems([]);
+        setAccount(null);
+      }
       if (d.newsletter) setNewsletter(d.newsletter);
       if (d.token) setToken(d.token);
-      setPassword("");
       await load();
       setMessage("Saved.");
     } catch (e) {
@@ -73,6 +76,24 @@ export function AccountMonitoring({
       setBusy(false);
     }
   }
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/vault", { cache: "no-store", signal: controller.signal })
+      .then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw Error(d.error || "Unable to load your account.");
+        return d;
+      })
+      .then((d) => {
+        setAccount(d.user);
+        setItems(d.items || []);
+        setUsage(d.usage || null);
+      })
+      .catch((e) => {
+        if (e.name !== "AbortError") setMessage(e.message);
+      });
+    return () => controller.abort();
+  }, []);
   return (
     <section className="panel">
       <span className="eyebrow">PRIVATE WORKSPACE</span>
@@ -103,45 +124,7 @@ export function AccountMonitoring({
           </Button>
         </>
       ) : (
-        <>
-          <label>
-            Email
-            <input
-              type="email"
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <label>
-            Password (12 characters minimum)
-            <input
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-          <div className="row wrap">
-            <Button
-              disabled={busy}
-              onClick={() =>
-                action("/api/vault", { action: "register", email, password })
-              }
-            >
-              Create private account
-            </Button>
-            <Button
-              variant="outline"
-              disabled={busy}
-              onClick={() =>
-                action("/api/vault", { action: "login", email, password })
-              }
-            >
-              Sign in
-            </Button>
-          </div>
-        </>
+        <WorkspaceAuthForm onAuthenticated={load} />
       )}
       {account && (
         <>
