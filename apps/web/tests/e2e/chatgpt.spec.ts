@@ -6,7 +6,7 @@ test("home links to a usable ChatGPT connection guide and public MCP discovery",
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }).getByRole("link"),
   ).toHaveCount(2);
-  await page.getByRole("link", { name: "Use in ChatGPT", exact: true }).click();
+  await page.getByRole("link", { name: "Connecter FormaProof", exact: true }).click();
   await expect(page).toHaveURL(/\/connect$/);
   await expect(
     page.getByRole("link", { name: "Open ChatGPT Plugins", exact: true }),

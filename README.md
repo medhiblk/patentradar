@@ -56,6 +56,10 @@ Research results now flag explainable multi-feature overlap and keep the source 
 
 Try [the real US20080003142A1 case](https://patentradar-puce.vercel.app/demo/patent): ingest a verified excerpt, edit the example design, save the project/PDF and inspect the resulting sourced signal. The application is reported as abandoned by Google; the exercise establishes a prior publication and technical overlap, not an active blocking right. [Behavior, provenance and limitations](docs/PATENT_SIMILARITY_ALERTS.md).
 
+## Guided project workflow
+
+Start at [/workspace](https://patentradar-puce.vercel.app/workspace): add a document or describe your idea, then choose patent research or measured CAD. Review the interpretation before searching or building. Documents, measured parts and patent evidence stay connected through the same-tab workflow. [Corrections and remaining limits](docs/RELIABILITY_FIXES.md).
+
 ## What works
 
 The [demo](https://patentradar-puce.vercel.app/demo) supports downloading and reuploading/dropping its PDF. Recoverable upload failures use actual on-device PDF text extraction when AI consent is off. [Upload recovery, limits and browser tests](docs/PDF_UPLOAD_RECOVERY.md).

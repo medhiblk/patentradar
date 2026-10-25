@@ -61,7 +61,7 @@ export function AppNavigation({
         aria-label="Main navigation"
       >
         <a href="/demo" aria-current={page === "Demo" ? "page" : undefined}>
-          Demo
+          Démo
         </a>
         <a
           href="/connect"
@@ -72,7 +72,7 @@ export function AppNavigation({
       </nav>
       <div className="app-nav-actions">
         <a href="/workspace" className="nav-workspace-link">
-          Open workspace <ArrowUpRight size={13} />
+          Nouveau projet <ArrowUpRight size={13} />
         </a>
         <button
           ref={toggle}

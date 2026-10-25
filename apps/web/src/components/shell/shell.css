@@ -421,3 +421,176 @@
     padding: 8px 14px;
   }
 }
+
+/* Keep the first visit focused on one project; tools stay available on demand. */
+.formaproof-home .hero-secondary,
+.formaproof-home .hero-demo-link {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.formaproof-home .hero-note {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.formaproof-home .hero-actions .btn-primary {
+  color: #fff;
+  background: #2554eb;
+  border-color: #2554eb;
+}
+.formaproof-home .hero-actions .btn-primary:hover {
+  background: #1740c3;
+}
+.formaproof-home .workspace-shortcuts > a:first-child {
+  border-top: 3px solid #2554eb;
+}
+.formaproof-home .workspace-shortcuts > a:nth-child(2) {
+  border-top: 3px solid #7c4de6;
+}
+.formaproof-home .workspace-shortcuts > a:last-child {
+  border-top: 3px solid #07958f;
+}
+.workspace-utilities :is(a, button)[aria-current="page"] {
+  color: #1740c3;
+  background: #eef3ff;
+}
+.workspace-sidebar :is(a, button, summary):focus-visible,
+.formaproof-home :is(a, button):focus-visible {
+  outline: 2px solid #2554eb;
+  outline-offset: 4px;
+}
+.formaproof-project-navigation .workspace-destination {
+  min-height: 44px;
+  font-size: 12px;
+}
+@media (max-width: 950px) {
+  .formaproof-project-navigation.workspace-sidebar nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .formaproof-project-navigation .workspace-destination {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .formaproof-home :is(a, button) {
+    transition: none;
+  }
+}
+
+/* The source form owns its sizing; native file controls never become flex cards. */
+.engineering-studio .studio-source .studio-source-goal,
+.engineering-studio .studio-source .studio-source-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  color: #283f61;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.engineering-studio .studio-source .studio-source-goal {
+  margin-bottom: 22px;
+}
+.engineering-studio .studio-source .studio-source-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 22px;
+  min-width: 0;
+  margin-bottom: 16px;
+}
+.engineering-studio .studio-source-fields textarea,
+.engineering-studio .studio-source-goal textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.engineering-studio .studio-source .studio-source-field-title {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+.engineering-studio .studio-source-upload {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px dashed #a8bfe8;
+  border-radius: 14px;
+  background: #f4f7ff;
+  padding: 22px 18px;
+}
+.engineering-studio .studio-source input.studio-source-file-input[type="file"] {
+  position: absolute;
+  width: 1px;
+  max-width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.engineering-studio .studio-source .studio-source-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.engineering-studio .studio-source-picker-action {
+  display: inline-block;
+  max-width: 100%;
+  border: 1px solid #c7d6f0;
+  border-radius: 9px;
+  background: #fff;
+  color: #1745bc;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.engineering-studio .studio-source-picker:hover .studio-source-picker-action {
+  background: #e9efff;
+}
+.engineering-studio .studio-source-upload:focus-within {
+  outline: 2px solid #2554eb;
+  outline-offset: 4px;
+}
+.engineering-studio .studio-source-picker-caption,
+.engineering-studio .studio-source-file-help,
+.engineering-studio .studio-source-file-name {
+  min-width: 0;
+  max-width: 100%;
+  color: #506078;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.engineering-studio .studio-source-file-name {
+  margin: 14px 0 0;
+}
+.engineering-studio .studio-source-file-help {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .engineering-studio .studio-source .studio-source-fields {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}

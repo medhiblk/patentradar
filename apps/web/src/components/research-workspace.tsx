@@ -1,4 +1,12 @@
 "use client";
+import { searchAvailability } from "@/lib/search/availability";
+import { applicantActivity } from "@/lib/intelligence/applicants";
+import type { ProjectSource } from "@/lib/project-source";
+import { designResearchDraft } from "@/lib/cad/design-research";
+import { peekDesignSession } from "@/lib/cad/design-session";
+import { applyRankingIfCurrent } from "@/lib/search/ranking";
+import { preparePdfVision } from "@/lib/documents/browser-pdf";
+import { isPdfSource, sourceFileError } from "@/lib/cad/source-files";
 import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
 import dynamic from "next/dynamic";
 import { BRAND } from "@/lib/brand";
@@ -80,9 +88,11 @@ import type { PatentRecord, Provider } from "@/lib/providers/types";
 export default function Dashboard({
   initialPage = "Overview",
   startWithRealPatent = false,
+  initialSource,
 }: {
   initialPage?: string;
   startWithRealPatent?: boolean;
+  initialSource?: ProjectSource;
 }) {
   const [analysisModule, setAnalysisModule] = useState<"general" | "physical">(
     initialPage === "Physical Analysis" ? "physical" : "general",
@@ -106,9 +116,9 @@ export default function Dashboard({
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [text, setText] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [cadFile, setCadFile] = useState<File | null>(null);
+  const [text, setText] = useState(initialSource?.text || "");
+  const [file, setFile] = useState<File | null>(initialSource?.goal === "patents" ? initialSource.file : null);
+  const [cadFile, setCadFile] = useState<File | null>(initialSource?.goal === "design" ? initialSource.file : null);
   const consumeCadFile = useCallback(() => setCadFile(null), []);
   const [aiConsent, setAiConsent] = useState(false);
   const [localOnly, setLocalOnly] = useState(false);
@@ -129,6 +139,7 @@ export default function Dashboard({
   const [competitor, setCompetitor] = useState("");
   const [dragging, setDragging] = useState(false);
   const [designReturn, setDesignReturn] = useState(false);
+  const [retryPrivateDocument, setRetryPrivateDocument] = useState(false);
   const reduceMotion = useReducedMotion();
   useEffect(() => {
     const reset = () => {
@@ -141,9 +152,14 @@ export default function Dashboard({
       setProfile(realProfile);
       setReviewed(false);
       setDesignReturn(false);
+      setRetryPrivateDocument(false);
       setProjectTitle("");
       setSeedText("");
       setSeedPublications([]);
+      setQuery("");
+      setAiConsent(false);
+      setSearchConsent(false);
+      setLocalOnly(false);
       setPhysical({ components: "", function: "", relationships: "" });
       setPage("Overview");
       setNotice("Signed out. Open private document views were cleared.");
@@ -162,10 +178,11 @@ export default function Dashboard({
           "patentradar-private-file-handoff",
         );
         if (privateHandoff) {
-          sessionStorage.removeItem("patentradar-private-file-handoff");
           const ref = JSON.parse(privateHandoff);
           loadPrivateFile(ref.projectId, ref.id)
             .then(async (source) => {
+              sessionStorage.removeItem("patentradar-private-file-handoff");
+              setRetryPrivateDocument(false);
               setDesignReturn(false);
               if (ref.target === "cad") {
                 setCadFile(source);
@@ -185,6 +202,7 @@ export default function Dashboard({
             })
             .catch((e) => {
               setPage("My Inventions");
+              setRetryPrivateDocument(true);
               setError(e.message);
             });
         }
@@ -195,7 +213,10 @@ export default function Dashboard({
           sessionStorage.removeItem("patentradar-engineering-handoff");
           setText(handoff);
           setDesignReturn(true);
-          setReviewed(false);
+          const design = peekDesignSession();
+          const draft = design ? designResearchDraft(design.spec) : null;
+          if (draft) { setProfile(draft.profile); setQuery(draft.query); setProjectTitle(draft.profile.title); }
+          setReviewed(!!draft);
           setPage("New Analysis");
         }
         const stored = JSON.parse(
@@ -222,7 +243,7 @@ export default function Dashboard({
     return () => window.removeEventListener("hashchange", restore);
   }, []);
   const go = (p: string) => {
-    if (p === "Engineering Studio") setDesignReturn(false);
+    if (p === "Engineering Studio") setDesignReturn(!!peekDesignSession());
     if (p === "Physical Analysis") {
       setAnalysisModule("physical");
       setReviewed(false);
@@ -314,13 +335,23 @@ export default function Dashboard({
             .join("\n"),
         );
       form.set("consent", String(aiConsent));
+      if (aiConsent && file && isPdfSource(file)) {
+        const preview = await preparePdfVision(form, file);
+        if (preview.notice) setNotice(preview.notice);
+      }
       const d = await json("/api/extract", form);
       setProfile({
         ...d.profile,
         ...(projectTitle ? { title: projectTitle } : {}),
       });
+      setQuery(d.profile.searchKeywords[0] || "");
       setMode(d.mode);
-      setNotice(d.notice);
+      const coverage = d.ingestion && Array.isArray(d.ingestion.analyzedPages)
+        ? `Pages lues : ${d.ingestion.analyzedPages.join(", ")} sur ${d.ingestion.pageCount}.` +
+          (d.ingestion.imagePages?.length ? ` Images soumises à l’IA : pages ${d.ingestion.imagePages.join(", ")}.` : "") +
+          (d.ingestion.truncated ? " Analyse partielle : certaines pages ou du texte n’ont pas été traités." : "")
+        : "";
+      setNotice([d.notice, coverage].filter(Boolean).join(" "));
       setReviewed(true);
     });
   const research = (demo = false) =>
@@ -358,8 +389,13 @@ export default function Dashboard({
         }),
       });
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Search failed");
+        let message = `Recherche indisponible (HTTP ${response.status}). Vos données sont conservées.`;
+        try {
+          const data = JSON.parse(await response.text());
+          if (typeof data.error === "string") message = data.error;
+          else if (typeof data.error?.message === "string") message = data.error.message;
+        } catch {}
+        throw new Error(message);
       }
       if (!response.body) throw new Error("Search stream unavailable");
       let complete = false;
@@ -440,13 +476,7 @@ export default function Dashboard({
     }
   };
   const patents = result?.patents || [];
-  const applicants = Object.entries(
-    patents
-      .flatMap((p) => p.applicants)
-      .reduce<
-        Record<string, number>
-      >((a, n) => ({ ...a, [n]: (a[n] || 0) + 1 }), {}),
-  ).map(([name, count]) => ({ name, count }));
+  const applicants = applicantActivity(patents);
   const timeline = Object.entries(
     patents
       .filter((p) => p.publicationDate)
@@ -681,11 +711,19 @@ export default function Dashboard({
             {page === "Engineering Studio" && (
               <EngineeringStudio
                 initialFile={cadFile}
+                initialText={initialSource?.goal === "design" ? initialSource.text : undefined}
+                restoreDraft={designReturn}
                 onFileConsumed={consumeCadFile}
                 onPatentResearch={(description) => {
                   setText(description);
                   setDesignReturn(true);
-                  setReviewed(false);
+                  const design = peekDesignSession();
+                  const draft = design ? designResearchDraft(design.spec) : null;
+                  if (draft) {
+                    setProfile(draft.profile); setQuery(draft.query); setProjectTitle(draft.profile.title);
+                    setNotice("Caractéristiques reprises de votre assemblage. Vérifiez les fonctions et les concepts avant de lancer la recherche.");
+                  }
+                  setReviewed(!!draft);
                   go("New Analysis");
                 }}
               />
@@ -742,6 +780,8 @@ export default function Dashboard({
               <AIEvidence
                 profile={result.profile}
                 patents={selected ? [selected] : result.patents}
+                rankingCandidates={result.patents}
+                onRerank={(entries) => setResult(old => applyRankingIfCurrent(old, result, entries))}
               />
             )}
             {error && (
@@ -749,14 +789,17 @@ export default function Dashboard({
                 {error}
               </div>
             )}
+            {retryPrivateDocument && <section className="notice">
+              <p>Votre référence documentaire est conservée. Reconnectez-vous si nécessaire, puis reprenez l’ouverture.</p>
+              <Button variant="outline" onClick={() => window.location.reload()}>Reprendre le document privé</Button>
+            </section>}
             {designReturn && page !== "Engineering Studio" && (
               <section className="notice" aria-label="Design iteration">
                 <strong>Investigate, then iterate.</strong>
                 <p>
                   Review the technical concepts before sharing search queries.
-                  Your assembly parameters are retained in this tab so you can
-                  explore another design. Original files and imported geometry
-                  are not retained.
+                  Votre assemblage et les fichiers STEP importés restent disponibles dans cet onglet.
+                  Un rechargement nécessite une sauvegarde privée ou une réimportation des originaux.
                 </p>
                 <Button
                   variant="outline"
@@ -896,15 +939,16 @@ export default function Dashboard({
                     </span>
                     <span className="stage-line" />
                     <span className={reviewed ? "active" : ""}>
-                      <i>02</i> Refine the features
+                      <i>02</i> Ce que nous comprenons
                     </span>
                     <span className="stage-line" />
                     <span>
-                      <i>03</i> Follow the evidence
+                      <i>03</i> Les preuves
                     </span>
                   </div>
                   <div className="analysis-grid">
-                    <section className="panel">
+                    <details className="panel" open={!reviewed}>
+                      <summary className="mb-4 cursor-pointer font-medium">01 / Document ou idée d’origine</summary>
                       <div className="panel-heading">
                         <h3>
                           01 /{" "}
@@ -929,8 +973,8 @@ export default function Dashboard({
                           const dropped = e.dataTransfer.files[0];
                           if (dropped) {
                             if (
-                              dropped.type !== "application/pdf" ||
-                              dropped.size > 4 * 1024 * 1024
+                              !isPdfSource(dropped) ||
+                              !!sourceFileError(dropped)
                             ) {
                               setError("Choose a PDF smaller than 4 MB.");
                               return;
@@ -949,14 +993,17 @@ export default function Dashboard({
                           {file ? file.name : "Drop your next idea here"}
                         </strong>
                         <span>Drag a PDF here, or choose a file below</span>
-                        <small>Text-based PDF · up to 4 MB · 80 pages</small>
+                        <small>PDF · jusqu’à 4 Mo · 80 pages · scans avec analyse IA consentie</small>
                         <input
                           aria-label="Technical PDF"
                           type="file"
-                          accept="application/pdf"
+                          accept=".pdf,application/pdf"
                           onChange={(e) => {
-                            setFile(e.target.files?.[0] || null);
-                            setReviewed(false);
+                            const chosen = e.target.files?.[0];
+                            if (chosen && (!isPdfSource(chosen) || sourceFileError(chosen))) {
+                              setError(sourceFileError(chosen) || "Choose a valid PDF."); return;
+                            }
+                            setFile(chosen || null); setReviewed(false); setError("");
                           }}
                         />
                       </label>
@@ -974,7 +1021,7 @@ export default function Dashboard({
                         technologies.
                         <textarea
                           value={text}
-                          onChange={(e) => setText(e.target.value)}
+                          onChange={(e) => { setText(e.target.value); setReviewed(false); }}
                           placeholder="Describe the components, operating principles and technical functions…"
                           rows={5}
                         />
@@ -1025,12 +1072,12 @@ export default function Dashboard({
                         }
                         onClick={extract}
                       >
-                        Extract technical features <ArrowRight size={16} />
+                        Comprendre mon document <ArrowRight size={16} />
                       </Button>
-                    </section>
+                    </details>
                     <section className="panel">
                       <div className="panel-heading">
-                        <h3>02 / Review & retrieve</h3>
+                        <h3>02 / Vérifier puis rechercher</h3>
                         <span className="badge amber">{mode}</span>
                       </div>
                       {notice && <div className="notice">{notice}</div>}
@@ -1136,11 +1183,12 @@ export default function Dashboard({
                           {mode === "LIVE" && (
                             <>
                               <label>
-                                Reviewed public search concepts
+                                Concepts qui seront envoyés aux sources publiques
                                 <input
                                   value={query}
+                                  maxLength={150}
                                   onChange={(e) => setQuery(e.target.value)}
-                                  placeholder={profile.searchKeywords[0]}
+                                  placeholder="Ex. : optical sample detection"
                                 />
                               </label>
                               <label>
@@ -1216,11 +1264,12 @@ export default function Dashboard({
                           <Button
                             disabled={
                               !!busy ||
+                              !query.trim() ||
                               (mode === "LIVE" && !searchConsent && !localOnly)
                             }
                             onClick={() => research()}
                           >
-                            Retrieve & compare <ArrowRight size={16} />
+                            Trouver les brevets proches <ArrowRight size={16} />
                           </Button>
                         </motion.div>
                       )}
@@ -1235,6 +1284,13 @@ export default function Dashboard({
                       ? "SYNTHETIC DEMO — illustrative records, not real patents."
                       : "Results include only successfully retrieved evidence. Literature results are not patents."}
                   </div>
+                  {result && (
+                    <section className="notice" aria-label="Couverture brevet disponible">
+                      <strong>{searchAvailability(result).outcome === "patents-found" ? "Publications brevet retrouvées" : "État de la recherche brevet"}</strong>
+                      <p>{searchAvailability(result).message}</p>
+                      <p>Revendications disponibles : {searchAvailability(result).claimsAvailable} · Résumés disponibles : {searchAvailability(result).abstractAvailable}. Une absence de résultat ne constitue pas une autorisation de fabriquer.</p>
+                    </section>
+                  )}
                   {result && (
                     <SearchProvenance
                       trace={result.searchTrace}

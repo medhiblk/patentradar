@@ -89,6 +89,10 @@ it("rejects patent identifiers absent from candidates during reranking", async (
   });
   expect((await call({ operation: "rerank" })).status).toBe(400);
 });
+it("rejects a reranking response which silently omits supplied publications", async () => {
+  model.parse.mockResolvedValue({ output_parsed: { ranking: [] } });
+  expect((await call({ operation: "rerank" })).status).toBe(400);
+});
 it("labels translations and preserves original text", async () => {
   model.parse.mockResolvedValue({
     output_parsed: { translation: "Un arbre." },

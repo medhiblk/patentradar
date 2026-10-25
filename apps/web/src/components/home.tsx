@@ -1,6 +1,7 @@
 "use client";
 import "./shell/shell.css";
 import { PatentFilm } from "./patent-film/patent-film";
+import { useRouter } from "next/navigation";
 import {
   ArrowUpRight,
   MessageSquare,
@@ -18,63 +19,55 @@ export function Home({
   demo: () => void;
   busy: boolean;
 }) {
+  const router = useRouter();
   return (
-    <>
-      <PatentFilm explore={() => go("New Analysis")} />
+    <div className="formaproof-home">
+      <PatentFilm explore={() => router.push("/workspace?goal=patents")} />
       <section className="product-hero">
         <div className="hero-story">
           <span className="product-kicker">
             <span className="live-dot" />
-            FROM DOCUMENT TO DESIGN
+            VOTRE IDÉE, VOS PIÈCES, VOS PREUVES
           </span>
           <h1>
-            Your next prototype
+            D’un document
             <br />
-            starts with <em>a page.</em>
+            à une <em>décision concrète.</em>
           </h1>
           <p>
-            Turn a manual, drawing or technical brief into editable parts. Build
-            your assembly, explore alternatives, then investigate the patent
-            evidence behind your design.
+            Repérez les brevets proches de votre idée ou créez des pièces 3D à
+            partir de dimensions vérifiables. Un seul projet, des étapes guidées
+            et des sources visibles.
           </p>
           <div className="hero-actions">
-            <button
-              className="btn btn-primary"
-              onClick={() => go("Engineering Studio")}
-            >
-              Start with a document <ArrowUpRight size={16} />
-            </button>
-            <a className="hero-secondary" href="/connect">
-              Use in ChatGPT <ArrowUpRight size={15} />
+            <a className="btn btn-primary" href="/workspace">
+              Commencer mon projet <ArrowUpRight size={16} />
+            </a>
+            <a className="hero-secondary" href="/demo">
+              Voir comment ça marche <ArrowUpRight size={15} />
             </a>
           </div>
           <span className="hero-note">
-            No account needed to model. Save privately when you’re ready.
+            Commencez sans compte. Vous gardez la main sur les données partagées.
           </span>
           <div className="hero-alternative-actions">
-            <button
-              className="hero-demo-link"
-              onClick={() => go("New Analysis")}
-            >
-              Analyze an invention
-            </button>
-            <a className="hero-demo-link" href="/demo">
-              Try the guided demo <ArrowUpRight size={12} />
+            <a className="hero-demo-link" href="/files">
+              Reprendre un projet enregistré <ArrowUpRight size={12} />
             </a>
           </div>
         </div>
         <div
           className="design-scene"
           role="img"
-          aria-label="Illustration of a technical drawing becoming an editable mechanical assembly; not a generated model"
+          aria-label="Illustration du passage d’un dessin à un assemblage ; ce visuel n’est pas un modèle généré"
         >
           <div className="scene-topline">
-            <span>THE DESIGN WORKSPACE</span>
-            <span>DOCUMENT → ASSEMBLY</span>
+            <span>COMPRENDRE, EXPLORER, CONCEVOIR</span>
+            <span>DOCUMENT → PROJET</span>
           </div>
           <div className="scene-document">
             <FileText size={19} strokeWidth={1.3} />
-            <span>Technical specification</span>
+            <span>Votre document technique</span>
             <div />
             <div />
             <div />
@@ -83,7 +76,7 @@ export function Home({
               <ellipse cx="62" cy="43" rx="14" ry="8" />
               <path d="M13 66 58 90 M111 57 70 82" strokeDasharray="2 3" />
             </svg>
-            <small>SOURCE DIMENSIONS</small>
+            <small>DIMENSIONS À VÉRIFIER</small>
           </div>
           <div className="scene-assembly">
             <div className="assembly-layer layer-top" />
@@ -94,73 +87,73 @@ export function Home({
           </div>
           <div className="scene-tag tag-one">
             <span />
-            Editable components
+            Pièces modifiables
           </div>
           <div className="scene-tag tag-two">
             <span />
-            Measurements first
+            Mesures vérifiables
           </div>
           <div className="scene-caption">
-            <span>01 / UNDERSTAND THE SYSTEM</span>
+            <span>01 / COMPRENDRE VOTRE SYSTÈME</span>
             <small>
-              Concept illustration · Geometry requires source measurements
+              Illustration · La géométrie nécessite des dimensions vérifiées
             </small>
           </div>
         </div>
       </section>
       <section
         className="chatgpt-invitation"
-        aria-label="FormaProof MCP plugin"
+        aria-label="Connexion MCP de FormaProof"
       >
         <div className="chatgpt-invitation-icon">
           <MessageSquare size={23} strokeWidth={1.4} />
         </div>
         <div>
-          <span className="product-kicker">ALSO IN CHATGPT</span>
-          <h2>Take the research into your conversation.</h2>
+          <span className="product-kicker">AUSSI DANS CHATGPT</span>
+          <h2>Vos recherches, dans votre conversation.</h2>
           <p>
-            Patent evidence, technical comparisons and component inspection
-            through one MCP connection.
+            Retrouvez les outils publics de recherche brevet et d’inspection
+            de composants avec une connexion MCP.
           </p>
         </div>
         <a href="/connect">
-          Connect FormaProof <ArrowUpRight size={15} />
+          Connecter FormaProof <ArrowUpRight size={15} />
         </a>
       </section>
-      <section className="journey-section" aria-label="How it works">
+      <section className="journey-section" aria-label="Comment ça marche">
         <div className="journey-heading">
-          <span className="product-kicker">ONE CONTINUOUS WORKFLOW</span>
+          <span className="product-kicker">UN SEUL POINT DE DÉPART</span>
           <h2>
-            Bring the document.
+            Dites ce que vous avez.
             <br />
-            Keep moving the design forward.
+            Choisissez ce que vous voulez obtenir.
           </h2>
           <p>
-            Each step builds on your work. You decide what to model and what to
-            share.
+            Recherche brevet ou conception de pièces : les outils utiles
+            apparaissent au bon moment.
           </p>
         </div>
         <div className="journey-steps">
           {[
             [
               "01",
-              "Bring your source",
-              "Upload a PDF, drawing or manual. Tell us which system or part you want to represent.",
+              "Déposez votre source",
+              "Un document, un dessin ou quelques lignes suffisent pour commencer. Choisissez votre objectif.",
             ],
             [
               "02",
-              "Review the interpretation",
-              "Check identified components and dimensions. Fill in missing measurements.",
+              "Vérifiez ce qui a été compris",
+              "Corrigez les caractéristiques ou dimensions extraites. Les informations manquantes restent signalées.",
             ],
             [
               "03",
-              "Build & adjust in 3D",
-              "Edit parts, assemble components and export STEP or STL for your next tool.",
+              "Obtenez un résultat utile",
+              "Explorez les brevets avec leurs preuves, ou construisez des pièces paramétriques à partir de mesures.",
             ],
             [
               "04",
-              "Investigate the evidence",
-              "Search related inventions, inspect source passages and return to refine your design.",
+              "Faites évoluer votre projet",
+              "Ajustez votre conception, relancez la recherche et exportez le travail dans vos outils.",
             ],
           ].map(([n, title, text]) => (
             <article key={n}>
@@ -171,63 +164,62 @@ export function Home({
           ))}
         </div>
       </section>
-      <section className="workspace-shortcuts" aria-label="Choose a workspace">
-        <button onClick={() => go("Engineering Studio")}>
+      <section className="workspace-shortcuts" aria-label="Choisir un objectif">
+        <a href="/workspace?goal=design">
           <Box size={21} strokeWidth={1.4} />
-          <h3>Build a physical prototype</h3>
+          <h3>Créer ou modifier une pièce</h3>
           <p>
-            Parts, purchased components and custom housings in one assembly.
+            Vérifiez les dimensions, ajoutez des composants et préparez un
+            assemblage exportable en STEP ou STL.
           </p>
           <span>
-            Open 3D Studio <ArrowUpRight size={15} />
+            Explorer les pièces 3D <ArrowUpRight size={15} />
           </span>
-        </button>
-        <button onClick={() => go("New Analysis")}>
+        </a>
+        <a href="/workspace?goal=patents">
           <ScanLine size={21} strokeWidth={1.4} />
-          <h3>Research an invention</h3>
+          <h3>Repérer les brevets proches</h3>
           <p>
-            Start with any idea: mechanical, digital, biological or a new
-            process.
+            Décrivez une idée mécanique, numérique, biologique ou un procédé.
+            Examinez les résultats et les passages sources.
           </p>
           <span>
-            Open patent research <ArrowUpRight size={15} />
+            Explorer les brevets <ArrowUpRight size={15} />
           </span>
-        </button>
+        </a>
         <a href="/files">
           <FolderOpen size={21} strokeWidth={1.4} />
-          <h3>Pick up where you left off</h3>
+          <h3>Retrouver mes projets</h3>
           <p>
-            Keep documents in private projects. Reopen them for design or
-            research.
+            Retrouvez vos documents privés, vos recherches et vos composants
+            enregistrés.
           </p>
           <span>
-            Open private files <ArrowUpRight size={15} />
+            Ouvrir mes projets <ArrowUpRight size={15} />
           </span>
         </a>
       </section>
       <footer className="product-footer">
-        <span>Built around your engineering workflow.</span>
+        <span>Du document aux pièces et aux preuves.</span>
         <div>
           <button disabled={busy} onClick={demo}>
-            Research a real patent
+            Voir un cas brevet réel
           </button>
-          <button onClick={() => go("Physical Analysis")}>
-            Physical inventions
-          </button>
-          <button onClick={() => go("API Providers")}>Data sources</button>
+          <button onClick={() => go("API Providers")}>Sources de données</button>
           <a
             href="https://github.com/medhiblk/patentradar"
             target="_blank"
             rel="noreferrer"
           >
-            Open on GitHub ↗
+            Ouvrir sur GitHub ↗
           </a>
         </div>
         <p>
-          Model only what the source supports. Patent research is preliminary
-          technical intelligence, not legal clearance.
+          Les modèles simplifiés nécessitent une validation technique. Les
+          résultats brevet dépendent des sources disponibles et ne constituent
+          pas une autorisation de fabriquer.
         </p>
       </footer>
-    </>
+    </div>
   );
 }

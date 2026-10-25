@@ -28,7 +28,10 @@ export function reportSections(data: Research) {
         ...(data.searchTrace?.notQueried.map(
           (run) => "NOT QUERIED - " + run.name + ": " + run.reason,
         ) || []),
-        "Ranking is lexical feature-term overlap, not a semantic or legal conclusion. OpenAIRE metadata, where returned, credits OpenAIRE Graph and upstream Lens; CC-BY information: https://graph.openaire.eu/faq . Other content rights remain source-specific.",
+        data.ranking?.method === "ai-assisted"
+          ? `Shortlist order was reviewed with AI at ${data.ranking.appliedAt}; underlying evidence and lexical scores remain unchanged. AI explanations are technical assessments, not legal conclusions.`
+          : "Ranking is lexical feature-term overlap, not a semantic or legal conclusion.",
+        "OpenAIRE metadata, where returned, credits OpenAIRE Graph and upstream Lens; CC-BY information: https://graph.openaire.eu/faq . Other content rights remain source-specific.",
       ].join("\n"),
     ],
     [
@@ -45,7 +48,7 @@ export function reportSections(data: Research) {
       data.patents
         .map(
           (p) =>
-            `${p.publicationNumber} — ${p.title}\n${p.synthetic ? "SYNTHETIC DEMO — NOT A REAL PATENT. " : ""}${p.source}; retrieved ${p.retrievedAt}\n${triage(data.profile, p).priority}. ${triage(data.profile, p).applicant}\nPatent PDF: ${p.pdfUrl || "Unavailable"}\n${p.sourceUrl}\n${(p.additionalSources || []).map((s) => s.name + ": " + s.url).join("\n")}`,
+            `${p.publicationNumber} — ${p.title}\n${p.synthetic ? "SYNTHETIC DEMO — NOT A REAL PATENT. " : ""}${p.source}; retrieved ${p.retrievedAt}\n${data.ranking?.entries.find((entry) => entry.publicationNumber === p.publicationNumber)?.reason || "Lexical ranking; no AI ranking explanation."}\n${triage(data.profile, p).priority}. ${triage(data.profile, p).applicant}\nPatent PDF: ${p.pdfUrl || "Unavailable"}\n${p.sourceUrl}\n${(p.additionalSources || []).map((s) => s.name + ": " + s.url).join("\n")}`,
         )
         .join("\n\n") || "No patent evidence retrieved.",
     ],
@@ -57,7 +60,7 @@ export function reportSections(data: Research) {
           return `${p.publicationNumber}: ${c.score}% lexical relevance. Evidence: ${evidenceBasis(p)}. ${c.limitation}\n${c.matches
             .map((m) => {
               const source = passageSource(p, m.excerpt);
-              return `${m.feature}: ${m.strength}. ${m.explanation}\nExcerpt: ${m.excerpt}\n${source.verified ? "Passage source" : "Record source; passage attribution unavailable"}: ${source.source}; ${source.url}${source.page ? "; original PDF page " + source.page : ""}; retrieved ${source.retrievedAt}`;
+              return `${m.feature}: ${m.strength}. ${m.explanation}\n${m.claimIndex === undefined ? m.evidenceField : "Claim index " + m.claimIndex}; original character offsets ${m.start}-${m.end}. Excerpt: ${m.excerpt}\n${source.verified ? "Passage source" : "Record source; passage attribution unavailable"}: ${source.source}; ${source.url}${source.page ? "; original PDF page " + source.page : ""}; retrieved ${source.retrievedAt}`;
             })
             .join("\n")}`;
         })

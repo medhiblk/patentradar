@@ -58,7 +58,7 @@ export async function studioRequest(
       throw new StudioRequestError(
         message,
         response.status,
-        response.status >= 500,
+        response.status === 408 || response.status >= 500,
       );
     }
     return data;

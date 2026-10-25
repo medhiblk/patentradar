@@ -57,6 +57,13 @@ export function SimilarityAlerts({
                 <strong>{match.feature}</strong>
                 <p>Shared terms: {match.terms.join(", ")}</p>
                 <blockquote>{match.excerpt}</blockquote>
+                {match.evidenceField && (
+                  <small>
+                    {match.claimIndex !== undefined ? `Retrieved claim ${match.claimIndex + 1}` : match.evidenceField}
+                    {match.start !== undefined && match.end !== undefined ? ` · source characters ${match.start}–${match.end}` : ""}
+                    {match.sourceUrl && <> · <a href={match.sourceUrl} target="_blank" rel="noreferrer">Verify passage ↗</a></>}
+                  </small>
+                )}
               </div>
             ))}
           </details>

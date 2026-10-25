@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-25T20:05:44.077258+00:00",
+  "baseCommit": "aa52394b29294f243d4b12367e69e27f6b59825f",
+  "checks": {
+    "applicationTestsPassed": 186,
+    "sdkTestsPassed": 5,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "privateBuild": {
+      "manifests": 41,
+      "privateEntries": 0
+    },
+    "localSourceLayout": {
+      "passed": 2,
+      "viewports": [
+        1280,
+        390
+      ],
+      "scope": "Local empty-source UI with actual fixture selection; no production calls."
+    }
+  },
+  "productionFinalTests": "Not run at user request.",
+  "realExternalAIOrNewProviderCalls": "Not run; automated external calls mocked. Existing EPO adapter reused.",
+  "deployment": "pending",
+  "scope": [
+    "Shared bounded PDF ingestion and browser-rendered consented PDF vision",
+    "Per-dimension evidence and source provenance",
+    "Revision-safe CAD and same-tab original-file retention",
+    "Evidence-linked ranking and bounded keyless EP document enrichment",
+    "Cumulative manual watches and stable reviewed alerts",
+    "Adaptive project intake and responsive source upload layout"
+  ],
+  "remainingLimits": [
+    "Partial keyless patent discovery; no global corpus substitute claimed.",
+    "OpenAI vision/reranking needs configured access, account, allowance and consent.",
+    "Native arbitrary-machine reconstruction and physical simulation not implemented.",
+    "Private saved CAD parameters do not automatically persist original imported files.",
+    "No scheduled email monitoring.",
+    "Competitor service access401 prevents verified superiority comparison."
+  ]
+}

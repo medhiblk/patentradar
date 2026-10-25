@@ -1,4 +1,5 @@
 "use client";
+import { safeJsonResponse } from "@/lib/safe-json-response";
 import { useState } from "react";
 import { parseSeeds } from "@/lib/patent-seeds";
 import { Button } from "./ui/button";
@@ -163,7 +164,7 @@ export function InventionWorkspace({
                     data: { description, seedPublications },
                   }),
                 });
-                const d = await r.json();
+                const d = await safeJsonResponse(r);
                 if (!r.ok) throw new Error(d.error);
                 setError("Saved privately to your signed-in account.");
               } catch (e) {

@@ -1,0 +1,12 @@
+/** Keep server HTML/proxy errors out of browser JSON.parse errors, especially on WebKit. */
+export async function safeJsonResponse(response: Response) {
+  let data: Awaited<ReturnType<Response["json"]>>;
+  try { data = JSON.parse(await response.text()); }
+  catch { throw new Error(`Réponse du service illisible (HTTP ${response.status}). Vos données sont conservées ; réessayez.`); }
+  if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("Réponse du service inattendue. Réessayez sans fermer votre projet.");
+  if (!response.ok) {
+    const message = typeof data.error === "string" ? data.error : typeof data.error?.message === "string" ? data.error.message : `Service indisponible (HTTP ${response.status}).`;
+    throw new Error(message);
+  }
+  return data;
+}

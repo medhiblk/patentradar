@@ -6,6 +6,7 @@ import {
   writeDocument,
   deleteDocument,
   mutateDocument,
+  Conflict,
 } from "./private-store";
 export type Account = { id: string; email: string; password: string };
 export type Session = {
@@ -128,6 +129,42 @@ export async function saveItem(owner: string, item: Item, existing: boolean) {
       JSON.stringify(item.data),
       item.updated,
     );
+}
+/** Re-read on every CAS retry so long-running searches cannot overwrite a review. */
+export async function mutateItem(
+  owner: string,
+  id: string,
+  mutate: (item: Item) => Item,
+): Promise<Item> {
+  const checked = (old: Item) => {
+    const next = mutate(old);
+    if (next.id !== old.id || next.kind !== old.kind)
+      throw new Conflict("Item identity changed; refresh and retry.");
+    if (Buffer.byteLength(JSON.stringify(next.data)) > 3000000)
+      throw new Error("Private item history exceeds 3 MB. Export and start another watch.");
+    return next;
+  };
+  if (blobBackend())
+    return mutateDocument<Item>(
+      itemKey(owner, id),
+      () => { throw new Error("Not found"); },
+      checked,
+    );
+  const database = db();
+  database.exec("BEGIN IMMEDIATE");
+  try {
+    const row = database.prepare("SELECT id,kind,title,data,updated FROM items WHERE id=? AND userId=?").get(id, owner);
+    if (!row) throw new Error("Not found");
+    const next = checked({ ...row, data: JSON.parse(String(row.data)) } as Item);
+    const written = database.prepare("UPDATE items SET title=?,data=?,updated=? WHERE id=? AND userId=?")
+      .run(next.title, JSON.stringify(next.data), next.updated, id, owner);
+    if (!written.changes) throw new Conflict("Concurrent update; retry.");
+    database.exec("COMMIT");
+    return next;
+  } catch (error) {
+    database.exec("ROLLBACK");
+    throw error;
+  }
 }
 export async function deleteItem(owner: string, id: string) {
   if (blobBackend()) {

@@ -1,4 +1,5 @@
 "use client";
+import { safeJsonResponse } from "@/lib/safe-json-response";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
@@ -45,7 +46,7 @@ export async function loadPrivateFile(projectId: string, id: string) {
     { cache: "no-store" },
   );
   if (!r.ok) {
-    const d = await r.json();
+    const d = await safeJsonResponse(r);
     throw Error(d.error || "Private file unavailable.");
   }
   return new File(
@@ -93,7 +94,7 @@ export function PrivateWorkspace({
     });
     let d;
     try {
-      d = await r.json();
+      d = await safeJsonResponse(r);
     } catch {
       throw Error(
         `Unexpected server response (HTTP ${r.status}). Retry; your selected files have been kept.`,
@@ -148,7 +149,7 @@ export function PrivateWorkspace({
     const controller = new AbortController();
     fetch("/api/vault", { cache: "no-store", signal: controller.signal })
       .then(async (r) => {
-        const d = await r.json();
+        const d = await safeJsonResponse(r);
         if (!r.ok) throw Error(d.error);
         return d;
       })
@@ -181,7 +182,7 @@ export function PrivateWorkspace({
       signal: controller.signal,
     })
       .then(async (r) => {
-        const d = await r.json();
+        const d = await safeJsonResponse(r);
         if (!r.ok) throw Error(d.error);
         return d;
       })

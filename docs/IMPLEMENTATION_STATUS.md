@@ -58,3 +58,8 @@ Local sourced FTS search, private workspaces, bounded AI evidence-review routes 
 ## Monorepo checkpoint — 2026-10-25
 
 Moved the working application into `apps/web`; extracted canonical contracts, engineering operations and a typed HTTP/MCP SDK into three npm packages. Root commands, CI, Docker paths and Vercel preparation follow the workspace layout. Local private data was moved intact and remains ignored. See [integration instructions](MONOREPO.md), [functional inventory](FEATURES.md) and [verification record](MONOREPO_RELEASE.json). No provider was newly declared operational by this reorganization.
+
+
+## Reliability and adaptive workflow — 2026-10-25
+
+Six parallel work areas corrected document ingestion, measurement provenance, stale CAD exports, same-tab assembly continuity, evidence ranking and manual-watch history. The adaptive project intake is now `/workspace`. See [implementation and limits](RELIABILITY_FIXES.md) and [validation record](RELIABILITY_RELEASE.json). Keyless EP enrichment is exact document retrieval from known dates, not a worldwide search engine. Final production tests are left to the user.

@@ -47,6 +47,11 @@ export const SimilarityAlertSchema = z.object({
       feature: z.string(),
       excerpt: z.string(),
       terms: z.array(z.string()),
+      start: z.number().int().nonnegative().optional(),
+      end: z.number().int().nonnegative().optional(),
+      claimIndex: z.number().int().nonnegative().optional(),
+      evidenceField: z.enum(["claim", "abstract", "title"]).optional(),
+      sourceUrl: z.string().url().refine(publicLink).optional(),
     }),
   ),
   legalStatusNotice: z.string().optional(),
@@ -58,6 +63,15 @@ function signature(input: string) {
   let n = 2166136261;
   for (const ch of input) n = Math.imul(n ^ ch.charCodeAt(0), 16777619);
   return (n >>> 0).toString(16);
+}
+function canonicalMatches(matches: SimilarityAlert["matches"]) {
+  return matches.map((match) => ({
+    ...match,
+    terms: [...new Set(match.terms)].sort(),
+  })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+}
+function matchIdentity(matches: SimilarityAlert["matches"]) {
+  return JSON.stringify(canonicalMatches(matches).map(({ feature, excerpt, terms }) => ({ feature, excerpt, terms })));
 }
 /** Transparent lexical review signal. Never a probability of infringement or legal clearance. */
 export function similarityAlerts(
@@ -81,19 +95,24 @@ export function similarityAlerts(
       profile,
       hasClaims ? patent : { ...patent, claims: undefined },
     );
-    const matches = comparison.matches
+    const matches = canonicalMatches(comparison.matches
       .map((match) => ({
         feature: match.feature,
         excerpt: match.excerpt,
         terms: match.terms.filter(
           (term) => !generic.has(term) && !/^\d+$/.test(term),
         ),
+        start: match.start,
+        end: match.end,
+        claimIndex: match.claimIndex,
+        evidenceField: match.evidenceField,
+        sourceUrl: publicLink(match.sourceUrl) ? match.sourceUrl : patent.sourceUrl,
       }))
-      .filter((match) => match.terms.length >= 2);
+      .filter((match) => match.terms.length >= 2));
     const meaningful = [...new Set(matches.flatMap((match) => match.terms))];
     if (matches.length < 2 || meaningful.length < 4) continue;
     const id =
-      patent.publicationNumber + "-" + signature(JSON.stringify(matches));
+      patent.publicationNumber + "-" + signature(matchIdentity(matches));
     unique.set(patent.publicationNumber, {
       id,
       publicationNumber: patent.publicationNumber,
@@ -109,7 +128,9 @@ export function similarityAlerts(
       matches,
       generatedAt: now,
       acknowledged: previous.some(
-        (alert) => alert.id === id && alert.acknowledged,
+        (alert) => alert.acknowledged &&
+          (alert.id === id || (alert.publicationNumber === patent.publicationNumber &&
+            matchIdentity(alert.matches) === matchIdentity(matches))),
       ),
       ...(patent.legalStatus
         ? {
@@ -123,9 +144,16 @@ export function similarityAlerts(
 export function savedAlerts(data: Record<string, unknown>): SimilarityAlert[] {
   const parsed = z
     .array(SimilarityAlertSchema)
-    .max(50)
+    .max(200)
     .safeParse(data.similarityAlerts);
   return parsed.success ? parsed.data : [];
+}
+/** Missing records on a partial watch check do not delete historic review signals. */
+export function mergeSimilarityAlerts(previous: SimilarityAlert[], incoming: SimilarityAlert[]) {
+  const merged = new Map(previous.map((alert) => [alert.publicationNumber, alert]));
+  for (const alert of incoming) merged.set(alert.publicationNumber, alert);
+  if (merged.size > 200) throw new Error("Watch alert history reached 200 entries. Export and start another watch.");
+  return [...merged.values()];
 }
 export function withResearchAlerts(
   data: Record<string, unknown>,

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { requireUser } from "@/lib/platform/auth";
-import { listItems, getItem, saveItem } from "@/lib/platform/store";
+import { listItems, getItem, mutateItem } from "@/lib/platform/store";
+import { Conflict } from "@/lib/platform/private-store";
 import { savedAlerts } from "@/lib/intelligence/alerts";
 import { guard } from "@/lib/security";
 export const runtime = "nodejs";
@@ -26,7 +27,11 @@ export async function GET(req: Request) {
         ...alert,
         matches: alert.matches
           .slice(0, 3)
-          .map((match) => ({ ...match, excerpt: match.excerpt.slice(0, 650) })),
+          .map((match) => ({
+            ...match,
+            excerpt: match.excerpt.slice(0, 650),
+            ...(match.start !== undefined ? { end: match.start + Math.min(match.excerpt.length, 650) } : {}),
+          })),
       }));
     return Response.json(
       {
@@ -67,22 +72,23 @@ export async function POST(req: Request) {
         { error: "Alert not found." },
         { status: 404, headers },
       );
-    await saveItem(
-      account.id,
-      {
-        ...item,
+    await mutateItem(account.id, input.projectId, (current) => {
+      const latest = savedAlerts(current.data);
+      if (!latest.some((alert) => alert.id === input.alertId))
+        throw new Conflict("Alert evidence changed; refresh before reviewing it.");
+      return {
+        ...current,
         updated: new Date().toISOString(),
         data: {
-          ...item.data,
-          similarityAlerts: alerts.map((alert) =>
+          ...current.data,
+          similarityAlerts: latest.map((alert) =>
             alert.id === input.alertId
               ? { ...alert, acknowledged: input.acknowledged }
               : alert,
           ),
         },
-      },
-      true,
-    );
+      };
+    });
     return Response.json({ ok: true }, { headers });
   } catch (e) {
     return failure(e);
@@ -92,6 +98,7 @@ function failure(e: unknown) {
   const message = e instanceof Error ? e.message : "";
   const status = message.startsWith("Sign in")
     ? 401
+    : e instanceof Conflict ? 409
     : message.includes("Rate limit")
       ? 429
       : e instanceof z.ZodError
@@ -102,6 +109,7 @@ function failure(e: unknown) {
       error:
         status === 401
           ? "Sign in to see your private patent alerts."
+          : status === 409 ? "Alert evidence changed. Reload the saved alerts and retry."
           : status === 429
             ? "Too many requests. Wait one minute and retry."
             : status === 400

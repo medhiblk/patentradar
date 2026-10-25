@@ -43,6 +43,11 @@ export const ResearchSchema = z.object({
   consent: z.boolean().default(false),
 });
 export const ReportSchema = z.object({
+  ranking: z.object({
+    method: z.enum(["lexical", "ai-assisted"]),
+    entries: z.array(z.object({ publicationNumber: z.string(), reason: z.string().max(500) })).max(50),
+    appliedAt: z.string(),
+  }).optional(),
   searchTrace: SearchTraceSchema.optional(),
   profile: ProfileSchema,
   mode: z.enum(["LIVE", "PARTIAL", "DEMO"]),

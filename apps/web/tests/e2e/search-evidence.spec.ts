@@ -83,7 +83,7 @@ test("source execution, analysed publications and feature evidence remain inspec
     }),
   );
   await page.goto("/");
-  await page.getByRole("button", { name: "Research a real patent" }).click();
+  await page.getByRole("button", { name: "Voir un cas brevet réel" }).click();
   const audit = page.getByRole("region", {
     name: "Search sources and analysed patents",
   });

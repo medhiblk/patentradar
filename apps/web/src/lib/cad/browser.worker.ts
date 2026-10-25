@@ -2,6 +2,7 @@
 import * as cad from "replicad";
 import type { OpenCascadeInstance } from "replicad-opencascadejs";
 import { AssemblySchema, buildable, type ComponentSpec } from "./schema";
+import { requireSupportedStepSolids } from "./step-solids";
 let initialized: Promise<OpenCascadeInstance> | undefined;
 async function kernel() {
   return (initialized ||= (async () => {
@@ -96,8 +97,9 @@ self.onmessage = async (event: MessageEvent) => {
           if (!loaded.has(source.file)) {
             const imported = await cad.importSTEP(source.file);
             cleanup.push(imported);
-            const solids = imported.solids.slice(0, 20);
+            const solids = imported.solids;
             cleanup.push(...solids);
+            requireSupportedStepSolids(solids);
             loaded.set(source.file, solids);
           }
           const original = loaded.get(source.file)![source.solidIndex];
@@ -116,10 +118,10 @@ self.onmessage = async (event: MessageEvent) => {
         throw new Error("STEP file exceeds the limit");
       const imported = await cad.importSTEP(payload.file);
       cleanup.push(imported);
-      const solids = imported.solids.slice(0, 20);
-      if (!solids.length) throw new Error("No supported STEP solids");
+      const solids = imported.solids;
+      cleanup.push(...solids);
+      requireSupportedStepSolids(solids);
       shapes = solids.map((shape, index) => {
-        cleanup.push(shape);
         const item = payload.placements?.find(
           (p: { id: string }) => p.id === `part-${index + 1}`,
         );

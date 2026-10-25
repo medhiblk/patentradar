@@ -1,8 +1,9 @@
 import { extractMeasured } from "./schema";
+import { validateDocumentMeasurements } from "@formaproof/engineering";
 import { MAX_SOURCE_BYTES } from "./source-files";
 type PdfJs = typeof import("pdfjs-dist/legacy/build/pdf.mjs");
 let engine: Promise<PdfJs> | undefined;
-function pdfEngine() {
+export function browserPdfEngine() {
   if (!engine) {
     const url = new URL("/document-kernel/pdf.min.mjs", window.location.href)
       .href;
@@ -38,7 +39,7 @@ export async function interpretPdfLocally(file: File, goal = "") {
   const sourceHash = Array.from(hash, (byte) =>
     byte.toString(16).padStart(2, "0"),
   ).join("");
-  const pdfjs = await pdfEngine();
+  const pdfjs = await browserPdfEngine();
   pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     "/document-kernel/pdf.worker.min.mjs",
     window.location.href,
@@ -71,7 +72,7 @@ export async function interpretPdfLocally(file: File, goal = "") {
       if (total > 60000) break;
     }
     return {
-      spec: { ...extractMeasured(pages), goal },
+      spec: { ...validateDocumentMeasurements(extractMeasured(pages), pages, sourceHash), goal },
       sourceName: file.name,
       sourceHash,
       method: "local-browser-measured-text",

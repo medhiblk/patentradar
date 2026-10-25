@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import type { SimilarityAlert } from "@/lib/intelligence/alerts";
 import { SimilarityAlerts } from "./similarity-alerts";
+import { safeJsonResponse } from "@/lib/safe-json-response";
 type AlertRow = SimilarityAlert & { projectId: string; projectTitle: string };
 export function AlertCenter() {
   const [alerts, setAlerts] = useState<AlertRow[]>([]),
@@ -17,9 +18,11 @@ export function AlertCenter() {
     });
     if (response.status === 401) {
       setSignIn(true);
+      setAlerts([]);
+      setUnread(0);
       return;
     }
-    const data = await response.json();
+    const data = await safeJsonResponse(response);
     if (!response.ok) throw Error(data.error);
     setAlerts(data.alerts);
     setUnread(data.unread);
@@ -50,7 +53,7 @@ export function AlertCenter() {
           acknowledged: !alert.acknowledged,
         }),
       });
-      if (!response.ok) throw Error((await response.json()).error);
+      await safeJsonResponse(response);
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to update alert.");
@@ -72,13 +75,14 @@ export function AlertCenter() {
           className="btn btn-outline"
           disabled={loading || !!busy}
           onClick={() => {
+            setError("");
             setLoading(true);
             load()
               .catch((e) => setError(e.message))
               .finally(() => setLoading(false));
           }}
         >
-          Refresh alerts
+          Reload saved alerts
         </button>
       </div>
       {error && (
@@ -124,7 +128,7 @@ export function AlertCenter() {
         </div>
       ))}
       <p className="hint">
-        Alerts update when you run and save research or check a watch.
+        This reloads saved alerts; it does not launch a patent search. Run and save research or manually check a watch to retrieve more evidence.
         Background checks and email delivery are not enabled.
       </p>
     </section>

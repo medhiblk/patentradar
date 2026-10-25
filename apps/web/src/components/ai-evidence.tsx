@@ -3,12 +3,18 @@ import { useState } from "react";
 import type { Profile } from "@/lib/model";
 import type { PatentRecord } from "@/lib/providers/types";
 import { Button } from "./ui/button";
+import { z } from "zod";
+import { validatePatentRanking, type PatentRankingEntry } from "@/lib/search/ranking";
 export function AIEvidence({
   profile,
   patents,
+  rankingCandidates = patents,
+  onRerank,
 }: {
   profile: Profile;
   patents: PatentRecord[];
+  rankingCandidates?: PatentRecord[];
+  onRerank?: (ranking: PatentRankingEntry[]) => void;
 }) {
   const [consent, setConsent] = useState(false),
     [busy, setBusy] = useState(false),
@@ -28,25 +34,38 @@ export function AIEvidence({
   async function run(operation: string) {
     setBusy(true);
     setError("");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 35000);
     try {
+      const selected = (operation === "rerank" ? rankingCandidates : patents).slice(0, 20);
       const r = await fetch("/api/intelligence/ai", {
+        signal: controller.signal,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           operation,
           consent,
           profile,
-          patents: patents.slice(0, 20),
+          patents: selected,
           text: patents[0]?.claims?.[0] || patents[0]?.abstract || "",
           language: "French",
         }),
       });
-      const d = await r.json();
-      if (!r.ok) throw new Error(d.error);
+      let d;
+      try { d = JSON.parse(await r.text()); }
+      catch { throw new Error(`AI service returned an unreadable response (HTTP ${r.status}). Your evidence is retained.`); }
+      if (!r.ok) throw new Error(typeof d?.error === "string" ? d.error : `AI analysis unavailable (HTTP ${r.status}).`);
+      if (operation === "rerank") {
+        const ranked = z.object({ ranking: z.array(z.object({ publicationNumber: z.string(), reason: z.string().min(1).max(500) })).max(20) }).parse(d);
+        validatePatentRanking(selected, ranked.ranking);
+        onRerank?.(ranked.ranking);
+        d = ranked;
+      }
       setOutput(d);
     } catch (e) {
       setError(e instanceof Error ? e.message : "AI unavailable");
     } finally {
+      clearTimeout(timeout);
       setBusy(false);
     }
   }
@@ -67,7 +86,7 @@ export function AIEvidence({
       </label>
       <div className="row wrap">
         <Button
-          disabled={!consent || busy || !patents.length}
+          disabled={!consent || busy || !rankingCandidates.length || rankingCandidates.length > 20}
           onClick={() => run("rerank")}
         >
           Rank selected patents

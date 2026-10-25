@@ -24,6 +24,9 @@ import type { SearchTrace, SourceRun } from "./audit";
 import { sourceRun } from "./source-runs";
 import { withRequestTrace } from "./request-trace";
 import { ProviderRequestError } from "../providers/http";
+import { rankPatentsLexically } from "./ranking";
+import { searchAvailability } from "./availability";
+import { enrichEpoCandidates } from "./epo-enrichment";
 export type SearchInput = z.infer<typeof ResearchSchema>;
 export type SearchEvent = {
   schemaVersion: 1;
@@ -58,7 +61,7 @@ export function plan(input: SearchInput): {
       "Review and supply a short search concept before searching. Your description will not be used as a fallback.",
     );
   const warnings: string[] = [];
-  const jobs: Job[] = [
+  const jobs: Job[] = localIndex.localIndexAvailable() ? [
     {
       name: "Local sourced patent index",
       run: async () => ({
@@ -76,12 +79,14 @@ export function plan(input: SearchInput): {
         papers: [],
       }),
     },
-  ];
+  ] : [];
   if (input.sources === "local")
     return {
       jobs,
       warnings: [
-        "Local index only: no external search requests. Coverage is limited to cached or authorized imported records.",
+        localIndex.localIndexAvailable()
+          ? "Local index only: no external search requests. Coverage is limited to cached or authorized imported records."
+          : "Local patent index unavailable on this cloud host: no persistent server volume is configured. No external search requests were made.",
       ],
       queries: [query],
     };
@@ -173,6 +178,10 @@ export function plan(input: SearchInput): {
         papers: [],
       }),
     });
+  // Patent retrieval gets the first bounded worker slots; papers cannot delay it.
+  const priority = (name: string) => name.startsWith("EPO ") || name === "Google Patents Public Data" ? 0 :
+    ["OpenAIRE Graph", "Europe PMC", "VeyIP MCP", "Local sourced patent index"].includes(name) ? 1 : 2;
+  jobs.sort((a, b) => priority(a.name) - priority(b.name));
   return {
     jobs,
     warnings,
@@ -185,6 +194,7 @@ export async function execute(
   signal?: AbortSignal,
   override?: Job[],
 ) {
+  signal = AbortSignal.any([AbortSignal.timeout(55000), ...(signal ? [signal] : [])]);
   return withSearchSignal(signal, async () => {
     const planned = plan(input),
       jobs = override || planned.jobs;
@@ -229,6 +239,7 @@ export async function execute(
                     },
                   ]
                 : []),
+              ...(!localIndex.localIndexAvailable() ? [{ name: "Local sourced patent index", reason: "No persistent server volume is configured on this cloud host; the local SQLite index was not queried." }] : []),
             ],
     };
     let sequence = 0,
@@ -326,10 +337,20 @@ export async function execute(
       }),
     );
     signal?.throwIfAborted();
-    patents.sort(
-      (a, b) =>
-        compare(input.profile, b).score - compare(input.profile, a).score,
-    );
+    patents = rankPatentsLexically(input.profile, patents);
+    if (input.sources !== "local" && input.consent) {
+      const enriched = await enrichEpoCandidates(patents, {
+        signal,
+        onRun: (run, event) => {
+          if (event === "provider_started") trace.providers.push(run);
+          send(event, { provider: run.name, providerRun: structuredClone(run) });
+        },
+        onPatent: (candidate) => send("candidate_upsert", { provider: "EPO Publication Server", candidate }),
+      });
+      patents = enriched.patents;
+      warnings.push(...enriched.warnings);
+      signal.throwIfAborted();
+    }
     if (
       input.sources !== "local" &&
       process.env.ENABLE_GOOGLE_PATENT_PAGES === "true"
@@ -383,6 +404,9 @@ export async function execute(
           );
       });
     }
+    // Enrichment may add the only available claims/abstract. Rank the new evidence,
+    // not the original title-only records used to choose enrichment candidates.
+    patents = rankPatentsLexically(input.profile, patents);
     warnings.push(
       "OpenAIRE patents cover a literature-linked subset, not a complete worldwide database. Ranking is lexical, not a legal opinion.",
       "Provider quotas apply. Local cache/limiter protects one process unless shared storage is configured.",
@@ -419,6 +443,14 @@ export async function execute(
       papers: diversePapers(papers, 30),
       queries: planned.queries,
       warnings,
+    };
+    const availability = searchAvailability(result);
+    if (availability.outcome !== "patents-found") result.warnings.push(availability.message);
+    result.ranking = {
+      method: "lexical",
+      appliedAt: new Date().toISOString(),
+      entries: result.patents.map((patent) => ({ publicationNumber: patent.publicationNumber,
+        reason: `${compare(input.profile, patent).score}% lexical feature-term overlap in displayed source passages; ${patent.claims?.some((claim) => claim.trim()) ? "claims available" : patent.abstract?.trim() ? "abstract only" : "title only"}. Not a semantic or legal conclusion.` })),
     };
     send("ranking_updated", { result });
     send("completed", { result });

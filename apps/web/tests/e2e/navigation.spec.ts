@@ -9,16 +9,20 @@ test("lightweight home explains the workflow without loading research or CAD", a
   });
   await page.goto("/", { waitUntil: "networkidle" });
   await expect(
-    page.getByRole("heading", { name: /Your next prototype/ }),
+    page.getByRole("heading", { name: /D’un document/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("region", { name: "How it works" }),
+    page.getByRole("region", { name: "Comment ça marche" }),
   ).toBeVisible();
   expect(calls).toEqual([]);
   await page
-    .getByRole("button", { name: "Start with a document", exact: true })
+    .getByRole("link", { name: "Commencer mon projet", exact: true })
     .click();
-  await expect(page.getByLabel("Engineering source file")).toBeVisible();
+  await expect(page).toHaveURL(/\/workspace$/);
+  await expect(page.getByLabel("Document du projet", { exact: true })).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Trouver les brevets proches/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /Concevoir une pièce ou un assemblage/ })).not.toBeChecked();
+  await expect(page.getByRole("button", { name: "Continuer", exact: true })).toBeDisabled();
   await expect(page.locator("canvas")).toHaveCount(0);
   expect(calls.filter((c) => c.includes("cad-kernel"))).toEqual([]);
 });
@@ -36,13 +40,13 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }).getByRole("link"),
   ).toHaveCount(2);
-  await page.getByRole("link", { name: "Open workspace", exact: true }).click();
+  await page.getByRole("link", { name: "Nouveau projet", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: /What are you/ }),
+    page.getByRole("heading", { name: /Partez de ce que vous avez/ }),
   ).toBeVisible();
   await page
     .getByRole("navigation", { name: "Workspace navigation" })
-    .getByRole("link", { name: "Projects & files" })
+    .getByRole("link", { name: "Mes projets" })
     .click();
   await expect(page).toHaveURL(/#projects$/);
   await expect(
@@ -62,7 +66,7 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
     .getByRole("link", { name: "FormaProof home", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: /Your next prototype/ }),
+    page.getByRole("heading", { name: /D’un document/ }),
   ).toBeVisible();
   await page.goBack();
   await expect(

@@ -1,4 +1,12 @@
 import { z } from "zod";
+import {
+  MeasurementEvidenceSchema,
+  sourceMeasurements,
+  validDimension,
+  sameMeasurement,
+  type DimensionKey,
+} from "./measurement-values.js";
+export type { DimensionKey, MeasurementEvidence, SourceUnit } from "./measurement-values.js";
 const dimension = z.number().positive().max(2000).nullable();
 export const MeasuredComponentSchema = z.object({
   id: z.string().regex(/^[a-zA-Z0-9_-]{1,50}$/),
@@ -44,6 +52,14 @@ export const referenceUrl = z
   }, "Use a public HTTP(S) reference without credentials");
 export const ComponentSchema = MeasuredComponentSchema.extend({
   sourceName: z.string().max(250).optional(),
+  sourceHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+  measurementEvidence: z.object({
+    length: MeasurementEvidenceSchema.optional(),
+    width: MeasurementEvidenceSchema.optional(),
+    height: MeasurementEvidenceSchema.optional(),
+    diameter: MeasurementEvidenceSchema.optional(),
+    innerDiameter: MeasurementEvidenceSchema.optional(),
+  }).optional(),
   referenceUrl: referenceUrl.optional(),
   templateId: z.string().max(100).optional(),
   role: z.enum(["measured", "envelope", "custom", "imported"]).optional(),
@@ -102,43 +118,59 @@ export const buildable = (p: ComponentSpec) =>
   requiredDimensions(p).every(
     (k) => Number.isFinite(p.dimensions[k]) && p.dimensions[k]! > 0,
   ) &&
+  (p.shape !== "tube" || p.dimensions.innerDiameter! < p.dimensions.diameter!) &&
   (!p.pocket ||
     (p.shape === "box" &&
       p.dimensions.length! > 2 * p.pocket.wall &&
       p.dimensions.width! > 2 * p.pocket.wall &&
       p.dimensions.height! > p.pocket.floor));
+/** Evidence review is distinct from geometric buildability or engineering certification. */
+export function measurementReview(p: ComponentSpec): {
+  state: "ready" | "needs-review" | "missing";
+  missing: DimensionKey[];
+  unverified: DimensionKey[];
+} {
+  const missing = requiredDimensions(p).filter(key => p.dimensions[key] === null || !validDimension(p.dimensions[key]!));
+  const unverified = requiredDimensions(p).filter(key => {
+    const value = p.dimensions[key];
+    if (value === null || missing.includes(key)) return false;
+    const proof = p.measurementEvidence?.[key];
+    if (proof && proof.valueMm !== null && sameMeasurement(value, proof.valueMm))
+      return proof.status !== "text-verified" && proof.status !== "user-entered";
+    return p.basis !== "user-entered";
+  });
+  return { state: p.shape === "unresolved" || missing.length || !buildable(p) ? "missing" : unverified.length ? "needs-review" : "ready", missing, unverified };
+}
 export function extractMeasured(
   pages: { page: number; text: string }[],
 ): AssemblySpec {
   const components: ComponentSpec[] = [];
-  for (const page of pages)
+  for (const page of pages) {
+    if (components.length >= 20) break;
     for (const line of page.text.split(/[\n\r;]+/)) {
-      const box = line.match(
-        /(.{1,100}?)\s+(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)\s*mm\b/i,
-      );
-      const diameter = line.match(
-          /(?:diameter|diamètre|[Øø])\s*[:=]?\s*(\d+(?:\.\d+)?)\s*mm/i,
-        ),
-        length = line.match(
-          /(?:length|longueur)\s*[:=]?\s*(\d+(?:\.\d+)?)\s*mm/i,
-        );
-      const inner = line.match(
-        /(?:inner diameter|diamètre intérieur)\s*[:=]?\s*(\d+(?:\.\d+)?)\s*mm/i,
-      );
+      const values = sourceMeasurements(line);
+      const byField = Object.fromEntries(values.filter(value => value.field).map(value => [value.field, value]));
+      const box = byField.length && byField.width && byField.height;
+      const diameter = byField.diameter, length = byField.length, inner = byField.innerDiameter;
       if (!box && !(diameter && length)) continue;
+      const fields: DimensionKey[] = box ? ["length", "width", "height"] : inner ? ["length", "diameter", "innerDiameter"] : ["length", "diameter"];
+      const dimensions = { length: null, width: null, height: null, diameter: null, innerDiameter: null } as ComponentSpec["dimensions"];
+      const measurementEvidence: NonNullable<ComponentSpec["measurementEvidence"]> = {};
+      for (const field of fields) {
+        const value = byField[field];
+        if (!value || !validDimension(value.valueMm)) continue;
+        dimensions[field] = value.valueMm;
+        measurementEvidence[field] = { status: "text-verified", valueMm: value.valueMm, sourceValue: value.sourceValue, sourceUnit: value.sourceUnit, sourcePage: page.page, sourceQuote: line.slice(0, 2000) };
+      }
+      const name = box ? line.split(/\d+(?:[.,]\d+)?\s*[x×]/, 1)[0].trim() : line.slice(0, 60);
       components.push(
         ComponentSchema.parse({
           id: "component-" + (components.length + 1),
-          name: box?.[1].trim() || line.slice(0, 60),
+          name: name || "Measured component",
           description: line.slice(0, 1000),
           shape: box ? "box" : inner ? "tube" : "cylinder",
-          dimensions: {
-            length: box ? Number(box[2]) : Number(length![1]),
-            width: box ? Number(box[3]) : null,
-            height: box ? Number(box[4]) : null,
-            diameter: box ? null : Number(diameter![1]),
-            innerDiameter: !box && inner ? Number(inner[1]) : null,
-          },
+          dimensions,
+          measurementEvidence,
           material: "Not specified",
           sourcePage: page.page,
           sourceQuote: line.slice(0, 2000),
@@ -150,6 +182,7 @@ export function extractMeasured(
       );
       if (components.length === 20) break;
     }
+  }
   // Conservative local fallback: only explicit component-list entries, not inferred geometry.
   for (const page of pages) {
     if (
@@ -207,7 +240,7 @@ export function extractMeasured(
     title: "Measured document reconstruction",
     components: components.slice(0, 20),
     limitations: [
-      "Local rules recognize explicit mm dimensions for boxes, cylindrical shafts and explicitly dimensioned tubes only. Shapes are parametric approximations. Connections and placements require user validation.",
+      "Local rules recognize explicitly dimensioned boxes, cylindrical shafts and tubes in mm, cm, m or inches, converted to mm. Shapes are parametric approximations. Connections and placements require user validation.",
     ],
   };
 }

@@ -26,6 +26,7 @@ import {
   readDocument,
   Conflict,
 } from "../src/lib/platform/private-store";
+import { saveItem, mutateItem, getItem } from "../src/lib/platform/store";
 const req = (body: object, cookie?: string) =>
   new Request("https://app.example/api/vault", {
     method: "POST",
@@ -95,6 +96,16 @@ it("updates a substantial private research document using its strong storage ver
   await mutateDocument(key, () => ({ text: "Reports “Abandoned” · technical evidence. ".repeat(500), reviewed: false }), (document) => document);
   await mutateDocument(key, () => ({ text: "", reviewed: false }), (document) => ({ ...document, reviewed: true }));
   expect((await readDocument<{ reviewed: boolean }>(key))?.data.reviewed).toBe(true);
+});
+it("retries concurrent private item mutations without losing either review field", async () => {
+  const owner = "fixture-owner", id = "fixture-watch";
+  await saveItem(owner, { id, kind: "watch", title: "Fixture watch", updated: "2026-10-25T00:00:00Z", data: { reviewed: false, checked: false } }, false);
+  await Promise.all([
+    mutateItem(owner, id, item => ({ ...item, data: { ...item.data, reviewed: true } })),
+    mutateItem(owner, id, item => ({ ...item, data: { ...item.data, checked: true } })),
+  ]);
+  expect((await getItem(owner, id))?.data).toMatchObject({ reviewed: true, checked: true });
+  await expect(mutateItem("different-owner", id, item => item)).rejects.toThrow("Not found");
 });
 it("persists private accounts, sessions, projects and attachments without SQLite on the cloud backend", async () => {
   const signup = await vault(
