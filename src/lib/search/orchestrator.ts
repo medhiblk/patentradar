@@ -20,6 +20,10 @@ import { patentSeed } from "../patent-seeds";
 import { familyGroups } from "../providers/normalization";
 import * as google from "../providers/google-patents";
 import { withSearchSignal } from "./scope";
+import type { SearchTrace, SourceRun } from "./audit";
+import { sourceRun } from "./source-runs";
+import { withRequestTrace } from "./request-trace";
+import { ProviderRequestError } from "../providers/http";
 export type SearchInput = z.infer<typeof ResearchSchema>;
 export type SearchEvent = {
   schemaVersion: 1;
@@ -31,6 +35,8 @@ export type SearchEvent = {
   candidate?: PatentRecord;
   result?: Research;
   message?: string;
+  searchTrace?: SearchTrace;
+  providerRun?: SourceRun;
 };
 export type Job = {
   name: string;
@@ -183,6 +189,48 @@ export async function execute(
     const planned = plan(input),
       jobs = override || planned.jobs;
     const searchId = crypto.randomUUID();
+    const trace: SearchTrace = {
+      searchId,
+      context: "live-search",
+      startedAt: new Date().toISOString(),
+      providers: jobs.map((job) =>
+        sourceRun(
+          job.name,
+          job.name === "Local sourced patent index" ||
+            job.name === "Google Patents Public Data"
+            ? planned.queries
+            : planned.queries.slice(0, 1),
+        ),
+      ),
+      notQueried:
+        input.sources === "local"
+          ? [
+              {
+                name: "External databases",
+                reason:
+                  "Local-only search selected. No external search requests were planned.",
+              },
+            ]
+          : [
+              ...(!google.enabled()
+                ? [
+                    {
+                      name: "Google Patents Public Data / BigQuery",
+                      reason:
+                        "Not enabled or missing project configuration. Google Patents links are references, not evidence of a BigQuery search.",
+                    },
+                  ]
+                : []),
+              ...(!(process.env.EPO_OPS_KEY && process.env.EPO_OPS_SECRET)
+                ? [
+                    {
+                      name: "EPO OPS",
+                      reason: "Authenticated credentials are not configured.",
+                    },
+                  ]
+                : []),
+            ],
+    };
     let sequence = 0,
       index = 0;
     const send = (type: string, data: Partial<SearchEvent> = {}) => {
@@ -199,16 +247,38 @@ export async function execute(
     let patents: PatentRecord[] = [];
     const papers: Paper[] = [];
     const warnings = [...planned.warnings];
-    send("started");
+    send("started", { searchTrace: structuredClone(trace) });
     await Promise.all(
       Array.from({ length: Math.min(4, jobs.length) }, async () => {
         while (index < jobs.length && !signal?.aborted) {
-          const job = jobs[index++];
-          send("provider_started", { provider: job.name });
+          const jobIndex = index++,
+            job = jobs[jobIndex],
+            run = trace.providers[jobIndex];
+          run.status = "running";
+          run.startedAt = new Date().toISOString();
+          send("provider_started", {
+            provider: job.name,
+            providerRun: structuredClone(run),
+          });
           const began = Date.now();
           try {
-            const records = await job.run();
+            const records = await withRequestTrace(run.requests, job.run);
             if (signal?.aborted) break;
+            records.patents = deduplicate(records.patents).map((p) => ({
+              ...p,
+              queries: run.queries,
+            }));
+            run.patentsRetrieved = records.patents.length;
+            run.papersRetrieved = records.papers.length;
+            run.patentNumbers = records.patents
+              .map((p) => p.publicationNumber)
+              .slice(0, 100);
+            run.status =
+              records.patents.length || records.papers.length
+                ? "succeeded"
+                : "empty";
+            run.completedAt = new Date().toISOString();
+            run.elapsedMs = Date.now() - began;
             patents = deduplicate([...patents, ...records.patents]);
             localIndex.indexPatents(records.patents);
             papers.push(...records.papers);
@@ -219,7 +289,10 @@ export async function execute(
                 )!,
             ))
               send("candidate_upsert", { provider: job.name, candidate });
-            send("provider_finished", { provider: job.name });
+            send("provider_finished", {
+              provider: job.name,
+              providerRun: structuredClone(run),
+            });
             console.info(
               JSON.stringify({
                 event: "search_provider_complete",
@@ -230,13 +303,23 @@ export async function execute(
                 elapsedMs: Date.now() - began,
               }),
             );
-          } catch {
+          } catch (error) {
+            run.status = "failed";
+            run.completedAt = new Date().toISOString();
+            run.elapsedMs = Date.now() - began;
+            run.message =
+              error instanceof ProviderRequestError
+                ? error.code === "RATE_LIMITED"
+                  ? "Rate-limited; retry later."
+                  : "Provider unavailable or response could not be validated."
+                : "Provider unavailable or response could not be validated.";
             warnings.push(
               `${job.name} unavailable or rate-limited; other sources continue.`,
             );
             send("provider_failed", {
               provider: job.name,
               message: "Unavailable or rate-limited",
+              providerRun: structuredClone(run),
             });
           }
         }
@@ -252,7 +335,45 @@ export async function execute(
       process.env.ENABLE_GOOGLE_PATENT_PAGES === "true"
     ) {
       const enriched = await Promise.allSettled(
-        patents.slice(0, 3).map((p) => pages.enrich(p)),
+        patents.slice(0, 3).map(async (p) => {
+          const run: SourceRun = {
+            ...sourceRun("Public document enrichment " + p.publicationNumber, [
+              p.publicationNumber,
+            ]),
+            category: "patent",
+            method: "publication-lookup",
+            coverage:
+              "Optional public document enrichment; not BigQuery search.",
+            status: "running",
+            startedAt: new Date().toISOString(),
+          };
+          trace.providers.push(run);
+          send("provider_started", {
+            provider: run.name,
+            providerRun: structuredClone(run),
+          });
+          const began = Date.now();
+          try {
+            const record = await withRequestTrace(run.requests, () =>
+              pages.enrich(p),
+            );
+            run.status = "succeeded";
+            run.patentsRetrieved = 1;
+            run.patentNumbers = [record.publicationNumber];
+            return record;
+          } catch (error) {
+            run.status = "failed";
+            run.message = "Enrichment unavailable; original evidence retained.";
+            throw error;
+          } finally {
+            run.completedAt = new Date().toISOString();
+            run.elapsedMs = Date.now() - began;
+            send(
+              run.status === "failed" ? "provider_failed" : "provider_finished",
+              { provider: run.name, providerRun: structuredClone(run) },
+            );
+          }
+        }),
       );
       enriched.forEach((r, i) => {
         if (r.status === "fulfilled") patents[i] = r.value;
@@ -290,6 +411,7 @@ export async function execute(
         .slice(0, 12),
     };
     const result: Research = {
+      searchTrace: { ...trace, completedAt: new Date().toISOString() },
       seedSuggestions,
       profile: input.profile,
       mode: "PARTIAL",

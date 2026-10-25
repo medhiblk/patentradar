@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PatentSchema } from "./providers/types";
+import { SearchTraceSchema } from "./search/audit";
 export const ProfileSchema = z.object({
   title: z.string().min(1).max(200),
   domain: z.string().max(200),
@@ -42,6 +43,7 @@ export const ResearchSchema = z.object({
   consent: z.boolean().default(false),
 });
 export const ReportSchema = z.object({
+  searchTrace: SearchTraceSchema.optional(),
   profile: ProfileSchema,
   mode: z.enum(["LIVE", "PARTIAL", "DEMO"]),
   patents: z.array(PatentSchema).max(50),

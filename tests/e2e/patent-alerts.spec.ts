@@ -25,12 +25,37 @@ test("real publication is ingested, compared, stored in a private portfolio and 
   await expect(
     page.getByRole("status").filter({ hasText: "Verified excerpt loaded" }),
   ).toBeVisible({ timeout: 60000 });
+  const provenance = page.getByRole("region", {
+    name: "Search sources and analysed patents",
+  });
+  await expect(
+    provenance.getByRole("heading", { name: "Where we searched" }),
+  ).toBeVisible();
+  await expect(
+    provenance.getByText("Known reference · no database search", {
+      exact: true,
+    }),
+  ).toBeVisible();
   await page
     .getByRole("button", {
       name: "Compare this design with the publication",
       exact: true,
     })
     .click();
+  const evidence = page.getByRole("region", {
+    name: "Evidence for US20080003142A1",
+  });
+  await expect(
+    evidence.getByText("Claim excerpts", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    evidence
+      .getByRole("link", {
+        name: /Verify passage source · original PDF page 81/,
+      })
+      .first(),
+  ).toHaveAttribute("href", /US20080003142A1.pdf#page=81$/);
+  await expect(evidence.locator("mark").first()).toBeVisible();
   await page
     .getByRole("button", { name: "Save to private portfolio", exact: true })
     .click();
@@ -50,7 +75,9 @@ test("real publication is ingested, compared, stored in a private portfolio and 
     "https://patents.google.com/patent/US20080003142A1/en",
   );
   await expect(final.getByText(/reports “Abandoned”/)).toBeVisible();
-  await expect(page.getByRole("form", { name: "Workspace sign in" })).toHaveCount(0);
+  await expect(
+    page.getByRole("form", { name: "Workspace sign in" }),
+  ).toHaveCount(0);
   await page
     .getByRole("link", { name: "Open project ↗", exact: true })
     .click();
@@ -61,6 +88,15 @@ test("real publication is ingested, compared, stored in a private portfolio and 
     }),
   ).toBeVisible({ timeout: 60000 });
   const projectId = new URL(page.url()).searchParams.get("projectId")!;
+  await page
+    .getByText("Saved search & evidence (1 patents)", { exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Where we searched" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Evidence for US20080003142A1" }),
+  ).toBeVisible();
   await page.goto("/alerts");
   await expect(
     page.getByText("1 unread · 1 displayed", { exact: true }),

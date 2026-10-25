@@ -5,6 +5,8 @@ import {
   publicCacheKey,
 } from "../cache/shared";
 import { currentSearchSignal } from "../search/scope";
+import { recordRequest } from "../search/request-trace";
+import type { RequestTrace } from "../search/audit";
 import { createHash } from "node:crypto";
 const cache = new Map<string, { until: number; body: string }>();
 const inflight = new Map<string, Promise<string>>();
@@ -89,7 +91,12 @@ async function readBounded(response: Response) {
   }
   return Buffer.concat(chunks).toString("utf8");
 }
-async function perform(provider: string, url: string, init: RequestInit) {
+async function perform(
+  provider: string,
+  url: string,
+  init: RequestInit,
+  trace?: RequestTrace,
+) {
   let failure = "Network timeout or unavailable";
   let status: number | undefined;
   const started = Date.now();
@@ -110,6 +117,7 @@ async function perform(provider: string, url: string, init: RequestInit) {
         },
       });
       status = response.status;
+      if (trace) trace.httpStatus = status;
       if (!response.ok) {
         failure = status === 429 ? "Rate limited (429)" : `HTTP ${status}`;
         const retryRaw = response.headers.get("retry-after");
@@ -188,19 +196,29 @@ export async function request(
   init: RequestInit = {},
   cached = true,
 ): Promise<string> {
+  const trace = recordRequest(provider, url);
   const hash = createHash("sha256")
     .update(JSON.stringify({ body: init.body, headers: init.headers }))
     .digest("hex");
   const key = provider + " " + (init.method || "GET") + " " + url + " " + hash;
   const hit = cache.get(key);
-  if (cached && hit && hit.until > Date.now()) return hit.body;
-  if (cached && inflight.has(key)) return inflight.get(key)!;
+  if (cached && hit && hit.until > Date.now()) {
+    if (trace) trace.servedFrom = "memory-cache";
+    return hit.body;
+  }
+  if (cached && inflight.has(key)) {
+    if (trace) trace.servedFrom = "in-flight";
+    return inflight.get(key)!;
+  }
   const sharedKey = publicCacheKey(key);
   if (cached && sharedConfigured()) {
     const remote = await redis(["GET", sharedKey]);
-    if (typeof remote === "string") return remote;
+    if (typeof remote === "string") {
+      if (trace) trace.servedFrom = "shared-cache";
+      return remote;
+    }
   }
-  const pending = perform(provider, url, init)
+  const pending = perform(provider, url, init, trace)
     .then(async (body) => {
       if (cached) {
         if (sharedConfigured())
@@ -222,6 +240,12 @@ export async function request(
         });
       }
       return body;
+    })
+    .catch((e) => {
+      if (trace)
+        trace.errorCode =
+          e instanceof ProviderRequestError ? e.code : "UNAVAILABLE";
+      throw e;
     })
     .finally(() => inflight.delete(key));
   if (cached) inflight.set(key, pending);

@@ -46,6 +46,8 @@ import { Home } from "@/components/home";
 import { similarityAlerts } from "@/lib/intelligence/alerts";
 import { SimilarityAlerts } from "./intelligence/similarity-alerts";
 import { ResearchPortfolioSave } from "./intelligence/research-portfolio-save";
+import { SearchProvenance } from "./intelligence/search-provenance";
+import { PatentEvidence } from "./intelligence/patent-evidence";
 import {
   Radar,
   Plus,
@@ -362,6 +364,30 @@ export default function Dashboard({
       if (!response.body) throw new Error("Search stream unavailable");
       let complete = false;
       await readSearchStream(response.body, (event) => {
+        if (event.searchTrace)
+          setResult((old) =>
+            old ? { ...old, searchTrace: event.searchTrace } : old,
+          );
+        if (event.providerRun)
+          setResult((old) =>
+            old?.searchTrace
+              ? {
+                  ...old,
+                  searchTrace: {
+                    ...old.searchTrace,
+                    providers: old.searchTrace.providers.some(
+                      (run) => run.id === event.providerRun!.id,
+                    )
+                      ? old.searchTrace.providers.map((run) =>
+                          run.id === event.providerRun!.id
+                            ? event.providerRun!
+                            : run,
+                        )
+                      : [...old.searchTrace.providers, event.providerRun!],
+                  },
+                }
+              : old,
+          );
         if (event.provider)
           setSearchUpdates((old) => [
             ...old.slice(-11),
@@ -523,6 +549,11 @@ export default function Dashboard({
           </a>
         )}
       </div>
+      <PatentEvidence
+        patent={p}
+        profile={result?.profile || profile}
+        trace={result?.searchTrace}
+      />
     </article>
   );
   const startedInitialResearch = useRef(false);
@@ -1204,6 +1235,17 @@ export default function Dashboard({
                       ? "SYNTHETIC DEMO — illustrative records, not real patents."
                       : "Results include only successfully retrieved evidence. Literature results are not patents."}
                   </div>
+                  {result && (
+                    <SearchProvenance
+                      trace={result.searchTrace}
+                      patents={patents}
+                      active={!!busy}
+                      onInspect={(patent) => {
+                        setSelected(patent);
+                        go("Patent Detail");
+                      }}
+                    />
+                  )}
                   <div className="row between section-title">
                     <h2>
                       Patent shortlist{" "}
@@ -1402,6 +1444,12 @@ export default function Dashboard({
                   <small>
                     {selected.source} · Retrieved {selected.retrievedAt}
                   </small>
+                  <PatentEvidence
+                    patent={selected}
+                    profile={result?.profile || profile}
+                    trace={result?.searchTrace}
+                    expanded
+                  />
                 </section>
               )}
               {page === "Claim Comparison" && (
@@ -1432,6 +1480,11 @@ export default function Dashboard({
                           </span>
                         </div>
                         <p>{c.limitation}</p>
+                        <PatentEvidence
+                          patent={p}
+                          profile={result?.profile || profile}
+                          trace={result?.searchTrace}
+                        />
                         <div className="table-scroll">
                           <table>
                             <thead>

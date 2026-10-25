@@ -936,3 +936,54 @@ body .mcp-primary-actions .btn-primary:hover {
   background: #1742cd;
   border-color: #1742cd;
 }
+
+/* Per-analysis provenance: readable, compact, with evidence close to the result. */
+body .search-provenance { margin: 24px 0 32px; padding: 28px; background: #fff; border: 1px solid #d9e4fc; border-radius: 22px; }
+body .evidence-section-heading, body .source-run-heading { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+body .evidence-section-heading h2 { margin: 7px 0 14px; color: #172b50; font-size: clamp(23px, 3vw, 30px); letter-spacing: -.04em; }
+body .evidence-pill { display: inline-block; font-size: 11px; line-height: 1.6; background: #eef3ff; color: #2047ad; border-radius: 20px; padding: 4px 10px; }
+body .source-run-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 22px 0 18px; }
+body .source-run { min-width: 0; padding: 19px; background: #f6f8ff; border-radius: 14px; }
+body .source-run strong { color: #172b50; font-size: 14px; }
+body .source-run-heading p { margin: 5px 0 10px; font-size: 12px; color: #536580; }
+body .source-run-counts { font-size: 12px; color: #3d5374; }
+body .source-run-status { flex-shrink: 0; font-size: 10px; padding: 4px 7px; border-radius: 7px; color: #425878; background: #e8edf5; }
+body .source-run-status.status-succeeded { color: #125b4a; background: #e0f5ed; }
+body .source-run-status.status-running { color: #2047ad; background: #e2eaff; }
+body .source-run-status.status-failed, body .evidence-limited { color: #9a3412; background: #fff0dd; }
+body .source-run-error { color: #9a3412; font-size: 12px; }
+body .source-run details { margin-top: 14px; font-size: 12px; }
+body .source-run summary, body .patent-evidence summary, body .saved-research-evidence > summary, body .sources-not-queried summary { cursor: pointer; color: #254bb2; font-size: 12px; line-height: 1.7; }
+body .source-run details p { color: #425878; margin: 10px 0; font-size: 12px; }
+body .source-request { display: grid; gap: 4px; margin: 12px 0; }
+body .source-request a { overflow-wrap: anywhere; }
+body .source-request span { color: #536580; }
+body .sources-not-queried { background: #f8f9fc; padding: 13px 16px; border-radius: 10px; }
+body .sources-not-queried p { font-size: 12px; }
+body .analysed-patents { margin-top: 23px; padding-top: 20px; border-top: 1px solid #e5ebf8; }
+body .analysed-patents h3 { color: #172b50; font-size: 16px; margin-bottom: 8px; }
+body .analysed-patents ul { margin: 12px 0 0; padding-left: 18px; }
+body .analysed-patents li { padding: 6px 0; font-size: 13px; overflow-wrap: anywhere; }
+body .patent-evidence { margin: 22px 0 0; padding: 20px 0 0; border-top: 1px solid #e0e8fa; min-width: 0; }
+body .patent-evidence h4 { margin: 0; color: #172b50; font-size: 14px; }
+body .patent-evidence .evidence-origin { margin: 14px 0 8px; font-size: 12px; }
+body .patent-evidence small { display: block; margin-top: 7px; font-size: 11px; color: #526584; overflow-wrap: anywhere; }
+body .patent-evidence .evidence-discovery { font-size: 12px; color: #425878; overflow-wrap: anywhere; }
+body .patent-evidence-match { padding: 16px; border-radius: 12px; background: #f5f7ff; margin: 16px 0; }
+body .patent-evidence-match strong { color: #20375c; font-size: 13px; }
+body .patent-evidence-match blockquote { margin: 14px 0 10px; padding: 0 0 0 12px; border-left: 2px solid #6988f0; font-size: 13px; line-height: 1.8; color: #253b5e; overflow-wrap: anywhere; }
+body .patent-evidence-match mark { color: #173b9f; background: #dce7ff; border-radius: 3px; padding: 1px 2px; }
+body .patent-evidence-match p, body .patent-evidence-match a { font-size: 12px; line-height: 1.7; }
+body .evidence-source-list { margin-top: 20px; padding: 16px; background: #f8faff; border-radius: 12px; font-size: 12px; }
+body .evidence-source-list p { margin: 12px 0; font-size: 12px; }
+body .saved-research-evidence { margin: 18px 0; }
+body .patent-evidence a, body .search-provenance a { color: #254bc2; }
+@media (max-width: 700px) {
+  body .search-provenance { padding: 19px; border-radius: 18px; }
+  body .source-run-list { grid-template-columns: 1fr; }
+  body .evidence-section-heading { flex-direction: column; }
+  body .source-run-heading { gap: 10px; }
+  body .source-run { padding: 15px; }
+  body .patent-evidence-match { padding: 13px; }
+  body .source-run-status { max-width: 115px; text-align: center; }
+}

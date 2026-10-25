@@ -6,7 +6,11 @@ import type { PatentRecord } from "@/lib/providers/types";
 import type { SimilarityAlert } from "@/lib/intelligence/alerts";
 import { SimilarityAlerts } from "../intelligence/similarity-alerts";
 import { ResearchPortfolioSave } from "../intelligence/research-portfolio-save";
+import { SearchProvenance } from "../intelligence/search-provenance";
+import { PatentEvidence } from "../intelligence/patent-evidence";
+import type { SearchTrace } from "@/lib/search/audit";
 type Source = {
+  searchTrace?: SearchTrace;
   patent: PatentRecord;
   sourceDocument: {
     url: string;
@@ -129,6 +133,12 @@ export function PatentAwarenessCase() {
         )}
       </section>
       {source && (
+        <SearchProvenance
+          trace={research?.searchTrace || source.searchTrace}
+          patents={research?.patents || []}
+        />
+      )}
+      {source && (
         <section className="panel case-step">
           <span className="product-kicker">
             02 / REVIEW THE PROPOSED DESIGN
@@ -181,6 +191,12 @@ export function PatentAwarenessCase() {
             description={description}
             document={source.sourceDocument}
             onSaved={setSaved}
+          />
+          <PatentEvidence
+            patent={research.patents[0]}
+            profile={research.profile}
+            trace={research.searchTrace}
+            expanded
           />
           {!saved && (
             <details className="case-preview">

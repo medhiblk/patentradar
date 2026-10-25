@@ -7,6 +7,8 @@ export function indexPatents(records: PatentRecord[]) {
       if (p.synthetic) continue;
       const parsed = PatentSchema.safeParse(p);
       if (!parsed.success) continue;
+      const publicRecord = { ...parsed.data };
+      delete publicRecord.queries;
       d.prepare("DELETE FROM patents WHERE publication=?").run(
         p.publicationNumber,
       );
@@ -14,7 +16,7 @@ export function indexPatents(records: PatentRecord[]) {
         p.publicationNumber,
         p.title,
         p.abstract || "",
-        JSON.stringify(p),
+        JSON.stringify(publicRecord),
       );
     }
   } catch {
@@ -31,7 +33,9 @@ export async function search(query: string) {
     .all(terms.map((t) => '"' + t + '"').join(" OR "));
   return rows.flatMap((r) => {
     const p = PatentSchema.safeParse(JSON.parse(String(r.record)));
-    return p.success ? [p.data] : [];
+    if (!p.success) return [];
+    delete p.data.queries;
+    return [p.data];
   });
 }
 
@@ -44,6 +48,8 @@ export async function lookup(publications: string[]) {
     .all(...publications)
     .flatMap((r) => {
       const p = PatentSchema.safeParse(JSON.parse(String(r.record)));
-      return p.success ? [p.data] : [];
+      if (!p.success) return [];
+      delete p.data.queries;
+      return [p.data];
     });
 }

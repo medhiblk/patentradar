@@ -58,6 +58,8 @@ Try [the real US20080003142A1 case](https://patentradar-puce.vercel.app/demo/pat
 
 ## What works
 
+Research now shows **Where we searched**, the exact analysed patent shortlist and **Evidence behind this result** on each record. Queries, provider failures/empty replies, cache reuse, claim/abstract/title limitations, source passages and timestamps remain inspectable in the UI, private portfolio and PDF report. [Traceability details](docs/SEARCH_EVIDENCE.md).
+
 - PDF/text/image interpretation, component review, real measured geometry through OpenCascade WASM, STEP/STL import and export, purchased-part references and custom housings.
 - Private projects and attachments with authenticated downloads and deletion; SQLite/filesystem locally, private Blob when configured.
 - Progressive public-source patent/literature searches, source attribution, deduplication, comparisons and report export. Provider coverage is partial.

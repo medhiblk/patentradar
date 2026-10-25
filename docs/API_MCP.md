@@ -142,3 +142,7 @@ Open `/files` for private accounts, durable projects and attached originals. Ful
 - `/api/vault` account/project sessions now persist in private Blob on Vercel or SQLite on a configured local volume. Existing password hashes/token scopes are preserved. Deleting a project first marks it as deleting, blocks new attachments and removes its stored files.
 
 See [storage setup and limits](PRIVATE_STORAGE.md). Native CAD, the sourced SQLite patent index, and billing are separate capabilities; adding private Blob does not provide those runtimes or complete user-account recovery workflows.
+
+### Search provenance
+
+Search results include optional `searchTrace` with per-run provider states/counts/queries, observed network or cache access, sanitized endpoint paths and actually observed HTTP statuses. Streaming search also emits `searchTrace` on `started` and `providerRun` updates on provider events. These fields are additive; existing publication/source fields remain unchanged. No secret-bearing query strings or headers are exposed. See [search and evidence semantics](SEARCH_EVIDENCE.md).

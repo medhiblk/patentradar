@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { WorkspaceAuthForm } from "./workspace-auth-form";
 import { clearPrivateSessionView } from "@/lib/private-session";
+import { ReportSchema } from "@/lib/model";
+import { SearchProvenance } from "./intelligence/search-provenance";
+import { PatentEvidence } from "./intelligence/patent-evidence";
 type Project = {
   id: string;
   kind: string;
@@ -13,6 +16,7 @@ type Project = {
     seedPublications?: { publicationNumber: string }[];
     _deleting?: boolean;
     similarityAlerts?: { publicationNumber: string; acknowledged: boolean }[];
+    research?: unknown;
   };
 };
 type FileRow = {
@@ -70,6 +74,10 @@ export function PrivateWorkspace({
     [backend, setBackend] = useState(""),
     [usage, setUsage] = useState({ bytes: 0, files: 0 });
   const project = projects.find((p) => p.id === selected);
+  const parsedResearch = ReportSchema.safeParse(project?.data.research);
+  const savedResearch = parsedResearch.success
+    ? parsedResearch.data
+    : undefined;
   async function json(url: string, body?: object | FormData, method?: string) {
     const r = await fetch(url, {
       method: method || (body ? "POST" : "GET"),
@@ -343,6 +351,30 @@ export function PrivateWorkspace({
               <a href="/alerts">Review patent alerts ↗</a>
             </div>
           ) : null}
+          {savedResearch && (
+            <details className="saved-research-evidence">
+              <summary>
+                Saved search &amp; evidence ({savedResearch.patents.length}{" "}
+                patents)
+              </summary>
+              <SearchProvenance
+                trace={savedResearch.searchTrace}
+                patents={savedResearch.patents}
+              />
+              {savedResearch.patents.map((patent) => (
+                <div className="panel" key={patent.publicationNumber}>
+                  <h3>
+                    {patent.publicationNumber} — {patent.title}
+                  </h3>
+                  <PatentEvidence
+                    patent={patent}
+                    profile={savedResearch.profile}
+                    trace={savedResearch.searchTrace}
+                  />
+                </div>
+              ))}
+            </details>
+          )}
           {project && (
             <div className="row wrap">
               {onAnalyze && project.data.description && (

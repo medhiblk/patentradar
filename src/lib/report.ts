@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { disclaimer, type Research } from "./model";
 import { compare, triage } from "./compare";
+import { evidenceBasis, passageSource } from "./intelligence/evidence";
 export function reportSections(data: Research) {
   return [
     [
@@ -13,7 +14,22 @@ export function reportSections(data: Research) {
     ],
     [
       "Search methodology",
-      `Executed queries: ${data.queries.join("; ")}. Keyword-based public patent-metadata and literature discovery, plus exact EP publication lookup when supplied. OpenAIRE metadata is normalized; credit OpenAIRE Graph and upstream Lens. CC-BY licensing: https://graph.openaire.eu/faq . Other content rights remain source-specific. Ranking is the average proportion of distinct feature terms shared with the best available evidence excerpt; no semantic or legal inference.`,
+      [
+        data.searchTrace?.context === "known-reference"
+          ? "Known-reference comparison against a preselected real publication snapshot. No live worldwide search or BigQuery query was performed."
+          : data.searchTrace
+            ? "Provider execution history recorded for this analysis. Counts describe returned records before cross-provider deduplication and shortlist limits."
+            : "No provider execution history was recorded for this analysis; do not infer which databases were queried from reference links alone.",
+        "Reported queries: " + data.queries.join("; "),
+        ...(data.searchTrace?.providers.map(
+          (run) =>
+            `${run.name}: ${run.status}; ${run.method}; ${run.patentsRetrieved} patents, ${run.papersRetrieved} scientific records. Queries: ${run.queries.join("; ")}. ${run.coverage}\n${run.requests.map((request) => `${request.endpoint}: ${request.servedFrom}; ${request.httpStatus ? "HTTP " + request.httpStatus : "HTTP status not recorded"}${request.errorCode ? "; " + request.errorCode : ""}`).join("\n")}`,
+        ) || []),
+        ...(data.searchTrace?.notQueried.map(
+          (run) => "NOT QUERIED - " + run.name + ": " + run.reason,
+        ) || []),
+        "Ranking is lexical feature-term overlap, not a semantic or legal conclusion. OpenAIRE metadata, where returned, credits OpenAIRE Graph and upstream Lens; CC-BY information: https://graph.openaire.eu/faq . Other content rights remain source-specific.",
+      ].join("\n"),
     ],
     [
       "Data sources",
@@ -38,7 +54,12 @@ export function reportSections(data: Research) {
       data.patents
         .map((p) => {
           const c = compare(data.profile, p);
-          return `${p.publicationNumber}: ${c.score}% lexical relevance. ${c.limitation}\n${c.matches.map((m) => `${m.feature}: ${m.strength}. ${m.explanation}\nExcerpt: ${m.excerpt}`).join("\n")}`;
+          return `${p.publicationNumber}: ${c.score}% lexical relevance. Evidence: ${evidenceBasis(p)}. ${c.limitation}\n${c.matches
+            .map((m) => {
+              const source = passageSource(p, m.excerpt);
+              return `${m.feature}: ${m.strength}. ${m.explanation}\nExcerpt: ${m.excerpt}\n${source.verified ? "Passage source" : "Record source; passage attribution unavailable"}: ${source.source}; ${source.url}${source.page ? "; original PDF page " + source.page : ""}; retrieved ${source.retrievedAt}`;
+            })
+            .join("\n")}`;
         })
         .join("\n\n") || "No patent comparison available.",
     ],

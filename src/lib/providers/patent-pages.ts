@@ -44,6 +44,16 @@ export function parsePatentPage(
     ...record,
     applicants: applicants.length ? applicants : record.applicants,
     claims: claims.length ? claims : record.claims,
+    ...(claims.length ? { claimsScope: "excerpts" as const } : {}),
+    evidence: [
+      ...(record.evidence || []),
+      {
+        source: "Google Patents public publication page",
+        sourceUrl: url,
+        retrievedAt: new Date().toISOString(),
+        fields: { claims, applicants },
+      },
+    ],
     pdfUrl,
     source: claims.length
       ? "Google Patents public publication page"

@@ -1,5 +1,6 @@
 import type { Profile } from "./model";
 import type { PatentRecord } from "./providers/types";
+import { evidenceBasis } from "./intelligence/evidence";
 const stop = new Set([
   "with",
   "that",
@@ -85,7 +86,9 @@ export function compare(profile: Profile, patent: PatentRecord) {
     matches,
     limitation: claims.length
       ? "Lexical claim comparison only; claim construction and legal status are not assessed."
-      : "Comparison based on bibliographic information and abstract only.",
+      : patent.abstract?.trim()
+        ? "Comparison based on bibliographic information and abstract only."
+        : "Title-only comparison. Abstract and claims are unavailable; technical similarity cannot be established.",
   };
 }
 export function queries(profile: Profile) {
@@ -102,9 +105,7 @@ export function triage(profile: Profile, patent: PatentRecord) {
       : terms.length
         ? "Weak signal — inspect before shortlisting"
         : "No meaningful lexical signal",
-    basis: patent.claims?.length
-      ? "Retrieved claim text"
-      : "Title / abstract only",
+    basis: evidenceBasis(patent),
     caution: enough
       ? "Shared technical vocabulary warrants closer review; it does not establish identical functionality or infringement."
       : "Evidence is insufficient to treat this result as a close technical match.",
