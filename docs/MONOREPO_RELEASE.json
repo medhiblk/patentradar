@@ -26,11 +26,21 @@
       "typescript": true
     }
   },
-  "deployment": "pending production monorepo verification",
+  "deployment": {
+    "id": "dpl_CXWpXYgGDnESGUz1cvbrzQY1cn2m",
+    "productionUrl": "https://patentradar-puce.vercel.app",
+    "state": "READY",
+    "aliasAssigned": true
+  },
   "limitations": [
     "No npm registry publication: install packed artifacts or use workspaces.",
     "Docker and optional native Python runtime not executed during this migration.",
     "Provider availability and configuration remain unchanged; BigQuery is not asserted operational."
   ],
-  "functionalGroups": 24
+  "functionalGroups": 24,
+  "git": {
+    "repository": "https://github.com/medhiblk/patentradar",
+    "implementationCommit": "68fddf09c911544d0c2b6f15e4c0183afd57c130"
+  },
+  "productionSmokeTests": "Not run: user explicitly requested to handle final tests themselves."
 }
