@@ -66,7 +66,8 @@ Official SDK transport, stateless JSON responses, protocol negotiation and valid
 | `search_patents` | `{query,shareQuery,sources?,seeds?}` | Actual parallel patent/research retrieval; explicit external-query sharing |
 | `lookup_patent` | `{publicationNumber,publicationDate}` | Real EP A/B XML retrieval and available claim text |
 | `compare_patent_features` | `{profile,patents}` | Lexical, explained comparison of supplied records |
-| `extract_technical_profile` | `{text}` | Local literal extraction, no OpenAI call or external document transmission |
+| `extract_technical_profile` | `{text}` | Literal extraction on the remote PatentRadar server; no onward OpenAI call |
+| `query_source` | `{provider, query, consent: true, operation?, page?, publicationDate?}` | Direct source queries with explicit per-source status |
 
 Tool inputs are bounded and untrusted. No arbitrary SQL, URLs, Python, MCP tool forwarding or paid AI calls are accepted. The server supplies actual source provenance and avoids legal infringement conclusions.
 

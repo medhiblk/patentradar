@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { SearchInput, LookupInput, CompareInput } from "./public";
 import { AssemblySchema } from "../cad/schema";
+import { SourceInput } from "./source-query";
 const post = (
   operationId: string,
   summary: string,
@@ -29,7 +30,7 @@ export const openapi = {
   openapi: "3.1.0",
   info: {
     title: "PatentRadar API",
-    version: "1.1.0",
+    version: "1.2.0",
     description:
       "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. CAD/private operations require configured native runtime, persistent account storage and a scoped developer token. No legal FTO conclusions.",
   },
@@ -54,6 +55,7 @@ export const openapi = {
         },
       },
     },
+    "/api/v1/sources/query": post("querySource", "Query a configured source with explicit consent and per-source status", SourceInput),
     "/api/v1/search": post(
       "searchPatents",
       "Search public patent and research sources using approved concepts",

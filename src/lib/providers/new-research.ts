@@ -34,7 +34,7 @@ export async function datacite(query: string, page = 1): Promise<Paper[]> {
 }
 export async function hal(query: string, page = 1): Promise<Paper[]> {
   const url = new URL(
-    process.env.HAL_API_URL || "https://api.archives-ouvertes.fr/search/",
+    process.env.HAL_API_URL || "https://api.hal.science/search/",
   );
   Object.entries({
     q: query,

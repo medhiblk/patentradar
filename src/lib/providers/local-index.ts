@@ -1,6 +1,8 @@
 import { db } from "../platform/db";
 import { PatentSchema, type PatentRecord } from "./types";
+export const enabled = () => !process.env.VERCEL || !!process.env.PATENTRADAR_DATA_DIR;
 export function indexPatents(records: PatentRecord[]) {
+  if (!enabled() || !records.length) return;
   try {
     const d = db();
     for (const p of records) {

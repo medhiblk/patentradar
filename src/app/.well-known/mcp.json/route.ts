@@ -1,11 +1,12 @@
 export async function GET() {
   return Response.json({
     name: "PatentRadar",
-    version: "1.1.0",
+    version: "1.2.0",
     transport: "streamable-http",
     endpoint: "/api/mcp",
     publicTools: [
       "provider_status",
+      "query_source",
       "search_patents",
       "lookup_patent",
       "compare_patent_features",
