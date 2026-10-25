@@ -1,5 +1,6 @@
 "use client";
 import "./shell/shell.css";
+import { PatentFilm } from "./patent-film/patent-film";
 import {
   ArrowUpRight,
   MessageSquare,
@@ -19,6 +20,7 @@ export function Home({
 }) {
   return (
     <>
+      <PatentFilm explore={() => go("New Analysis")} />
       <section className="product-hero">
         <div className="hero-story">
           <span className="product-kicker">
