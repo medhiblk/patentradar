@@ -110,7 +110,7 @@ export function Home({
           </div>
         </motion.div>
       </section>
-      <section className="experience-section" aria-label="Explore Format Proof">
+      <section className="experience-section" aria-label="Explore FormaProof">
         <div className="gallery-heading">
           <span>YOUR DOCUMENTS. YOUR NEXT DESIGN.</span>
           <span>

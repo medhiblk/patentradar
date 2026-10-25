@@ -44,7 +44,7 @@ export default function PluginPage() {
     <section id="installation" className={styles.install}>
       <div className={styles.sectionHeading}><span className={styles.eyebrow}>À VOUS DE CHOISIR</span><h2>Commencez là où vous travaillez.</h2><p>Le site est utilisable directement. Pour votre assistant, choisissez le plugin complet ou la connexion MCP.</p></div>
       <div className={styles.installGrid}>
-        <article className={styles.card}><span className={styles.step}>01 / SANS INSTALLATION</span><h3>Dans votre navigateur</h3><p>Ouvrez le site Format Proof pour lancer une recherche depuis son interface.</p><Link className={styles.primary} href="/">Ouvrir le site <ArrowUpRight size={17}/></Link></article>
+        <article className={styles.card}><span className={styles.step}>01 / SANS INSTALLATION</span><h3>Dans votre navigateur</h3><p>Ouvrez le site FormaProof pour lancer une recherche depuis son interface.</p><Link className={styles.primary} href="/">Ouvrir le site <ArrowUpRight size={17}/></Link></article>
         <article className={styles.card}><span className={styles.step}>02 / PLUGIN COMPLET</span><h3>Dans Codex</h3><p>Téléchargez le paquet, décompressez-le puis ajoutez son dossier comme marketplace locale. Il contient les outils et le guide de recherche.</p><a className={styles.primary} href="/downloads/patentradar-public.zip" download><Download size={17}/> Télécharger le plugin</a>
           <details><summary>Afficher les étapes d’installation</summary><ol><li>Décompressez l’archive et ouvrez un terminal dans le dossier <code>patentradar-public</code>.</li><li>Exécutez ces deux commandes :</li></ol><pre>{"codex plugin marketplace add .\ncodex plugin add patent-radar@patentradar-public"}</pre><p>Ouvrez ensuite une nouvelle tâche et sélectionnez Format Proof. Codex doit être installé ; les règles de votre espace peuvent limiter les plugins personnalisés.</p></details>
         </article>
@@ -59,7 +59,7 @@ export default function PluginPage() {
       <details><summary>Y a-t-il des limites ?</summary><p>Des quotas et des interruptions de sources sont possibles. La couverture reste partielle et la comparaison est lexicale : elle ne démontre ni nouveauté ni liberté d’exploitation. Le plugin public n’inclut pas la 3D, les comptes privés ou le stockage de projets.</p></details>
       <details><summary>La connexion ne fonctionne pas ?</summary><p>Vérifiez l’URL et le transport HTTP, ouvrez une nouvelle tâche après installation, puis demandez « Vérifie les sources disponibles ». En cas de quota, attendez avant de réessayer. Le site reste une autre façon d’accéder au service.</p><Link href="/developers">Documentation technique ↗</Link></details>
     </section>
-    <footer className={styles.footer}><Link href="/">Format Proof <ArrowUpRight size={15}/></Link><a href="/developers">Documentation</a><a href="https://github.com/medhiblk/patentradar" target="_blank" rel="noreferrer">GitHub ↗</a><span>Des sources, pas des certitudes.</span></footer>
+    <footer className={styles.footer}><Link href="/">FormaProof <ArrowUpRight size={15}/></Link><a href="/developers">Documentation</a><a href="https://github.com/medhiblk/patentradar" target="_blank" rel="noreferrer">GitHub ↗</a><span>Des sources, pas des certitudes.</span></footer>
     <div className={styles.notice} role="status" aria-live="polite">{notice}</div>
   </main>;
 }

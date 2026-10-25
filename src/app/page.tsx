@@ -411,7 +411,7 @@ export default function Dashboard() {
         <button
           className="wordmark"
           onClick={() => go("Overview")}
-          aria-label="Format Proof home"
+          aria-label="FormaProof home"
         >
           <span className="wordmark-symbol">
             <span />
@@ -446,7 +446,6 @@ export default function Dashboard() {
             Engineering Studio
           </button>
           <button onClick={() => go("Account & Monitoring")}>Account</button>
-          <a className="nav-api-link" href="/plugin">Plugin ↗</a>
           <a className="nav-api-link" href="/developers">
             API &amp; MCP ↗
           </a>
