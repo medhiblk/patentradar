@@ -411,7 +411,7 @@ export default function Dashboard() {
         <button
           className="wordmark"
           onClick={() => go("Overview")}
-          aria-label="FormaProof home"
+          aria-label="Format Proof home"
         >
           <span className="wordmark-symbol">
             <span />

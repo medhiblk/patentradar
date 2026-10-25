@@ -86,7 +86,7 @@ export async function createReport(data: Research) {
     y -= heading ? 23 : 15;
   };
   const ascii = (s: string) => s.replace(/[^\x20-\x7E\n]/g, "?");
-  line("PatentRadar | Patent intelligence report", true);
+  line("Format Proof | Patent intelligence report", true);
   line(`Generated ${new Date().toISOString()} | ${data.mode}`);
   for (const [title, body] of reportSections(data)) {
     y -= 12;

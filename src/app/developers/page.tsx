@@ -50,7 +50,7 @@ export default function Developers() {
               GitHub ↗
             </a>
           )}
-          <Link href="/plugin">PatentRadar plugin ↗</Link>
+          <Link href="/plugin">Format Proof plugin ↗</Link>
           <a href="/api/v1/openapi.json">OpenAPI</a>
           <a href="/api/v1/health">Service health</a>
           <a href="/engineering">Try 3D Studio</a>

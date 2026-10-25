@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 export async function GET() {
   return Response.json({
-    name: "PatentRadar",
+    name: "Format Proof",
     apiVersion: "v1",
     status: "ready",
     mcp: {
