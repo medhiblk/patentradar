@@ -1,0 +1,77 @@
+{
+  "base": "https://patentradar-puce.vercel.app",
+  "deploymentId": "dpl_8K3efFYUjUX3bg55E5fVH7t8m5kr",
+  "sourceCommit": "0d041e42a52ea2d431f80b1f199221b516ae4ae2",
+  "ci": "https://github.com/medhiblk/patentradar/actions/runs/40193761507",
+  "ciConclusion": "success",
+  "browser": {
+    "startedAt": "2026-10-25T12:37:25.910Z",
+    "durationMs": 44044.555,
+    "checks": [
+      {
+        "name": "compose a sourced board, real custom housing, purchase reference and imported STEP",
+        "status": "passed",
+        "durationMs": 26273
+      },
+      {
+        "name": "fuses overlapping solids and rejects a disconnected merge",
+        "status": "passed",
+        "durationMs": 9560
+      },
+      {
+        "name": "manual component list becomes editable parts with an explicit partial preview",
+        "status": "passed",
+        "durationMs": 7428
+      }
+    ],
+    "method": "Real public deployment, no mocked API/CAD calls. Synthetic caller specifications; no paid AI or external patent search."
+  },
+  "apiMcp": {
+    "base": "https://patentradar-puce.vercel.app",
+    "checkedAt": "2026-10-25T12:37:31.035Z",
+    "passed": true,
+    "catalogParts": 10,
+    "apiInspection": "passed",
+    "mcpTools": [
+      "component_library",
+      "inspect_assembly",
+      "provider_status",
+      "search_patents",
+      "lookup_patent",
+      "compare_patent_features",
+      "extract_technical_profile"
+    ],
+    "mcpLibrary": "passed",
+    "mcpInspection": "passed",
+    "fit": {
+      "housing": "test-housing",
+      "target": "test-board",
+      "status": "fits-envelope",
+      "gapsMm": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "patentClearance": "NOT ESTABLISHED",
+    "externalPatentOrAIRequests": 0,
+    "input": "Synthetic caller-supplied housing; manufacturer bare PCB facts from catalog. This test does not build geometry or certify legal/manufacturing clearance."
+  },
+  "local": {
+    "unitIntegrationTestsPassed": 82,
+    "nativeCADTestsPassed": 6,
+    "browserTestsPassed": 13,
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed"
+  },
+  "remainingLimitations": [
+    "Not universal manual-to-functional-machine reconstruction; unknown measurements/geometry need review.",
+    "Purchases and licence references are user-entered; no live Amazon pricing, royalty inference or automatic patent clearance.",
+    "Envelope checks are not mechanical/thermal/electrical/printing simulation.",
+    "Imported CAD binaries are not retained across research/reopening; reimport when needed."
+  ]
+}
