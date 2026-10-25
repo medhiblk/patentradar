@@ -1,0 +1,341 @@
+.connect-page {
+  max-width: 1220px;
+  margin: auto;
+  padding: 62px 48px 45px;
+}
+.connect-intro {
+  max-width: 750px;
+  padding-bottom: 44px;
+}
+.connect-intro h1 {
+  font-size: clamp(38px, 4.5vw, 62px);
+  letter-spacing: -0.055em;
+  line-height: 1.12;
+  margin: 25px 0 22px;
+  color: #31452d;
+}
+.connect-intro h1 em {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #7b9270;
+}
+.connect-intro > p {
+  font-size: 15px;
+  color: #7c8c6e;
+  max-width: 600px;
+}
+.connect-alias {
+  display: block;
+  font-size: 10px;
+  color: #a0ab93;
+  margin-top: 18px;
+}
+.connect-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 54px;
+  align-items: start;
+}
+.mcp-install-panel {
+  background: #f0f4e9;
+  border: 1px solid #e1e8d7;
+  border-radius: 20px;
+  padding: 30px;
+}
+.mcp-install-heading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 27px;
+}
+.mcp-symbol {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: #f9fbf4;
+  border: 1px solid #dbe3d0;
+  border-radius: 12px;
+  color: #718a5c;
+}
+.mcp-install-heading h2 {
+  font-size: 20px;
+  letter-spacing: -0.6px;
+  margin: 0 0 8px;
+  color: #4b643a;
+}
+.mcp-install-heading p {
+  font-size: 10px;
+  margin: 0;
+  color: #91a07e;
+}
+.mcp-install-panel > label {
+  font-size: 10px;
+  color: #7a8e64;
+}
+.mcp-endpoint-input {
+  font-family: ui-monospace, monospace;
+  font-size: 11px !important;
+  background: #fffef9 !important;
+  border: 1px solid #d9e2cc !important;
+  border-radius: 9px !important;
+  color: #5c7648 !important;
+  margin-top: 10px;
+}
+.mcp-primary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.mcp-primary-actions .btn {
+  font-size: 10px;
+  padding: 11px 14px;
+  gap: 9px;
+}
+.mcp-primary-actions .btn-primary {
+  background: #526d40;
+  border-color: #526d40;
+}
+.mcp-settings {
+  display: grid;
+  gap: 12px;
+  margin: 25px 0;
+  color: #7c9065;
+}
+.mcp-settings > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 10px;
+}
+.mcp-settings dt {
+  color: #98a587;
+}
+.mcp-settings dd {
+  margin: 0;
+  text-align: right;
+}
+.mcp-check-row {
+  border-top: 1px solid #dfe7d3;
+  padding-top: 17px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px;
+}
+.mcp-check-row .quiet-button {
+  font-size: 10px;
+}
+.connection-feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #6d8853;
+  line-height: 1.8;
+  margin: 18px 0 0;
+}
+.mcp-install-note {
+  font-size: 9px !important;
+  color: #9caa8b;
+  margin: 20px 0 0;
+  line-height: 1.8;
+}
+.connect-steps {
+  padding: 16px 0;
+}
+.connect-steps ol {
+  list-style: none;
+  padding: 0;
+  margin: 25px 0 10px;
+}
+.connect-steps li {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 26px;
+}
+.connect-steps li > span {
+  font-size: 10px;
+  color: #9daf88;
+  padding-top: 3px;
+}
+.connect-steps h2 {
+  font-size: 16px;
+  color: #5a7248;
+  letter-spacing: -0.3px;
+  margin: 0 0 8px;
+}
+.connect-steps p {
+  font-size: 12px;
+  color: #889b76;
+  margin: 0;
+}
+.connect-steps > .quiet-button {
+  font-size: 10px;
+}
+.connect-steps details {
+  margin-top: 22px;
+  color: #95a684;
+  font-size: 10px;
+}
+.connect-steps summary {
+  cursor: pointer;
+}
+.connect-steps details p {
+  font-size: 11px;
+  margin-top: 12px;
+}
+.connect-use-cases {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  border-top: 1px solid #e1e8d7;
+  padding: 42px 0;
+  margin-top: 44px;
+}
+.connect-use-cases h2 {
+  font-size: 27px;
+  letter-spacing: -0.8px;
+  line-height: 1.25;
+  color: #506b3e;
+  margin: 20px 0 15px;
+}
+.connect-use-cases p {
+  font-size: 12px;
+  color: #8c9e79;
+  max-width: 380px;
+}
+.connect-use-cases blockquote {
+  margin: 0;
+  background: #edf3e3;
+  border-radius: 16px;
+  padding: 30px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #718b57;
+  align-self: center;
+}
+.connect-tools {
+  border-top: 1px solid #e3e9d9;
+  padding-top: 23px;
+  color: #7a9063;
+}
+.connect-tools > summary {
+  cursor: pointer;
+  font-size: 12px;
+}
+.connect-tools > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+.connect-tools article {
+  padding: 20px;
+  background: #f2f6eb;
+  border-radius: 12px;
+}
+.connect-tools h3 {
+  font-size: 14px;
+  color: #627c4c;
+}
+.connect-tools article p {
+  font-size: 11px;
+  color: #91a47d;
+}
+.connect-tools code {
+  font-size: 9px;
+  overflow-wrap: anywhere;
+}
+.connect-footer {
+  padding: 27px 0;
+  border-top: 1px solid #e2e9d7;
+  margin-top: 32px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.connect-footer > p {
+  font-size: 10px;
+  color: #a0ad91;
+  width: 100%;
+  max-width: 850px;
+}
+.connect-footer > a {
+  font-size: 10px;
+  color: #8b9d78;
+}
+@media (max-width: 850px) {
+  .connect-page {
+    padding: 42px 28px;
+  }
+  .connect-layout {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .connect-intro {
+    padding-bottom: 30px;
+  }
+  .connect-intro h1 {
+    font-size: 46px;
+  }
+  .connect-use-cases {
+    gap: 30px;
+  }
+  .connect-tools > div {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 550px) {
+  .connect-page {
+    padding: 35px 21px;
+  }
+  .connect-intro h1 {
+    font-size: 39px;
+  }
+  .connect-intro > p {
+    font-size: 13px;
+  }
+  .mcp-install-panel {
+    padding: 23px;
+  }
+  .mcp-install-heading h2 {
+    font-size: 18px;
+  }
+  .mcp-install-heading p {
+    font-size: 9px;
+  }
+  .mcp-settings > div {
+    flex-direction: column;
+    gap: 7px;
+  }
+  .mcp-settings dd {
+    text-align: left;
+  }
+  .connect-use-cases {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 30px 0;
+    margin-top: 25px;
+  }
+  .connect-tools > div {
+    grid-template-columns: 1fr;
+  }
+  .connect-steps li {
+    gap: 15px;
+  }
+  .connect-use-cases blockquote {
+    padding: 24px;
+    font-size: 14px;
+  }
+  .mcp-primary-actions > a {
+    width: 100%;
+    justify-content: center;
+  }
+  .mcp-primary-actions > button {
+    width: 100%;
+    justify-content: center;
+  }
+}

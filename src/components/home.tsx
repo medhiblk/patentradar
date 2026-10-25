@@ -1,7 +1,8 @@
 "use client";
+import "./shell/shell.css";
 import {
   ArrowUpRight,
-  ArrowRight,
+  MessageSquare,
   FileText,
   Box,
   ScanLine,
@@ -41,19 +42,24 @@ export function Home({
             >
               Start with a document <ArrowUpRight size={16} />
             </button>
-            <button
-              className="hero-secondary"
-              onClick={() => go("New Analysis")}
-            >
-              Analyze an invention <ArrowRight size={15} />
-            </button>
+            <a className="hero-secondary" href="/connect">
+              Use in ChatGPT <ArrowUpRight size={15} />
+            </a>
           </div>
           <span className="hero-note">
             No account needed to model. Save privately when you’re ready.
           </span>
-          <a className="hero-demo-link" href="/demo">
-            Try the guided demo <ArrowUpRight size={12} />
-          </a>
+          <div className="hero-alternative-actions">
+            <button
+              className="hero-demo-link"
+              onClick={() => go("New Analysis")}
+            >
+              Analyze an invention
+            </button>
+            <a className="hero-demo-link" href="/demo">
+              Try the guided demo <ArrowUpRight size={12} />
+            </a>
+          </div>
         </div>
         <div
           className="design-scene"
@@ -99,6 +105,25 @@ export function Home({
             </small>
           </div>
         </div>
+      </section>
+      <section
+        className="chatgpt-invitation"
+        aria-label="FormaProof MCP plugin"
+      >
+        <div className="chatgpt-invitation-icon">
+          <MessageSquare size={23} strokeWidth={1.4} />
+        </div>
+        <div>
+          <span className="product-kicker">ALSO IN CHATGPT</span>
+          <h2>Take the research into your conversation.</h2>
+          <p>
+            Patent evidence, technical comparisons and component inspection
+            through one MCP connection.
+          </p>
+        </div>
+        <a href="/connect">
+          Connect FormaProof <ArrowUpRight size={15} />
+        </a>
       </section>
       <section className="journey-section" aria-label="How it works">
         <div className="journey-heading">

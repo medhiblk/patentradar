@@ -4,7 +4,7 @@
 
 Bring a technical manual, drawing or specification. Choose what to represent, check the measurements, build an assembly and investigate related patents. General patent research remains available for non-physical inventions.
 
-[Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
+[Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [Use in ChatGPT](https://patentradar-puce.vercel.app/connect) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
 
 ## Work from any environment
 
@@ -38,6 +38,18 @@ docker compose up --build
 
 The compose service uses `Dockerfile.web`: Node and browser-based CAD, with persistent account/file storage in a named volume. The existing `Dockerfile` remains the optional, larger Python/CadQuery runtime. Docker configuration must be validated on your target Docker host.
 
+## Use FormaProof in ChatGPT
+
+Open the [connection guide](https://patentradar-puce.vercel.app/connect). Copy the public MCP URL, open [ChatGPT Plugins](https://chatgpt.com/plugins), add a custom MCP server and use no authentication for the public tools. Review the discovered tools and confirm the connection in your own account. Account/workspace restrictions apply. This is a custom connection; no approved public-directory listing is claimed.
+
+The guide can test the real anonymous MCP handshake and download a standard MCP client configuration. The web-based 3D editor remains in the workspace; MCP exposes patent/research and component inspection tools. It does not expose private uploaded files.
+
+```text
+https://patentradar-puce.vercel.app/api/mcp
+```
+
+[Official OpenAI connection instructions](https://developers.openai.com/api/docs/guides/custom-mcp-server) · [Architecture](docs/UX_ARCHITECTURE.md)
+
 ## What works
 
 - PDF/text/image interpretation, component review, real measured geometry through OpenCascade WASM, STEP/STL import and export, purchased-part references and custom housings.
@@ -53,7 +65,10 @@ Missing dimensions are never treated as verified measurements. Image interpretat
 | --- | --- |
 | `src/app/page.tsx` | Lightweight entry and lazy workspace loading |
 | `src/components/home.tsx` | Product story and starting points |
-| `src/components/app-navigation.tsx` | Shared desktop/mobile menu |
+| `src/components/app-navigation.tsx` | Minimal public menu: Demo, ChatGPT, Open workspace |
+| `src/components/shell/` | Workspace shell and contextual tool navigation |
+| `src/app/connect/`, `src/lib/mcp/` | ChatGPT onboarding, shared public metadata and real protocol probe |
+| `src/components/demo/product-tour.tsx` | Controlled motion preview; actual CAD stays in the interactive Studio |
 | `src/components/research-workspace.tsx` | Existing research flow, results, evidence and reports |
 | `src/components/engineering-studio.tsx` | Document → measured parts → assembly → research |
 | `src/lib/cad/` | Browser geometry worker and parametric schemas |

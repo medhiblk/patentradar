@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { AppNavigation } from "@/components/app-navigation";
+import { WorkspaceShell } from "@/components/shell/workspace-shell";
 import { useRouter } from "next/navigation";
 const EngineeringStudio = dynamic(
   () =>
@@ -17,8 +17,7 @@ const EngineeringStudio = dynamic(
 export default function Engineering() {
   const router = useRouter();
   return (
-    <>
-      <AppNavigation page="Engineering Studio" />
+    <WorkspaceShell page="Engineering Studio">
       <main className="engineering-page" id="main-content">
         <EngineeringStudio
           onPatentResearch={(text) => {
@@ -27,6 +26,6 @@ export default function Engineering() {
           }}
         />
       </main>
-    </>
+    </WorkspaceShell>
   );
 }

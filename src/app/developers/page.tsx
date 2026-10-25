@@ -82,6 +82,11 @@ export default function Developers() {
           <section className="panel">
             <h2>Connect an MCP client</h2>
             <p>
+              <a className="quiet-button" href="/connect">
+                Connect FormaProof to ChatGPT ↗
+              </a>
+            </p>
+            <p>
               Streamable HTTP at <code>/api/mcp</code>. Public tools need no
               account or API key. Use this deployment’s origin in your client.
             </p>

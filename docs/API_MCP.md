@@ -1,5 +1,16 @@
 # PatentRadar API & MCP
 
+## Connect in ChatGPT
+
+The public connection page is [/connect](https://patentradar-puce.vercel.app/connect). It provides the endpoint, a clipboard action, a link to ChatGPT Plugins, setup steps, a client-config download and an actual anonymous protocol check. Current setup follows [OpenAI's custom MCP guide](https://developers.openai.com/api/docs/guides/custom-mcp-server): Plugins → add a custom MCP server → enter the URL/name/authentication → review → create the plugin. No approved directory listing or automatic installation is claimed. Private token workflows remain separate.
+
+A bounded, read-only SDK connectivity check that performs no third-party patent search:
+
+```bash
+PATENTRADAR_URL=https://patentradar-puce.vercel.app node --use-env-proxy scripts/verify-mcp-connection.mjs
+```
+
+
 Base URL (public deployment): `https://patentradar-puce.vercel.app`
 
 - Developer portal: `/developers`

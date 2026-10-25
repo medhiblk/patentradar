@@ -35,12 +35,7 @@ test("sign in explains validation, submits with Enter and restores the account p
   await expect(
     page.getByRole("button", { name: "Sign out of workspace", exact: true }),
   ).toBeVisible({ timeout: 60000 });
-  await page.goto("/");
-  await page
-    .getByRole("navigation", { name: "Main navigation" })
-    .getByText("More", { exact: true })
-    .click();
-  await page.getByRole("button", { name: "Account", exact: true }).click();
+  await page.goto("/#account");
   await expect(
     page.getByText(`Signed in as ${email}`, { exact: true }),
   ).toBeVisible({ timeout: 60000 });

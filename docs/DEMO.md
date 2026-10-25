@@ -1,6 +1,6 @@
 # Guided PDF-to-CAD demo
 
-Open https://patentradar-puce.vercel.app/demo or select **Guided demo** in the More menu.
+Open https://patentradar-puce.vercel.app/demo or select **Demo** in the public navigation. An illustrated four-stage motion preview starts automatically, with pause/play and direct scene selection. Reduced-motion preferences disable automatic playback. The synthetic PDF preloads on this page; no CAD kernel, external AI or provider search starts automatically.
 
 1. Select **Try the example document**. The source is a clearly marked synthetic PDF shipped in `public/examples/mechanical-assembly.pdf`; it is also downloadable.
 2. Select **Read document & identify parts**. Local interpretation extracts the actual measured plate from that PDF; no account or OpenAI key is required for this sample.

@@ -35,11 +35,7 @@ test("three project seeds reach consented search and live results remain usable"
         }) + "\n",
     });
   });
-  await page.goto("/");
-  await page
-    .getByRole("navigation", { name: "Main navigation" })
-    .getByRole("button", { name: "My Inventions" })
-    .click();
+  await page.goto("/#projects");
   await page
     .getByText("Device-only drafts (this browser)", { exact: true })
     .click();

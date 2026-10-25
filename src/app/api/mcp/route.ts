@@ -24,7 +24,7 @@ const output = (value: unknown) => ({
 });
 export async function POST(req: Request) {
   try {
-    guard(req);
+    guard(req, "mcp", 20);
   } catch {
     return Response.json(
       {

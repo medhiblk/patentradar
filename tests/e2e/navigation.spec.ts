@@ -33,9 +33,16 @@ test("mobile menu closes with Escape and deep links support refresh and Back", a
   await page.keyboard.press("Escape");
   await expect(toggle).toHaveAttribute("aria-expanded", "false");
   await toggle.click();
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }).getByRole("link"),
+  ).toHaveCount(2);
+  await page.getByRole("link", { name: "Open workspace", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: /What are you/ }),
+  ).toBeVisible();
   await page
-    .getByRole("navigation", { name: "Main navigation" })
-    .getByRole("button", { name: "My Inventions", exact: true })
+    .getByRole("navigation", { name: "Workspace navigation" })
+    .getByRole("link", { name: "Projects & files" })
     .click();
   await expect(page).toHaveURL(/#projects$/);
   await expect(
