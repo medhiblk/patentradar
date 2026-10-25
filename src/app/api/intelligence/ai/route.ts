@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         },
         { status: 422 },
       );
-    reserveAI(req);
+    await reserveAI(req);
     const client = new OpenAI({ timeout: 25000, maxRetries: 0 });
     const schema =
       i.operation === "compare"

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import type { Profile } from "@/lib/model";
+import { clearPrivateSessionView } from "@/lib/private-session";
 type Item = {
   id: string;
   title: string;
@@ -59,6 +60,8 @@ export function AccountMonitoring({
         }),
         d = await r.json();
       if (!r.ok) throw new Error(d.error);
+      if ((b as { action?: string }).action === "logout")
+        clearPrivateSessionView();
       if (d.newsletter) setNewsletter(d.newsletter);
       if (d.token) setToken(d.token);
       setPassword("");
@@ -75,9 +78,9 @@ export function AccountMonitoring({
       <span className="eyebrow">PRIVATE WORKSPACE</span>
       <h2>Account & intelligence monitoring</h2>
       <p>
-        Local-server accounts isolate projects and component catalogs. Hosted
-        use requires a persistent database volume. No payment provider is
-        connected.
+        Accounts isolate projects, documents and component catalogs. Cloud
+        hosting uses a private Blob store; local hosting can use a persistent
+        server volume. No payment provider is connected.
       </p>
       <Button
         variant="outline"

@@ -74,11 +74,11 @@ Tool inputs are bounded and untrusted. No arbitrary SQL, URLs, Python, MCP tool 
 
 ### Private tools and API tokens
 
-On a self-hosted instance with persistent account storage, create an account in Account, then create an API/MCP token. It is shown once, stored hashed, expires in 24 hours and must be kept secret. Send `Authorization: Bearer ...`. Developer tokens work at `/api/v1/*` and `/api/mcp`; they cannot use account-management endpoints. Existing MCP-only tokens remain scoped to `/api/mcp`.
+On an instance with configured private Blob or persistent local account storage, create an account in Account, then create an API/MCP token. It is shown once, stored hashed, expires in 24 hours and must be kept secret. Send `Authorization: Bearer ...`. Developer tokens work at `/api/v1/*` and `/api/mcp`; they cannot use account-management endpoints. Existing MCP-only tokens remain scoped to `/api/mcp`.
 
-Authenticated MCP clients additionally receive `list_my_projects` and `search_local_patents`. Anonymous requests never access the private account database. Invalid presented credentials are rejected instead of silently downgraded. Token-authentication does not change source licensing or expand data coverage.
+Authenticated MCP clients additionally receive `list_my_projects`. The `search_local_patents` tool is offered only where the local index has a persistent server volume. Anonymous requests never access the private account database. Invalid presented credentials are rejected instead of silently downgraded. Token-authentication does not change source licensing or expand data coverage.
 
-`POST /api/v1/cad/build` accepts the documented assembly schema and requires a developer token (or a signed-in session), a native CAD runtime and complete measurements. It returns actual STEP/STL base64 and meshes. The public Vercel instance does not automatically have this Python/runtime or persistent SQLite configured; inspect health. Native build/setup instructions: [engineering delivery](engineering/DELIVERY.md).
+`POST /api/v1/cad/build` accepts the documented assembly schema and requires a developer token (or a signed-in session), a native CAD runtime and complete measurements. It returns actual STEP/STL base64 and meshes. The public Vercel instance does not automatically have this Python/runtime configured; inspect health. Native build/setup instructions: [engineering delivery](engineering/DELIVERY.md).
 
 ## Self-host
 
@@ -119,3 +119,15 @@ See [component workbench](engineering/WORKBENCH.md) for reproduction and limitat
 `EPO_PUBLICATION_SERVER_URL`, `OPENALEX_API_URL` and `WIKIDATA_SPARQL_URL` are compatible server-side aliases. Europe PMC scientific discovery is enabled for MED/PMC article metadata in the parallel search flow and Source Explorer, using `EUROPE_PMC_API_URL`. The legacy PAT archive remains disabled. Scientific titles/identifiers/year links are returned; abstracts/full text are not redistributed by the new adapter.
 
 `GET /api/v1/datasets` lists the USPTO research-dataset catalogue and the legacy PatentsView transition link, plus manual import limitations. It does not download data, search patents or change the local index. PatentsView’s current redirect does not certify anonymous file access. [Verification and import contract](discovery/PROVIDED_ENDPOINTS.md).
+
+## Private document attachments
+
+Open `/files` for private accounts, durable projects and attached originals. Full browser sessions use HttpOnly/SameSite cookies. Developer/MCP tokens intentionally cannot access `/api/attachments` or `/api/vault`; public MCP tools do not receive file contents.
+
+- `GET /api/attachments?projectId=UUID`: owner metadata, SHA-256, pending/ready/deleting state and file quota.
+- `POST /api/attachments`: authenticated multipart `projectId` and `file`, up to 4 MB, inspected extension/signature, bounded request body. No automatic AI processing.
+- `GET /api/attachments/UUID?projectId=UUID`: original bytes, `Content-Disposition: attachment`, `private, no-store`; requires full owner session. No object-store URLs returned.
+- `DELETE /api/attachments/UUID?projectId=UUID`: owner delete, quota released after object removal.
+- `/api/vault` account/project sessions now persist in private Blob on Vercel or SQLite on a configured local volume. Existing password hashes/token scopes are preserved. Deleting a project first marks it as deleting, blocks new attachments and removes its stored files.
+
+See [storage setup and limits](PRIVATE_STORAGE.md). Native CAD, the sourced SQLite patent index, and billing are separate capabilities; adding private Blob does not provide those runtimes or complete user-account recovery workflows.

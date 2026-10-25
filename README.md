@@ -8,7 +8,7 @@ Technical PDF, drawing or manual → reviewed system understanding → interacti
 
 **[Application](https://patentradar-puce.vercel.app) · [Developer portal](https://patentradar-puce.vercel.app/developers) · [OpenAPI](https://patentradar-puce.vercel.app/api/v1/openapi.json) · [API/MCP integration guide](docs/API_MCP.md)**
 
-Public API and remote MCP offer anonymous evidence discovery with explicit query-sharing consent. [Try the 3D Studio](https://patentradar-puce.vercel.app/engineering): real OpenCascade WASM geometry, PDF measurements, editable parts and STEP/STL exports run in your browser without Python or an account. CadQuery native APIs and private server portfolios remain optional hosted capabilities. Source coverage is partial and relevance is not a legal FTO assessment.
+Public API and remote MCP offer anonymous evidence discovery with explicit query-sharing consent. [Try the 3D Studio](https://patentradar-puce.vercel.app/engineering): real OpenCascade WASM geometry, PDF measurements, editable parts and STEP/STL exports run in your browser without Python or an account. CadQuery native APIs remain optional. [Private projects and attachments](https://patentradar-puce.vercel.app/files) persist in a private Blob store when configured, with authenticated downloads and a local SQLite/filesystem fallback. Source coverage is partial and relevance is not a legal FTO assessment.
 
 ```bash
 npm ci
@@ -132,4 +132,8 @@ See [implementation status](docs/IMPLEMENTATION_STATUS.md) for Work Package A re
 
 ## Engineering Studio, private workspaces and local patent index
 
-See [engineering delivery](docs/engineering/DELIVERY.md) for runnable setup, feature boundaries, source/licence evaluation and test evidence. Engineering Studio runs real CadQuery geometry through a Python environment configured by CAD_PYTHON. Local sourced patent search is an alternative to the Google Cloud dependency, with explicit partial coverage. Account data needs a persistent server volume; this release is not yet deployed to the existing plain Vercel frontend.
+See [engineering delivery](docs/engineering/DELIVERY.md) for runnable setup, feature boundaries, source/licence evaluation and test evidence. Engineering Studio runs real CadQuery geometry through a Python environment configured by CAD_PYTHON. Local sourced patent search is an alternative to the Google Cloud dependency, with explicit partial coverage. Private accounts and attachments now support Vercel private Blob, while local hosting retains SQLite and private files on a persistent volume. See [private attachment storage](docs/PRIVATE_STORAGE.md).
+
+## Attach documents to private projects
+
+Open `/files` or My Inventions, create/sign into an account, create a project, then drag in PDF, PNG/JPEG, STEP/STL, UTF-8 TXT or JSON files. Originals persist across refresh/sign-in. Download, delete or explicitly reopen a file for patent analysis or 3D interpretation. Storage does not start external AI or patent queries. Limits: 4 MB/file, 20/project, 50 files / 100 MB/account. Private documents are streamed through authenticated owner routes, never public URLs. See [setup, test evidence and limitations](docs/PRIVATE_STORAGE.md).

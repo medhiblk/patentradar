@@ -1,5 +1,5 @@
 "use client";
-import {BRAND} from "@/lib/brand";
+import { BRAND } from "@/lib/brand";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { EngineeringStudio } from "@/components/engineering-studio";
@@ -10,6 +10,7 @@ export default function Engineering() {
       <nav className="row between">
         <Link href="/">{BRAND.name}.</Link>
         <div className="row wrap">
+          <Link href="/files">Private files</Link>
           <Link href="/developers">API & MCP</Link>
           <a
             href="https://github.com/medhiblk/patentradar"

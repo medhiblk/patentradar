@@ -41,6 +41,9 @@ test("three project seeds reach consented search and live results remain usable"
     .getByRole("button", { name: "My Inventions" })
     .click();
   await page
+    .getByText("Device-only drafts (this browser)", { exact: true })
+    .click();
+  await page
     .getByLabel("Description", { exact: true })
     .fill(
       "An optical microfluidic instrument transports samples through channels and measures fluorescence.",

@@ -1,3 +1,4 @@
+import { privateBackend } from "@/lib/platform/private-store";
 export const dynamic = "force-dynamic";
 export async function GET() {
   return Response.json({
@@ -15,9 +16,17 @@ export async function GET() {
       exactLookup: "EP A/B + publication date",
       comparison: "lexical, client-supplied evidence",
       privateStorage:
-        process.env.VERCEL && !process.env.PATENTRADAR_DATA_DIR
-          ? "not-configured"
-          : "local-server",
+        privateBackend() === "blob"
+          ? "private-blob-configured"
+          : privateBackend() === "local"
+            ? "local-server"
+            : "not-configured",
+      attachments: {
+        backend: privateBackend(),
+        access: "authenticated owner only",
+        maxFileMB: 4,
+        maxAccountMB: 100,
+      },
       browserCAD:
         "Available at /engineering: OpenCascade WASM, no account or Python required",
       cad: process.env.CAD_PYTHON

@@ -1,21 +1,20 @@
 import { z } from "zod";
 import { guard } from "@/lib/security";
 import { requireUser } from "@/lib/platform/auth";
-import { db } from "@/lib/platform/db";
+import { getItem, saveItem } from "@/lib/platform/store";
 import { execute } from "@/lib/search/orchestrator";
 import { ResearchSchema } from "@/lib/model";
 export const maxDuration = 60;
 export async function POST(req: Request) {
   try {
     guard(req);
-    const u = requireUser(req),
+    const u = await requireUser(req),
       b = await req.json(),
       id = z.uuid().parse(b.id);
-    const row = db()
-      .prepare("SELECT * FROM items WHERE id=? AND userId=? AND kind='watch'")
-      .get(id, u.id);
-    if (!row) return Response.json({ error: "Not found" }, { status: 404 });
-    const stored = JSON.parse(String(row.data));
+    const row = await getItem(u.id, id);
+    if (!row || row.kind !== "watch")
+      return Response.json({ error: "Not found" }, { status: 404 });
+    const stored = row.data;
     const input = ResearchSchema.parse(stored.input);
     if (b.consent !== true)
       return Response.json(
@@ -23,24 +22,27 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     const result = await execute(input, undefined, req.signal),
-      before = new Set(stored.publications || []);
+      before = new Set(
+        Array.isArray(stored.publications) ? stored.publications : [],
+      );
     const discoveries = result.patents.filter(
       (p) => !before.has(p.publicationNumber),
     );
-    db()
-      .prepare("UPDATE items SET data=?,updated=? WHERE id=? AND userId=?")
-      .run(
-        JSON.stringify({
+    await saveItem(
+      u.id,
+      {
+        ...row,
+        updated: new Date().toISOString(),
+        data: {
           ...stored,
           publications: result.patents.map((p) => p.publicationNumber),
           lastResult: result,
           lastChecked: new Date().toISOString(),
           discoveries: discoveries.map((p) => p.publicationNumber),
-        }),
-        new Date().toISOString(),
-        id,
-        u.id,
-      );
+        },
+      },
+      true,
+    );
     const newsletter = [
       "# PatentRadar research briefing",
       new Date().toISOString(),

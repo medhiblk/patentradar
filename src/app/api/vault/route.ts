@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { randomBytes, randomUUID } from "node:crypto";
-import { db } from "@/lib/platform/db";
 import {
   user,
   requireUser,
@@ -8,89 +7,110 @@ import {
   passwordMatches,
   sessionHash,
 } from "@/lib/platform/auth";
+import * as store from "@/lib/platform/store";
+import { privateBackend, Conflict } from "@/lib/platform/private-store";
+import { deleteProjectAttachments } from "@/lib/platform/attachments";
 import { guard } from "@/lib/security";
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+const headers = { "Cache-Control": "private, no-store" };
 export async function GET(req: Request) {
   try {
-    const u = user(req);
-    if (!u) return Response.json({ user: null, items: [] });
-    const items = db()
-      .prepare(
-        "SELECT id,kind,title,data,updated FROM items WHERE userId=? ORDER BY updated DESC LIMIT 100",
-      )
-      .all(u.id)
-      .map((r) => ({ ...r, data: JSON.parse(String(r.data)) }));
-    const usage = db()
-      .prepare("SELECT count FROM usage WHERE userId=? AND day=?")
-      .get(u.id, new Date().toISOString().slice(0, 10));
-    return Response.json({
-      user: u,
-      items,
-      usage: {
-        calls: Number(usage?.count || 0),
-        dailyLimit: Number(process.env.AI_DAILY_CALL_LIMIT || 20),
-        unit: "AI requests; not money or purchased credits",
+    guard(req, "account-read", 60);
+    const u = await user(req);
+    if (!u)
+      return Response.json(
+        { user: null, items: [], storage: { backend: privateBackend() } },
+        { headers },
+      );
+    return Response.json(
+      {
+        user: u,
+        items: await store.listItems(u.id),
+        usage: {
+          calls: await store.usageCount(
+            u.id,
+            new Date().toISOString().slice(0, 10),
+          ),
+          dailyLimit: Number(process.env.AI_DAILY_CALL_LIMIT || 20),
+          unit: "AI requests; not money or purchased credits",
+        },
+        storage: { backend: privateBackend() },
       },
-    });
+      { headers },
+    );
   } catch {
     return Response.json(
       {
         error:
-          "Private storage unavailable. Configure a persistent server volume.",
+          "Private storage unavailable. Configure private Blob storage or a persistent server volume.",
       },
-      { status: 503 },
+      { status: 503, headers },
     );
   }
 }
 export async function POST(req: Request) {
   try {
-    guard(req);
-    const b = await req.json();
-    const action = z
-      .enum(["register", "login", "logout", "save", "delete", "token"])
-      .parse(b.action);
+    guard(req, "account-write", 20);
+    if (Number(req.headers.get("content-length") || 0) > 3200000)
+      return Response.json(
+        { error: "Request exceeds 3.2 MB." },
+        { status: 413, headers },
+      );
+    const b = await req.json(),
+      action = z
+        .enum(["register", "login", "logout", "save", "delete", "token"])
+        .parse(b.action);
     if (action === "register" || action === "login") {
-      const email = z.email().max(200).parse(b.email).toLowerCase();
-      const password = z.string().min(12).max(200).parse(b.password);
+      const email = z.email().max(200).parse(b.email).toLowerCase(),
+        password = z.string().min(12).max(200).parse(b.password);
       if (action === "register") {
         try {
-          db()
-            .prepare("INSERT INTO users VALUES(?,?,?)")
-            .run(randomUUID(), email, passwordHash(password));
+          await store.createAccount({
+            id: randomUUID(),
+            email,
+            password: passwordHash(password),
+          });
         } catch {
           return Response.json(
             { error: "Unable to create account with these details." },
-            { status: 400 },
+            { status: 400, headers },
           );
         }
       }
-      const row = db().prepare("SELECT * FROM users WHERE email=?").get(email);
-      if (!row || !passwordMatches(password, String(row.password)))
-        return Response.json({ error: "Invalid credentials" }, { status: 401 });
+      const row = await store.findAccount(email);
+      if (!row || !passwordMatches(password, row.password))
+        return Response.json(
+          { error: "Invalid credentials" },
+          { status: 401, headers },
+        );
       const token = randomBytes(32).toString("hex");
-      db()
-        .prepare("INSERT INTO sessions(token,userId,expires) VALUES(?,?,?)")
-        .run(sessionHash(token), String(row.id), Date.now() + 7 * 86400000);
+      await store.createSession(sessionHash(token), {
+        userId: row.id,
+        email: row.email,
+        expires: Date.now() + 7 * 86400000,
+        scope: "full",
+      });
       return Response.json(
         { ok: true },
         {
           headers: {
+            ...headers,
             "Set-Cookie": `pr_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${new URL(req.url).protocol === "https:" ? "; Secure" : ""}`,
           },
         },
       );
     }
-    const u = requireUser(req);
+    const u = await requireUser(req);
     if (action === "logout") {
       const raw = req.headers.get("cookie")?.match(/pr_session=([^;]+)/)?.[1];
-      if (raw)
-        db()
-          .prepare("DELETE FROM sessions WHERE token=?")
-          .run(sessionHash(raw));
+      if (raw) await store.removeSession(sessionHash(raw));
       return Response.json(
         { ok: true },
         {
           headers: {
+            ...headers,
             "Set-Cookie":
               "pr_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0",
           },
@@ -99,47 +119,71 @@ export async function POST(req: Request) {
     }
     if (action === "token") {
       const token = randomBytes(32).toString("hex");
-      db()
-        .prepare(
-          "INSERT INTO sessions(token,userId,expires,scope) VALUES(?,?,?,?)",
-        )
-        .run(
-          sessionHash(token),
+      await store.createSession(sessionHash(token), {
+        userId: u.id,
+        email: u.email,
+        expires: Date.now() + 86400000,
+        scope: b.scope === "developer" ? "developer" : "mcp",
+      });
+      return Response.json({ ok: true, token, expiresIn: 86400 }, { headers });
+    }
+    const existing = !!b.id,
+      id = existing ? z.uuid().parse(b.id) : randomUUID(),
+      old = existing ? await store.getItem(u.id, id) : null;
+    if (existing && !old)
+      return Response.json({ error: "Not found" }, { status: 404, headers });
+    if (action === "delete") {
+      if (old && ["project", "assembly"].includes(old.kind)) {
+        await store.saveItem(
           u.id,
-          Date.now() + 86400000,
-          b.scope === "developer" ? "developer" : "mcp",
+          { ...old, data: { ...old.data, _deleting: true } },
+          true,
         );
-      return Response.json({ ok: true, token, expiresIn: 86400 });
-    }
-    const id = b.id ? z.uuid().parse(b.id) : randomUUID();
-    if (action === "delete")
-      db().prepare("DELETE FROM items WHERE id=? AND userId=?").run(id, u.id);
-    else {
+        await deleteProjectAttachments(u.id, id);
+      }
+      await store.deleteItem(u.id, id);
+    } else {
+      if (old?.data._deleting)
+        return Response.json(
+          { error: "Project deletion is pending; retry deletion." },
+          { status: 409, headers },
+        );
       const kind = z
-        .enum(["project", "assembly", "component", "watch", "report"])
-        .parse(b.kind);
-      const title = z.string().min(1).max(200).parse(b.title);
-      const data = JSON.stringify(b.data);
-      if (data.length > 3000000) throw new Error("Item too large");
-      const old = db().prepare("SELECT userId FROM items WHERE id=?").get(id);
-      if (old && old.userId !== u.id)
-        return Response.json({ error: "Not found" }, { status: 404 });
-      db()
-        .prepare(
-          "INSERT INTO items VALUES(?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,data=excluded.data,updated=excluded.updated",
-        )
-        .run(id, u.id, kind, title, data, new Date().toISOString());
+          .enum(["project", "assembly", "component", "watch", "report"])
+          .parse(b.kind),
+        title = z.string().trim().min(1).max(200).parse(b.title),
+        data = z.record(z.string(), z.unknown()).parse(b.data);
+      if (Buffer.byteLength(JSON.stringify(data)) > 3000000)
+        throw Error("Item too large");
+      if (old && old.kind !== kind) throw Error("Item type cannot change");
+      await store.saveItem(
+        u.id,
+        { id, kind, title, data, updated: new Date().toISOString() },
+        existing,
+      );
     }
-    return Response.json({ ok: true, id });
+    return Response.json({ ok: true, id }, { headers });
   } catch (e) {
+    const message = e instanceof Error ? e.message : "";
+    const signIn = message.startsWith("Sign in");
     return Response.json(
       {
-        error:
-          e instanceof Error && e.message.startsWith("Sign in")
-            ? e.message
+        error: signIn
+          ? message
+          : e instanceof Conflict
+            ? "Concurrent update; refresh and retry."
             : "Check input and try again.",
       },
-      { status: 400 },
+      {
+        status: signIn
+          ? 401
+          : e instanceof Conflict
+            ? 409
+            : /Rate limit/.test(message)
+              ? 429
+              : 400,
+        headers,
+      },
     );
   }
 }

@@ -2,6 +2,8 @@
 import { browserCAD, type ImportedSolid } from "@/lib/cad/browser";
 import { mergeAssembly } from "@/lib/cad/workbench";
 import { PartsWorkbench } from "./parts-workbench";
+import { PrivateWorkspace } from "./private-workspace";
+import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "./ui/button";
@@ -48,8 +50,12 @@ const blank = (): ComponentSpec => ({
 });
 export function EngineeringStudio({
   onPatentResearch,
+  initialFile,
+  onFileConsumed,
 }: {
   onPatentResearch: (text: string) => void;
+  initialFile?: File | null;
+  onFileConsumed?: () => void;
 }) {
   const [spec, setSpec] = useState<AssemblySpec>({
     title: "Untitled engineering assembly",
@@ -57,6 +63,7 @@ export function EngineeringStudio({
     limitations: [],
   });
   const [source, setSource] = useState({ name: "", hash: "" });
+  const [pickerVersion, setPickerVersion] = useState(0);
   const [imports, setImports] = useState<Record<string, ImportedSolid>>({});
   const [appendDocument, setAppendDocument] = useState(true);
   const [file, setFile] = useState<File | null>(null),
@@ -88,6 +95,50 @@ export function EngineeringStudio({
     [dirty, setDirty] = useState(false);
   const component = spec.components.find((c) => c.id === selected);
   const meshInfo = geometry?.parts.find((p) => p.id === selected);
+  useEffect(() => {
+    const reset = () => {
+      setFile(null);
+      setText("");
+      setSpec({
+        title: "Untitled engineering assembly",
+        components: [],
+        limitations: [],
+      });
+      setSource({ name: "", hash: "" });
+      setImports({});
+      setGeometry(null);
+      setCatalog([]);
+      setSelected("");
+      setPickerVersion((v) => v + 1);
+      setNotice("Signed out. Open document and geometry views were cleared.");
+    };
+    window.addEventListener(PRIVATE_SIGNOUT_EVENT, reset);
+    return () => window.removeEventListener(PRIVATE_SIGNOUT_EVENT, reset);
+  }, []);
+  useEffect(() => {
+    if (!initialFile) return;
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        if (/\.txt$/i.test(initialFile.name)) {
+          const value = await initialFile.text();
+          if (cancelled) return;
+          setText(value);
+          setFile(null);
+        } else setFile(initialFile);
+        setNotice(
+          "Private source loaded. Choose what to represent, then read the document. No external AI processing was started.",
+        );
+        onFileConsumed?.();
+      } catch {
+        setError("Unable to read private source.");
+      }
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [initialFile, onFileConsumed]);
   const canBuild = (p: ComponentSpec) => buildable(p) || !!imports[p.id];
   function addPart(part: ComponentSpec) {
     if (spec.components.length >= 20) {
@@ -453,6 +504,7 @@ export function EngineeringStudio({
           <label className="grow">
             PDF, drawing, image or CAD file
             <input
+              key={pickerVersion}
               aria-label="Engineering source file"
               type="file"
               accept=".pdf,.png,.jpg,.jpeg,.step,.stp,.stl,.json"
@@ -511,6 +563,22 @@ export function EngineeringStudio({
           to 4 MB. Missing dimensions require your input.
         </p>
       </section>
+      <details className="private-file-drawer">
+        <summary>Keep source files in a private project</summary>
+        <PrivateWorkspace
+          pendingFile={file}
+          onUseFile={async (source) => {
+            if (/\.txt$/i.test(source.name)) {
+              setText(await source.text());
+              setFile(null);
+            } else setFile(source);
+            setNotice(
+              "Private source loaded. Click Read document & identify parts when ready.",
+            );
+          }}
+        />
+      </details>
+      {file && <p className="hint">Selected source: {file.name}</p>}
       {error && (
         <p role="alert" className="notice error">
           {error}

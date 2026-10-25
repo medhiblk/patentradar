@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     guard(req);
     try {
-      requireUser(req);
+      await requireUser(req);
     } catch {
       return Response.json(
         {

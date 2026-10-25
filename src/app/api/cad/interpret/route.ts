@@ -62,7 +62,7 @@ export async function POST(req: Request) {
           "No document was sent externally. Local rules extract explicit dimensions and labeled component-list entries. Unknown geometry stays unresolved; images need configured multimodal AI and consent or manual measurements.",
       });
     }
-    reserveAI(req);
+    await reserveAI(req);
     const client = new OpenAI({ timeout: 30000, maxRetries: 0 });
     const content: OpenAI.Responses.ResponseInputContent[] = [
       {

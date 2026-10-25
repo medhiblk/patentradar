@@ -1,6 +1,7 @@
 "use client";
-import {BRAND} from "@/lib/brand";
-import { useState, useEffect, useRef } from "react";
+import { PRIVATE_SIGNOUT_EVENT } from "@/lib/private-session";
+import { BRAND } from "@/lib/brand";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { readSearchStream } from "@/lib/search/read-stream";
 import { citationGraph } from "@/lib/search/citations";
@@ -10,6 +11,10 @@ import { patentSeed, parseSeeds } from "@/lib/patent-seeds";
 import { InventionWorkspace } from "@/components/invention-workspace";
 import { AccountMonitoring } from "@/components/account-monitoring";
 import { EngineeringStudio } from "@/components/engineering-studio";
+import {
+  PrivateWorkspace,
+  loadPrivateFile,
+} from "@/components/private-workspace";
 import { AIEvidence } from "@/components/ai-evidence";
 import { SourceExplorer } from "@/components/source-explorer";
 import { Home } from "@/components/home";
@@ -69,6 +74,8 @@ export default function Dashboard() {
   const [notice, setNotice] = useState("");
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [cadFile, setCadFile] = useState<File | null>(null);
+  const consumeCadFile = useCallback(() => setCadFile(null), []);
   const [aiConsent, setAiConsent] = useState(false);
   const [localOnly, setLocalOnly] = useState(false);
   const [searchConsent, setSearchConsent] = useState(false);
@@ -91,12 +98,63 @@ export default function Dashboard() {
   const [designReturn, setDesignReturn] = useState(false);
   const reduceMotion = useReducedMotion();
   useEffect(() => {
+    const reset = () => {
+      searchAbort.current?.abort();
+      setFile(null);
+      setCadFile(null);
+      setText("");
+      setResult(null);
+      setSelected(null);
+      setProfile(realProfile);
+      setReviewed(false);
+      setDesignReturn(false);
+      setProjectTitle("");
+      setSeedText("");
+      setSeedPublications([]);
+      setPhysical({ components: "", function: "", relationships: "" });
+      setPage("Overview");
+      setNotice("Signed out. Open private document views were cleared.");
+    };
+    window.addEventListener(PRIVATE_SIGNOUT_EVENT, reset);
+    return () => window.removeEventListener(PRIVATE_SIGNOUT_EVENT, reset);
+  }, []);
+  useEffect(() => {
     fetch("/api/health/providers")
       .then((r) => r.json())
       .then((d) => setProviders(d.providers))
       .catch(() => {});
     const timer = setTimeout(() => {
       try {
+        const privateHandoff = sessionStorage.getItem(
+          "patentradar-private-file-handoff",
+        );
+        if (privateHandoff) {
+          sessionStorage.removeItem("patentradar-private-file-handoff");
+          const ref = JSON.parse(privateHandoff);
+          loadPrivateFile(ref.projectId, ref.id)
+            .then(async (source) => {
+              setDesignReturn(false);
+              if (ref.target === "cad") {
+                setCadFile(source);
+                setPage("Engineering Studio");
+              } else {
+                if (/\.txt$/i.test(source.name)) {
+                  setText(await source.text());
+                  setFile(null);
+                } else {
+                  setFile(source);
+                  setText("");
+                }
+                setReviewed(false);
+                setAnalysisModule("general");
+                setPage("New Analysis");
+              }
+            })
+            .catch((e) => {
+              setPage("My Inventions");
+              setError(e.message);
+            });
+        }
         const handoff = sessionStorage.getItem(
           "patentradar-engineering-handoff",
         );
@@ -133,6 +191,26 @@ export default function Dashboard() {
     setError("");
     window.scrollTo({ top: 0, behavior: "auto" });
   };
+  async function openStoredFile(source: File, target: "analysis" | "cad") {
+    setDesignReturn(false);
+    if (target === "cad") {
+      setCadFile(source);
+      go("Engineering Studio");
+      return;
+    }
+    if (/\.txt$/i.test(source.name)) {
+      setText(await source.text());
+      setFile(null);
+    } else {
+      setFile(source);
+      setText("");
+    }
+    setReviewed(false);
+    go("New Analysis");
+    setNotice(
+      "Private document loaded. Review extraction and AI-processing options before continuing.",
+    );
+  }
   async function run(label: string, fn: () => Promise<void>) {
     setBusy(label);
     setError("");
@@ -418,7 +496,8 @@ export default function Dashboard() {
             <span />
             <span />
           </span>
-          {BRAND.name}<span className="wordmark-period">.</span>
+          {BRAND.name}
+          <span className="wordmark-period">.</span>
         </button>
         <nav
           className={mobile ? "main-nav is-open" : "main-nav"}
@@ -446,6 +525,7 @@ export default function Dashboard() {
             Engineering Studio
           </button>
           <button onClick={() => go("Account & Monitoring")}>Account</button>
+          <a href="/files">Files</a>
           <a className="nav-api-link" href="/developers">
             API &amp; MCP ↗
           </a>
@@ -557,6 +637,8 @@ export default function Dashboard() {
           )}
           {page === "Engineering Studio" && (
             <EngineeringStudio
+              initialFile={cadFile}
+              onFileConsumed={consumeCadFile}
               onPatentResearch={(description) => {
                 setText(description);
                 setDesignReturn(true);
@@ -582,6 +664,7 @@ export default function Dashboard() {
           )}
           {page === "My Inventions" && (
             <InventionWorkspace
+              onUseFile={openStoredFile}
               onAnalyze={(project) => {
                 setText(project.description);
                 setProjectTitle(project.title);
@@ -627,10 +710,13 @@ export default function Dashboard() {
               <p>
                 Review the technical concepts before sharing search queries.
                 Your assembly parameters are retained in this tab so you can
-                explore another design. Original files and imported geometry
-                are not retained.
+                explore another design. Original files and imported geometry are
+                not retained.
               </p>
-              <Button variant="outline" onClick={() => go("Engineering Studio")}>
+              <Button
+                variant="outline"
+                onClick={() => go("Engineering Studio")}
+              >
                 Return to design iteration
               </Button>
             </section>
@@ -827,6 +913,15 @@ export default function Dashboard() {
                         }}
                       />
                     </label>
+                    <details className="private-file-drawer">
+                      <summary>
+                        Save or reopen a private project document
+                      </summary>
+                      <PrivateWorkspace
+                        pendingFile={file}
+                        onUseFile={openStoredFile}
+                      />
+                    </details>
                     <label>
                       Describe your invention. We’ll find the closest existing
                       technologies.
@@ -1622,7 +1717,8 @@ export default function Dashboard() {
           </motion.div>
           <footer>
             <span>
-              {BRAND.name}<span className="footer-dot">.</span>
+              {BRAND.name}
+              <span className="footer-dot">.</span>
               <span className="footer-caption">
                 A new perspective on what’s possible.
               </span>

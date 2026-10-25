@@ -1,3 +1,4 @@
+import { attachmentPaths } from "./attachment-contract";
 import { z } from "zod";
 import { SearchInput, LookupInput, CompareInput } from "./public";
 import { AssemblySchema } from "../cad/schema";
@@ -29,12 +30,13 @@ export const openapi = {
   openapi: "3.1.0",
   info: {
     title: "PatentRadar API",
-    version: "1.2.0",
+    version: "1.3.0",
     description:
-      "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. CAD/private operations require configured native runtime, persistent account storage and a scoped developer token. No legal FTO conclusions.",
+      "Real patent intelligence with partial coverage, source attribution and explicit query sharing. Public read tools require no key. Native CAD requires its configured runtime and account access. Original private files require full owner sessions and configured private Blob/local storage. No legal FTO conclusions.",
   },
   servers: [{ url: "/", description: "Current host" }],
   paths: {
+    ...attachmentPaths,
     "/api/v1/datasets": {
       get: {
         operationId: "getDatasetCatalogues",
@@ -138,11 +140,18 @@ export const openapi = {
   },
   components: {
     securitySchemes: {
+      SessionCookie: {
+        type: "apiKey",
+        in: "cookie",
+        name: "pr_session",
+        description:
+          "HttpOnly full session from /api/vault login. Scoped developer/MCP tokens do not grant original-file access.",
+      },
       DeveloperToken: {
         type: "http",
         scheme: "bearer",
         description:
-          "24-hour scoped token created in Account. Full private hosting requires a persistent database. Never put a token in a URL.",
+          "24-hour scoped token created in Account. Private accounts require configured private Blob or persistent local storage. Never put a token in a URL.",
       },
     },
   },

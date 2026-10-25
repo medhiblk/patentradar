@@ -3,7 +3,7 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 import { z } from "zod";
 import { guard } from "@/lib/security";
 import { user } from "@/lib/platform/auth";
-import { db } from "@/lib/platform/db";
+import { listItems } from "@/lib/platform/store";
 import { search } from "@/lib/providers/local-index";
 import { registry } from "@/lib/providers/registry";
 import {
@@ -146,10 +146,10 @@ export async function POST(req: Request) {
       }),
   );
   // Private tools are scoped to this request. An anonymous server never touches the account database.
-  let account: ReturnType<typeof user> = null;
+  let account: Awaited<ReturnType<typeof user>> = null;
   if (req.headers.has("authorization") || req.headers.has("cookie")) {
     try {
-      account = user(req);
+      account = await user(req);
     } catch {
       return Response.json(
         {
@@ -182,23 +182,28 @@ export async function POST(req: Request) {
       },
       async () =>
         output(
-          db()
-            .prepare(
-              "SELECT id,title,kind,updated FROM items WHERE userId=? AND kind IN ('project','assembly') LIMIT 30",
-            )
-            .all(id),
+          (await listItems(id))
+            .filter((row) => ["project", "assembly"].includes(row.kind))
+            .slice(0, 30)
+            .map(({ id, title, kind, updated }) => ({
+              id,
+              title,
+              kind,
+              updated,
+            })),
         ),
     );
-    server.registerTool(
-      "search_local_patents",
-      {
-        description:
-          "Search this server’s cached public patent index. Partial coverage.",
-        inputSchema: z.object({ query: z.string().min(1).max(150) }).strict(),
-        annotations: { readOnlyHint: true, openWorldHint: false },
-      },
-      async (args) => output(await search(args.query)),
-    );
+    if (!process.env.VERCEL || process.env.PATENTRADAR_DATA_DIR)
+      server.registerTool(
+        "search_local_patents",
+        {
+          description:
+            "Search this server’s cached public patent index. Partial coverage.",
+          inputSchema: z.object({ query: z.string().min(1).max(150) }).strict(),
+          annotations: { readOnlyHint: true, openWorldHint: false },
+        },
+        async (args) => output(await search(args.query)),
+      );
   }
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
