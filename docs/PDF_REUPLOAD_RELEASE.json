@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-25T19:11:24.229932+00:00",
+  "applicationCommit": "ba44a253a281749d684abdc1c34f74515a5caa58",
+  "deploymentId": "dpl_pokmGEuMcHf9anv4gL9s8ArJrckN",
+  "url": "https://patentradar-puce.vercel.app/demo",
+  "unitTestsPassed": 125,
+  "chromiumLocal": {
+    "startTime": "2026-10-25T18:53:55.213Z",
+    "duration": 78874.762,
+    "expected": 27,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "webkitLocal": {
+    "startTime": "2026-10-25T18:53:55.216Z",
+    "duration": 14380.761,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "chromiumProduction": {
+    "startTime": "2026-10-25T19:05:06.621Z",
+    "duration": 26479.359,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "webkitProduction": {
+    "startTime": "2026-10-25T19:05:06.623Z",
+    "duration": 27277.035,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "method": "Actual downloaded PDFs, server extraction and real PDF.js/OpenCascade engines. Only HTTP gateway failures are injected in recovery scenarios. Mobile viewport/touch engine tests, not a physical Safari device.",
+  "limits": "The original user HTTP response was not captured. The native WebKit JSON parse message was reproduced with HTML; healthy production reuploads succeeded during diagnosis. Recovery now handles that failure boundary with actual local extraction."
+}
