@@ -1,0 +1,87 @@
+{
+  "checkedAt": "2026-10-25T17:37:46.478798+00:00",
+  "production": {
+    "url": "https://patentradar-puce.vercel.app/demo",
+    "deploymentId": "dpl_3xfkuy5h1D22VQZYx5ZebjQZHfZY",
+    "state": "READY",
+    "applicationCommit": "f7159cb1e47224e1e2ee4cb906d710e138e0c38e"
+  },
+  "observedBug": {
+    "environment": "Production Chromium mobile viewport 390x844",
+    "initialScrollY": 0,
+    "selectedSourceTop": 3334.0625,
+    "description": "Click loaded the sample below the viewport without moving to it. Existing visibility checks did not verify viewport placement. A subsequent mobile regression test exposed source-consumed notification occurring before the reading action was enabled."
+  },
+  "fixes": [
+    "Open and focus the reading action after React commits the selected source.",
+    "Display the selected filename beside its action and label the native picker as optional replacement.",
+    "Follow actual parsed components and successful CAD generation with guided viewport/focus navigation.",
+    "Apply a bounded PDF download timeout and signature/size validation; recover failed preloading on user retry.",
+    "Show download errors beside the launch button and retain a usable retry action."
+  ],
+  "source": {
+    "url": "/examples/mechanical-assembly.pdf",
+    "bytes": 1075,
+    "sha256": "a3b0aba88f46488e2a8cc26dad4b3b90f0e391a9460cbe277829fe2e612f208b",
+    "kind": "Clearly labeled synthetic measured PDF, not customer data or a prerecorded model."
+  },
+  "verification": {
+    "unitIntegration": {
+      "testsPassed": 117,
+      "filesPassed": 20
+    },
+    "localBrowser": {
+      "startTime": "2026-10-25T17:31:35.826Z",
+      "duration": 67988.829,
+      "expected": 24,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "productionBrowser": {
+      "startTime": "2026-10-25T17:35:44.877Z",
+      "duration": 22922.498,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "productionScenarios": [
+      "Unmocked PDF ingestion, explicit measured extraction, actual browser OpenCascade CAD generation (24000 mm3), width edit, real STEP download and reviewed design handoff to patent research.",
+      "Injected preload network failure followed by successful mobile retry, viewport/focus checks, keyboard extraction and example restart.",
+      "Injected HTML download error remains visible and can be retried with the actual public PDF."
+    ],
+    "touchMobileLaunch": {
+      "url": "https://patentradar-puce.vercel.app/demo",
+      "checkedAt": "2026-10-25T17:36:41.691Z",
+      "mobileEmulation": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "hasTouch": true
+      },
+      "unmocked": true,
+      "actionRect": {
+        "x": 41,
+        "y": 400.96875,
+        "width": 195.703125,
+        "height": 42.5
+      },
+      "focusedAction": "studio-read-source",
+      "horizontalOverflow": false,
+      "pageErrors": 0
+    },
+    "checksPassed": [
+      "TypeScript",
+      "ESLint",
+      "Production build",
+      "Private trace scan: 41 manifests, zero private entries"
+    ]
+  },
+  "scopeNotes": [
+    "Guided stage navigation is enabled only for the example; standard Studio navigation is preserved.",
+    "External AI and patent search remain separate explicit actions. No external AI or research requests occurred during the CAD/export/handoff test.",
+    "Mobile browser evidence is emulation, not a physical Safari device test."
+  ]
+}
