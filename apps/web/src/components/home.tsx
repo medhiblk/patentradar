@@ -59,6 +59,7 @@ export function Home({ go }: {
         <div className="chatgpt-invitation-icon"><MessageSquare size={23} strokeWidth={1.4} /></div>
         <div><span className="product-kicker">ALSO IN CHATGPT</span><h2>Take the evidence into your conversation.</h2><p>Public patent research and component inspection tools through one MCP connection.</p></div>
         <a href="/connect">Connect FormaProof <ArrowUpRight size={15} /></a>
+        <a href="https://raw.githubusercontent.com/medhiblk/patentradar/main/downloads/formaproof-plugin.zip" download="formaproof-plugin.zip">Download free MCP plugin ZIP <ArrowUpRight size={15} /></a>
       </section>
       <footer className="product-footer">
         <span>Earlier research. Clearer evidence. Better-informed design.</span>
