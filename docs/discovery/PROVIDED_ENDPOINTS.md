@@ -35,3 +35,5 @@ The existing importer does not parse raw USPTO/PatentsView TSV/ZIP formats. It r
 ## Implementation verification
 
 Production build (including TypeScript), ESLint, 88 unit/integration tests and all 13 Playwright browser workflows passed after these changes. Automated provider calls are mocked, including the newly added scientific provider in the existing partial-failure integration test. Separate real HTTP observations are stored above; those are not inferred from mocks.
+
+Production verification also passed after deployment: Europe PMC returned four normalized scientific records; exact EPO lookup returned EP1000000A1 and eleven claims with a single REST prefix in its original source URL; the dataset endpoint returned two catalogue links and performed zero imports. See [production release evidence](PROVIDED_ENDPOINTS_RELEASE.json). Source CI passed: https://github.com/medhiblk/patentradar/actions/runs/40195710758 .
