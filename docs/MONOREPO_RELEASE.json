@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-25T19:25:09.217922+00:00",
+  "structure": {
+    "workspaces": [
+      "apps/web",
+      "packages/contracts",
+      "packages/engineering",
+      "packages/sdk"
+    ],
+    "optionalWorker": "services/cad"
+  },
+  "checks": {
+    "cleanNpmCi": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "applicationTests": 125,
+    "sdkTests": 5,
+    "productionBuild": "passed",
+    "privateBuildManifests": 41,
+    "privateBuildEntries": 0,
+    "chromiumWorkflowsPassed": 27,
+    "webkitPdfWorkflowsPassed": 3,
+    "isolatedSdkInstall": {
+      "esm": true,
+      "node24CommonJs": true,
+      "typescript": true
+    }
+  },
+  "deployment": "pending production monorepo verification",
+  "limitations": [
+    "No npm registry publication: install packed artifacts or use workspaces.",
+    "Docker and optional native Python runtime not executed during this migration.",
+    "Provider availability and configuration remain unchanged; BigQuery is not asserted operational."
+  ],
+  "functionalGroups": 24
+}

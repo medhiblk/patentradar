@@ -53,3 +53,8 @@ Coherent commits: `e190f6a` baseline snapshot, `eba0ff8` streamed search/seed/ev
 ## Subsequent engineering and platform execution
 
 Local sourced FTS search, private workspaces, bounded AI evidence-review routes and a real CadQuery Engineering Studio were added after this A-only record. Read `engineering/DELIVERY.md` for current behavior, tests, remaining B/C gaps and deployment requirements. Earlier A-only limitations remain historical where superseded; there is still no claim of complete worldwide data or credential-free cloud CAD hosting.
+
+
+## Monorepo checkpoint — 2026-10-25
+
+Moved the working application into `apps/web`; extracted canonical contracts, engineering operations and a typed HTTP/MCP SDK into three npm packages. Root commands, CI, Docker paths and Vercel preparation follow the workspace layout. Local private data was moved intact and remains ignored. See [integration instructions](MONOREPO.md), [functional inventory](FEATURES.md) and [verification record](MONOREPO_RELEASE.json). No provider was newly declared operational by this reorganization.

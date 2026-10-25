@@ -1,4 +1,4 @@
-import { PUBLIC_MCP_TOOLS } from "./connection";
+import { PUBLIC_MCP_TOOLS } from "./connection.js";
 /** Test the anonymous protocol, not account access or provider search health. */
 export async function checkPublicMcp(endpoint: string, signal: AbortSignal) {
   let protocol = "2025-03-26";

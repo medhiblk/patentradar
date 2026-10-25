@@ -1,42 +1,13 @@
 {
-  "name": "patentradar",
+  "name": "formaproof-monorepo",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "node --use-env-proxy node_modules/next/dist/bin/next dev --hostname 0.0.0.0",
-    "build": "next build",
-    "start": "node --use-env-proxy node_modules/next/dist/bin/next start --hostname 0.0.0.0",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "test": "vitest run",
-    "test:e2e": "playwright test",
-    "postinstall": "node scripts/prepare-cad-assets.mjs",
-    "check:private-build": "node scripts/check-private-build.mjs"
-  },
-  "dependencies": {
-    "@google-cloud/bigquery": "^9.5.0",
-    "@modelcontextprotocol/sdk": "^1.32.2",
-    "@radix-ui/react-slot": "^1.2.4",
-    "@vercel/blob": "^2.8.2",
-    "cheerio": "^1.2.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "geist": "^1.8.2",
-    "lucide-react": "^0.468.0",
-    "motion": "^14.6.0",
-    "n3": "^2.13.12",
-    "next": "^16.0.0",
-    "openai": "^6.0.0",
-    "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^4.10.38",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "recharts": "^3.0.0",
-    "replicad": "^1.2.0",
-    "replicad-opencascadejs": "^1.1.0",
-    "tailwind-merge": "^3.0.0",
-    "three": "^0.186.1",
-    "zod": "^4.0.0"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",
@@ -52,12 +23,23 @@
     "typescript": "^5.9.0",
     "vitest": "^5.0.5"
   },
-  "engines": {
-    "node": ">=24.0.0"
-  },
   "overrides": {
     "@vercel/cli-config": {
       "zod": "4.6.7"
     }
+  },
+  "scripts": {
+    "postinstall": "npm run build:packages && node scripts/prepare-cad-assets.mjs",
+    "build:packages": "tsc -b packages/contracts packages/engineering packages/sdk",
+    "dev": "npm run build:packages && node scripts/dev.mjs",
+    "build": "npm run build:packages && npm run build --workspace @formaproof/web",
+    "start": "npm run start --workspace @formaproof/web",
+    "typecheck": "npm run build:packages && npm run typecheck --workspace @formaproof/web",
+    "lint": "eslint apps/web packages scripts",
+    "test": "npm run build:packages && npm run test --workspace @formaproof/web && npm run test --workspace @formaproof/sdk",
+    "test:e2e": "npm run test:e2e --workspace @formaproof/web --",
+    "check:private-build": "npm run check:private-build --workspace @formaproof/web",
+    "sdk:pack": "npm run build:packages && node scripts/pack-sdk.mjs",
+    "check:sdk": "npm run sdk:pack && node scripts/verify-sdk.mjs"
   }
 }

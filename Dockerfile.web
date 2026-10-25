@@ -1,21 +1,22 @@
-# Lightweight runtime; Python/CadQuery stays optional in the existing Dockerfile.
+# Build context is the monorepo root. Browser OpenCascade needs no Python.
 FROM node:24-bookworm-slim AS build
 WORKDIR /app
-COPY package*.json ./
-COPY scripts/prepare-cad-assets.mjs ./scripts/prepare-cad-assets.mjs
-RUN npm ci
 COPY . .
-RUN npm run build && npm run check:private-build && npm prune --omit=dev
+RUN npm ci && npm run build && npm run check:private-build
+# No install hooks at prune time: TypeScript is intentionally removed afterward.
+RUN npm prune --omit=dev --ignore-scripts
 
 FROM node:24-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production PATENTRADAR_DATA_DIR=/var/lib/patentradar
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
-COPY --from=build /app/next.config.ts ./next.config.ts
-COPY --from=build /app/docs/API_MCP.md ./docs/API_MCP.md
+COPY --from=build /app/apps/web/package.json ./apps/web/package.json
+COPY --from=build /app/apps/web/.next ./apps/web/.next
+COPY --from=build /app/apps/web/public ./apps/web/public
+COPY --from=build /app/apps/web/next.config.ts ./apps/web/next.config.ts
+COPY --from=build /app/apps/web/docs ./apps/web/docs
+COPY --from=build /app/packages ./packages
 RUN mkdir -p /var/lib/patentradar && chown node:node /var/lib/patentradar
 USER node
 VOLUME /var/lib/patentradar

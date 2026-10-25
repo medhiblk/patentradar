@@ -5,7 +5,7 @@ import {
   buildable,
   type AssemblySpec,
   type ComponentSpec,
-} from "./schema";
+} from "./schema.js";
 
 export const STARTER_PARTS = [
   {

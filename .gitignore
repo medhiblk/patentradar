@@ -11,8 +11,13 @@ playwright-report/
 .venv-cad/
 __pycache__/
 *.pyc
-/public/cad-kernel/
-/public/document-kernel/
+/apps/web/public/cad-kernel/
+/apps/web/public/document-kernel/
 # Local confidential attachment/data stores, including custom volume paths.
 **/private-files/
 **/patentradar.sqlite*
+
+/packages/*/dist/
+/artifacts/
+/apps/web/docs/API_MCP.md
+/apps/web/cad/

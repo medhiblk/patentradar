@@ -1,40 +1,10 @@
 import { z } from "zod";
-import { ResearchSchema, ProfileSchema } from "../model";
+import { ResearchSchema } from "../model";
 import { execute } from "../search/orchestrator";
 import { compare } from "../compare";
-import { PatentSchema } from "../providers/types";
 import { lookup } from "../providers/epo-publication";
-export const SearchInput = z
-  .object({
-    query: z.string().trim().min(3).max(150),
-    shareQuery: z.boolean().default(false),
-    sources: z.enum(["all", "local"]).default("all"),
-    seeds: z
-      .array(
-        z.object({
-          publicationNumber: z.string().max(40),
-          publicationDate: z
-            .string()
-            .regex(/^\d{8}$/)
-            .optional(),
-        }),
-      )
-      .max(10)
-      .default([]),
-  })
-  .strict();
-export const LookupInput = z
-  .object({
-    publicationNumber: z.string().regex(/^EP\s*\d+[AB]\d$/i),
-    publicationDate: z.string().regex(/^\d{8}$/),
-  })
-  .strict();
-export const CompareInput = z
-  .object({
-    profile: ProfileSchema,
-    patents: z.array(PatentSchema).min(1).max(10),
-  })
-  .strict();
+export { SearchInput, LookupInput, CompareInput } from "@formaproof/contracts";
+import { SearchInput, LookupInput, CompareInput } from "@formaproof/contracts";
 export function toResearchInput(raw: unknown) {
   const i = SearchInput.parse(raw);
   if (i.sources !== "local" && !i.shareQuery)

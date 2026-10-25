@@ -19,6 +19,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
+      - run: npm run check:sdk
       - run: npm run build
       - run: npm run check:private-build
       - run: npx playwright install --with-deps chromium
@@ -33,5 +34,5 @@ jobs:
         with:
           persist-credentials: false
       - run: sudo apt-get update && sudo apt-get install -y python3-venv libgl1 libglib2.0-0 libxrender1 libsm6
-      - run: python3 -m venv /tmp/cad-env && /tmp/cad-env/bin/pip install -r cad/requirements.txt
-      - run: /tmp/cad-env/bin/python cad/test_worker.py
+      - run: python3 -m venv /tmp/cad-env && /tmp/cad-env/bin/pip install -r services/cad/requirements.txt
+      - run: /tmp/cad-env/bin/python services/cad/test_worker.py
