@@ -52,10 +52,12 @@ export function EngineeringStudio({
   onPatentResearch,
   initialFile,
   onFileConsumed,
+  restoreDraft = true,
 }: {
   onPatentResearch: (text: string) => void;
   initialFile?: File | null;
   onFileConsumed?: () => void;
+  restoreDraft?: boolean;
 }) {
   const [spec, setSpec] = useState<AssemblySpec>({
     title: "Untitled engineering assembly",
@@ -191,6 +193,7 @@ export function EngineeringStudio({
   }
   // An explicit research handoff retains parameters, never the original file.
   useEffect(() => {
+    if (!restoreDraft) return;
     const timer = setTimeout(() => {
       try {
         const draft = sessionStorage.getItem("patentradar-design-return-v1");
@@ -220,7 +223,7 @@ export function EngineeringStudio({
       }
     }, 0);
     return () => clearTimeout(timer);
-  }, []);
+  }, [restoreDraft]);
   async function request(url: string, body: object | FormData) {
     const r = await fetch(url, {
       method: "POST",

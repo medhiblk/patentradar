@@ -51,6 +51,9 @@ export function Home({
           <span className="hero-note">
             No account needed to model. Save privately when you’re ready.
           </span>
+          <a className="hero-demo-link" href="/demo">
+            Try the guided demo <ArrowUpRight size={12} />
+          </a>
         </div>
         <div
           className="design-scene"

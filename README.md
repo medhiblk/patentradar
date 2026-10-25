@@ -4,7 +4,7 @@
 
 Bring a technical manual, drawing or specification. Choose what to represent, check the measurements, build an assembly and investigate related patents. General patent research remains available for non-physical inventions.
 
-[Open the app](https://patentradar-puce.vercel.app) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
+[Open the app](https://patentradar-puce.vercel.app) · [Guided demo](https://patentradar-puce.vercel.app/demo) · [3D Studio](https://patentradar-puce.vercel.app/engineering) · [Private files](https://patentradar-puce.vercel.app/files) · [API & MCP](https://patentradar-puce.vercel.app/developers)
 
 ## Work from any environment
 

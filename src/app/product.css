@@ -958,3 +958,119 @@
   font-size: 10px;
   color: #87917c;
 }
+.hero-demo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #607257;
+  margin-top: 14px;
+  border-bottom: 1px solid #d7dfcf;
+  padding-bottom: 4px;
+}
+.demo-intro {
+  max-width: 760px;
+  padding: 50px 0 24px;
+}
+.demo-intro h1 {
+  font-size: clamp(40px, 5vw, 66px);
+  line-height: 1.06;
+  letter-spacing: -0.06em;
+  color: #30422d;
+  margin: 24px 0;
+}
+.demo-intro > p {
+  font-size: 15px;
+  color: #718168;
+  max-width: 620px;
+}
+.demo-intro .hint {
+  font-size: 11px;
+  margin: 18px 0;
+}
+.demo-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  padding: 25px 0 32px;
+  border-bottom: 1px solid #dfe7d8;
+}
+.demo-guide article > span {
+  font-size: 10px;
+  color: #889b7b;
+}
+.demo-guide h2 {
+  font-size: 17px;
+  letter-spacing: -0.4px;
+  margin: 15px 0 10px;
+}
+.demo-guide p {
+  font-size: 12px;
+  color: #78896e;
+}
+.demo-context {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ebf1e4;
+  border: 1px solid #dce6d1;
+  border-radius: 12px;
+  padding: 15px 18px;
+  color: #687e5a;
+  font-size: 12px;
+  margin-top: 25px;
+}
+.demo-context svg {
+  flex-shrink: 0;
+}
+.demo-preview {
+  margin: 30px 0;
+  padding: 60px 25px;
+  text-align: center;
+  background: #eef3e8;
+  border-radius: 20px;
+  color: #748c64;
+}
+.demo-preview > svg {
+  margin: 0 auto 20px;
+}
+.demo-preview h2 {
+  font-size: 25px;
+  letter-spacing: -0.8px;
+  color: #4c6640;
+}
+.demo-preview p {
+  max-width: 470px;
+  margin: 0 auto 24px;
+  font-size: 13px;
+}
+.demo-live-workspace .studio-intro {
+  display: none;
+}
+@media (max-width: 650px) {
+  .demo-intro {
+    padding-top: 30px;
+  }
+  .demo-intro > p {
+    font-size: 13px;
+  }
+  .demo-guide {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .demo-guide h2 {
+    margin: 8px 0;
+  }
+  .demo-guide p {
+    margin-bottom: 10px;
+  }
+  .demo-context {
+    font-size: 10px;
+  }
+  .demo-preview {
+    padding: 35px 20px;
+  }
+  .demo-preview h2 {
+    font-size: 22px;
+  }
+}

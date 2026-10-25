@@ -113,6 +113,7 @@ export function AppNavigation({
             {destination("Account & Monitoring", "Account")}
             <span className="nav-group-label">RESOURCES</span>
             {destination("API Providers", "Data sources")}
+            <a href="/demo">Guided demo</a>
             <a href="/developers">
               API & MCP <ArrowUpRight size={12} />
             </a>
