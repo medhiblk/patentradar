@@ -83,6 +83,7 @@ export type Provider = {
   license?: string;
   category?: "patent" | "research" | "organization" | "technical" | "graph";
   enabledByDefault?: boolean;
+  setup?: { required: string[]; url: string; note: string };
 };
 export interface PatentLookup {
   lookup(number: string, date?: string): Promise<PatentRecord[]>;

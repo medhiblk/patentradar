@@ -1,6 +1,7 @@
 import type { Provider, ProviderCapability } from "./types";
 import { endpointCatalogue } from "./eligibility";
 import { observations } from "./http";
+import { providerSetup } from "./setup";
 const entry = (
   id: string,
   name: string,
@@ -247,11 +248,11 @@ export function registry(): Provider[] {
     entry(
       "lens",
       "Lens",
-      [],
+      ["patent-search"],
       "Approved API token",
       "https://docs.api.lens.org/",
-      "Authorized search adapter pending.",
-      false,
+      "Bounded authenticated patent search implemented; approved token and live verification required.",
+      true,
       !!process.env.LENS_API_TOKEN,
     ),
     entry(
@@ -327,6 +328,7 @@ export function registry(): Provider[] {
         : endpointCatalogue.find((e) => e.provider === (aliases[p.id] || p.id));
     return {
       ...p,
+      setup: providerSetup[p.id],
       tier:
         p.tier ||
         (p.id === "patent-pages" ? "C" : (evidence?.tier as Provider["tier"])),

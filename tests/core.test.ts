@@ -121,8 +121,10 @@ describe("workflow integration", () => {
     expect(spy).not.toHaveBeenCalled();
   });
   it("continues with partial real results when one provider fails", async () => {
+    const network = vi.fn(() => { throw new Error("Unexpected external request in integration test"); });
+    vi.stubGlobal("fetch", network);
     vi.spyOn(openaire, "search").mockResolvedValue({ patents: [], papers: [] });
-    for (const name of ["datacite", "hal", "arxiv", "zenodo"] as const)
+    for (const name of ["datacite", "hal", "arxiv", "zenodo", "nasa", "doe", "inspire"] as const)
       vi.spyOn(extra, name).mockResolvedValue([]);
     vi.spyOn(publicPatents, "search").mockResolvedValue([]);
     vi.spyOn(pubmed, "search").mockResolvedValue([]);
@@ -152,6 +154,7 @@ describe("workflow integration", () => {
     expect(d.papers).toHaveLength(1);
     expect(d.patents).toHaveLength(0);
     expect(d.warnings.join(" ")).toContain("Crossref unavailable");
+    expect(network).not.toHaveBeenCalled();
   });
   it("requires explicit external search consent", async () => {
     const r = await research(

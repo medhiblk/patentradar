@@ -17,6 +17,8 @@ import * as epmc from "@/lib/providers/europe-pmc";
 import * as semantic from "@/lib/providers/semantic-scholar";
 import * as local from "@/lib/providers/local-index";
 import { registry } from "@/lib/providers/registry";
+import * as lens from "@/lib/providers/lens";
+import * as patentPages from "@/lib/providers/patent-pages";
 export const SourceInput = z
   .object({
     provider: z.enum([
@@ -86,6 +88,7 @@ export async function querySource(raw: unknown) {
       status: "NOT_CONFIGURED",
       error: provider.detail,
       authentication: provider.authentication,
+      setup: provider.setup,
       retrievedAt: new Date().toISOString(),
     };
   if (i.provider === "openai")
@@ -224,13 +227,11 @@ export async function querySource(raw: unknown) {
       records = await local.search(i.query);
       category = "patent";
     } else if (i.provider === "patent-pages") {
-      // Enrichment requires an existing sourced patent record, not an invented one.
-      return {
-        provider: i.provider,
-        status: "UNSUPPORTED_OPERATION",
-        error: "Use search_patents with sourced records for HTML enrichment.",
-        retrievedAt: new Date().toISOString(),
-      };
+      records = await patentPages.lookup(i.query);
+      category = "patent";
+    } else if (i.provider === "lens") {
+      records = await lens.search(i.query, i.page);
+      category = "patent";
     } else {
       return {
         provider: i.provider,

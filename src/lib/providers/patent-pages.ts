@@ -66,3 +66,21 @@ export async function enrich(record: PatentRecord) {
     record,
   );
 }
+
+// Exact publication lookup; every returned field comes from the retrieved page.
+export async function lookup(publication: string) {
+  const number = normalizePublication(publication);
+  const url = "https://patents.google.com/patent/" + number + "/en";
+  const html = await request("patent-pages", url);
+  const $ = load(html);
+  const title = $('meta[name="DC.title"]').attr("content") ||
+    $('meta[name="citation_title"]').attr("content");
+  if (!title) return invalidResponse("patent-pages");
+  const record = parsePatentPage(html, {
+    id: number, publicationNumber: number, title: title.trim(), applicants: [],
+    abstract: $('meta[name="DC.description"]').attr("content"),
+    source: "Google Patents public publication page", sourceUrl: url,
+    retrievedAt: new Date().toISOString(),
+  });
+  return [record];
+}
