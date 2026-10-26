@@ -1,3 +1,4 @@
+import { PUBLIC_MCP_TOOLS } from "@formaproof/sdk/mcp";
 import { test, expect } from "@playwright/test";
 test("home links to a usable ChatGPT connection guide and public MCP discovery", async ({
   page,
@@ -9,7 +10,7 @@ test("home links to a usable ChatGPT connection guide and public MCP discovery",
   await page.getByRole("link", { name: "Connect FormaProof", exact: true }).click();
   await expect(page).toHaveURL(/\/connect$/);
   await expect(
-    page.getByRole("link", { name: "Open ChatGPT Plugins", exact: true }),
+    page.getByRole("link", { name: "Open ChatGPT", exact: true }),
   ).toHaveAttribute("href", "https://chatgpt.com/plugins");
   await expect(
     page.getByLabel("Public MCP server URL", { exact: true }),
@@ -20,11 +21,11 @@ test("home links to a usable ChatGPT connection guide and public MCP discovery",
   await expect(
     page
       .getByRole("status")
-      .filter({ hasText: "MCP reachable · 8 public tools discovered" }),
+      .filter({ hasText: `MCP reachable · ${PUBLIC_MCP_TOOLS.length} public tools discovered` }),
   ).toBeVisible({ timeout: 30000 });
   const download = page.waitForEvent("download");
   await page
-    .getByRole("button", { name: "Download MCP client config", exact: true })
+    .getByRole("button", { name: "Download config for other MCP clients", exact: true })
     .click();
   expect((await download).suggestedFilename()).toBe("formaproof-mcp.json");
   await page.setViewportSize({ width: 390, height: 844 });

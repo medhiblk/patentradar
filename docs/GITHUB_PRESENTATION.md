@@ -29,6 +29,14 @@ The workflow uploads **only `site/`**. It does not publish the checkout, local d
 
 For local review, run `python3 -m http.server 8080 --directory site` from the repository root. The stylesheet uses a relative URL so it works below the `/patentradar/` project path.
 
+## If the Pages workflow says “Not Found”
+
+The run on 26 October 2026 failed at **Configure Pages** with `Get Pages site failed` and HTTP 404. This means the repository had no enabled Pages site at that time; it is separate from the application/browser test failure.
+
+Open https://github.com/medhiblk/patentradar/settings/pages and select **GitHub Actions** under **Build and deployment → Source**, then rerun the Pages workflow. Confirm a successful deployment before advertising the Pages URL.
+
+Do not add `enablement: true` with the default workflow token as a workaround. The official `actions/configure-pages` input documentation states that automatic enablement requires a token other than `GITHUB_TOKEN`, with repository administration/Pages permissions. No additional token is needed when the repository owner enables Pages through Settings.
+
 ## GitHub-managed sections
 
 Stars, watchers, forks, contributors, language percentages, activity, releases and packages are maintained by GitHub. Do not invent or hard-code popularity statistics or releases in the README. Create a release only when there is a versioned deliverable and release notes; package publication is separate from packing the local SDK.
