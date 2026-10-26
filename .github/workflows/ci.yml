@@ -6,7 +6,8 @@ permissions:
   contents: read
 jobs:
   app:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -16,23 +17,46 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=high
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
       - run: npm run check:sdk
       - run: npm run build
       - run: npm run check:private-build
+      - name: Use the public Ubuntu archive for system packages
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure[.]archive[.]ubuntu[.]com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: npx playwright install --with-deps chromium
       - name: Browser workflows
         run: |
           export CHROMIUM_PATH="$(node -p 'require("@playwright/test").chromium.executablePath()')"
           npm run test:e2e
+      - name: Preserve browser failure diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: browser-failure-diagnostics
+          path: |
+            apps/web/test-results/
+            apps/web/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
   native-cad:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+      - name: Use the public Ubuntu archive for system packages
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure[.]archive[.]ubuntu[.]com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: sudo apt-get update && sudo apt-get install -y python3-venv libgl1 libglib2.0-0 libxrender1 libsm6
       - run: python3 -m venv /tmp/cad-env && /tmp/cad-env/bin/pip install -r services/cad/requirements.txt
       - run: /tmp/cad-env/bin/python services/cad/test_worker.py
