@@ -36,3 +36,9 @@ The security-alerts API also returned 403. An owner should inspect Security → 
 - The local SDK pack check required a writable npm cache because this managed workspace's default cache is read-only. Using `npm_config_cache=/tmp/patentradar-ci-npm-cache` fixed that environment-only issue; GitHub-hosted runners already have a writable cache. No application or SDK code was changed for it.
 
 The PR checks provide the authoritative hosted execution of the modified workflow. A PR's Pages build checks validation and artifact packaging only: deployment is intentionally restricted to main. A skipped PR deploy must not be described as a successful public deployment. Vercel application deployment is separate and is not changed by this PR.
+
+## Additional hosted-run finding
+
+The first PR attempt spent more than ten minutes downloading 25.9 MB of Ubuntu packages during `playwright install --with-deps`, not running browser tests. After cancellation, its actual logs showed repeated, very slow transfers from `azure.archive.ubuntu.com`, including a retried 7.5 MB font package. The same commit had completed the full application check in 3m05s on a different runner.
+
+Both jobs now replace that Azure mirror entry in the runner's mirror list with the official public Ubuntu HTTPS archive before installing system packages. All dependencies and browser tests remain required. The change affects only disposable GitHub-hosted runners; it does not change application code, package versions, Vercel or the local machine. The replacement is conditional on the mirror-list file existing, preserving compatibility with image layout changes. A new hosted execution is required to validate the revised workflow.

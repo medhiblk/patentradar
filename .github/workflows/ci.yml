@@ -25,6 +25,11 @@ jobs:
       - run: npm run check:sdk
       - run: npm run build
       - run: npm run check:private-build
+      - name: Use the public Ubuntu archive for system packages
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure[.]archive[.]ubuntu[.]com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: npx playwright install --with-deps chromium
       - name: Browser workflows
         run: |
@@ -47,6 +52,11 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+      - name: Use the public Ubuntu archive for system packages
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure[.]archive[.]ubuntu[.]com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: sudo apt-get update && sudo apt-get install -y python3-venv libgl1 libglib2.0-0 libxrender1 libsm6
       - run: python3 -m venv /tmp/cad-env && /tmp/cad-env/bin/pip install -r services/cad/requirements.txt
       - run: /tmp/cad-env/bin/python services/cad/test_worker.py
