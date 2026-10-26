@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "scripts/check-project-site.py"
+      - ".github/workflows/pages.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - "scripts/check-project-site.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -12,13 +18,33 @@ permissions:
   contents: read
 
 concurrency:
-  group: github-pages
+  group: github-pages-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
+  build:
+    name: Validate and package introduction
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Validate uploaded HTML, assets and anchors
+        run: python3 scripts/check-project-site.py
+      - name: Upload static introduction only
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: site
   deploy:
-    runs-on: ubuntu-latest
+    # PRs validate/package the exact payload but cannot publish it.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
@@ -30,11 +56,9 @@ jobs:
         with:
           persist-credentials: false
       - name: Configure Pages
+        # One-time prerequisite: Settings > Pages > Source = GitHub Actions.
+        # No fallback skips this check or hides an unconfigured Pages site.
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
-      - name: Upload static introduction only
-        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
-        with:
-          path: site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
