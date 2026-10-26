@@ -88,7 +88,7 @@ export function McpConnectionPanel() {
           <PlugZap size={22} strokeWidth={1.4} />
         </span>
         <div>
-          <h2>One URL. Your research tools.</h2>
+          <h2>Connect in regular ChatGPT</h2>
           <p>Public tools · No API key or FormaProof login needed</p>
         </div>
       </div>
@@ -122,7 +122,7 @@ export function McpConnectionPanel() {
           target="_blank"
           rel="noreferrer"
         >
-          Open ChatGPT Plugins <ArrowUpRight size={14} />
+          Open ChatGPT <ArrowUpRight size={14} />
         </a>
       </div>
       <dl className="mcp-settings">
@@ -146,8 +146,14 @@ export function McpConnectionPanel() {
           {checking ? "Checking MCP protocol…" : "Test this MCP connection"}
         </button>
         <button className="quiet-button" onClick={download}>
-          Download MCP client config
+          Download config for other MCP clients
         </button>
+        <a className="quiet-button" href="/formaproof-mcp-icon.png" download>
+          Download optional PNG icon
+        </a>
+        <a className="quiet-button" href="https://raw.githubusercontent.com/medhiblk/patentradar/main/downloads/formaproof-plugin.zip" download="formaproof-plugin.zip">
+          Download portable plugin ZIP
+        </a>
       </div>
       {message && (
         <p role="status" className="connection-feedback">
@@ -168,9 +174,9 @@ export function McpConnectionPanel() {
         </p>
       )}
       <p className="mcp-install-note">
-        This connects a custom MCP plugin. It does not imply an approved public
-        directory listing or automatically install anything in your ChatGPT
-        account.
+        Add the server in ChatGPT once, then select @FormaProof in a regular
+        conversation. Downloading the ZIP does not install it in ChatGPT.
+        This is a custom connection, not an approved public directory listing.
       </p>
     </section>
   );

@@ -21,12 +21,12 @@ export default function Connect() {
             <em>In the conversation.</em>
           </h1>
           <p>
-            Connect FormaProof’s MCP tools to ChatGPT. Discover related
-            inventions, examine evidence and inspect component specifications
-            while you work.
+            Use FormaProof in a regular ChatGPT conversation. Find related
+            inventions, examine evidence and inspect component specifications.
+            No Codex or ZIP installation is needed for this connection.
           </p>
           <span className="connect-alias">
-            PatentRadar tools, in your FormaProof workspace.
+            ChatGPT web · Custom connections depend on your account and workspace permissions.
           </span>
         </header>
         <div className="connect-layout">
@@ -42,8 +42,8 @@ export default function Connect() {
                 <div>
                   <h2>Open Plugins in ChatGPT</h2>
                   <p>
-                    Choose the plus button, then “Add custom MCP server”. Your
-                    account and workspace must permit custom connections.
+                    On ChatGPT web, open Plugins, choose the plus button, then
+                    “Add custom MCP server”. This is separate from Codex.
                   </p>
                 </div>
               </li>
@@ -53,7 +53,8 @@ export default function Connect() {
                   <h2>Add the FormaProof server</h2>
                   <p>
                     Paste the URL, use the connection name shown here and select
-                    no authentication for the public tools.
+                    no authentication for the public tools. The optional PNG
+                    icon is available below; you can also leave it empty.
                   </p>
                 </div>
               </li>
@@ -62,8 +63,8 @@ export default function Connect() {
                 <div>
                   <h2>Review, then create</h2>
                   <p>
-                    Review ChatGPT’s connection notice and discovered tools,
-                    then choose “Create as a plugin”. In a new chat, type @ and
+                    Acknowledge ChatGPT’s connection notice and choose “Create
+                    as a plugin”. Review the tools. In a new regular chat, type @ and
                     select your FormaProof connection.
                   </p>
                 </div>
@@ -85,6 +86,16 @@ export default function Connect() {
                 Account and workspace permissions apply.
               </p>
             </details>
+            <details>
+              <summary>Connection rejected, or the create option is missing?</summary>
+              <p>
+                Use the complete HTTPS URL ending in /api/mcp and select no
+                authentication. Retry without an optional icon, or use the PNG
+                below. If custom connections are unavailable, check your account
+                permissions with your workspace admin. The ZIP cannot enable a
+                ChatGPT feature that your account does not support.
+              </p>
+            </details>
           </section>
         </div>
         <section className="connect-use-cases">
@@ -102,9 +113,8 @@ export default function Connect() {
             </p>
           </div>
           <blockquote>
-            Use FormaProof to search for patents about sealed pump bearings. I
-            approve sharing those generic search terms. Show the sources,
-            technical overlap and coverage limits.
+            Use FormaProof to show the available patent providers and their
+            coverage limits. Then show the mechanical component library.
           </blockquote>
         </section>
         <details className="connect-tools">
@@ -120,6 +130,11 @@ export default function Connect() {
           </div>
         </details>
         <footer className="connect-footer">
+          <p>
+            For a patent search, approve only short non-confidential concepts,
+            for example: “Search for sealed pump bearings. I approve sharing
+            those search terms. Show actual sources and evidence.”
+          </p>
           <p>
             The interactive 3D editor lives in the web workspace. MCP provides
             research and component-inspection tools; it does not establish

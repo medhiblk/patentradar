@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
-import { guard } from "@/lib/security";
+import { guard, OriginRejectedError } from "@/lib/security";
 import { user } from "@/lib/platform/auth";
 import { listItems } from "@/lib/platform/store";
 import { search } from "@/lib/providers/local-index";
@@ -25,15 +25,21 @@ const output = (value: unknown) => ({
 });
 export async function POST(req: Request) {
   try {
-    guard(req, "mcp", 20);
-  } catch {
+    // Only this endpoint accepts ChatGPT origins. Account/file routes stay same-origin.
+    guard(req, "mcp", 20, ["https://chatgpt.com", "https://chat.openai.com"]);
+  } catch (error) {
+    const originRejected = error instanceof OriginRejectedError;
     return Response.json(
       {
         jsonrpc: "2.0",
         id: null,
-        error: { code: -32000, message: "Rate limit or origin rejected" },
+        error: {
+          code: -32000,
+          message: originRejected ? "Origin not permitted" : "Rate limit exceeded; retry in one minute",
+        },
       },
-      { status: 429 },
+      { status: originRejected ? 403 : 429,
+        headers: originRejected ? {} : { "Retry-After": "60" } },
     );
   }
   const server = new McpServer(

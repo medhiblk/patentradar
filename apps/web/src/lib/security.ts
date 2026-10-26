@@ -1,14 +1,32 @@
 import { ProviderRequestError } from "./providers/http";
 const buckets = new Map<string, { count: number; reset: number }>();
-export function guard(request: Request, namespace = "public", limit = 20) {
+export class OriginRejectedError extends Error {
+  constructor() {
+    super("Cross-origin request rejected");
+  }
+}
+export function guard(
+  request: Request,
+  namespace = "public",
+  limit = 20,
+  allowedOrigins: readonly string[] = [],
+) {
   const origin = request.headers.get("origin");
-  if (
-    origin &&
-    (new URL(origin).host !==
-      (request.headers.get("host") || new URL(request.url).host) ||
-      !["http:", "https:"].includes(new URL(origin).protocol))
-  )
-    throw new Error("Cross-origin request rejected");
+  if (origin) {
+    let parsed: URL;
+    try {
+      parsed = new URL(origin);
+    } catch {
+      throw new OriginRejectedError();
+    }
+    const sameHost = parsed.host ===
+      (request.headers.get("host") || new URL(request.url).host);
+    if (
+      !["http:", "https:"].includes(parsed.protocol) ||
+      parsed.origin !== origin ||
+      (!sameHost && !allowedOrigins.includes(origin))
+    ) throw new OriginRejectedError();
+  }
   const key =
     namespace +
     ":" +

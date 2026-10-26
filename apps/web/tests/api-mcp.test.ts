@@ -2,6 +2,7 @@ import { it, expect, vi } from "vitest";
 import { POST as mcp, GET as mcpGet } from "../src/app/api/mcp/route";
 import { POST as apiSearch } from "../src/app/api/v1/search/route";
 import { GET as spec } from "../src/app/api/v1/openapi.json/route";
+import { guard, OriginRejectedError } from "../src/lib/security";
 const rpc = (method: string, params?: object) =>
   new Request("http://localhost:3000/api/mcp", {
     method: "POST",
@@ -11,6 +12,26 @@ const rpc = (method: string, params?: object) =>
     },
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
   });
+it.each(["https://chatgpt.com", "https://chat.openai.com"])(
+  "allows public MCP discovery from the trusted ChatGPT origin %s",
+  async (origin) => {
+    const request = rpc("tools/list");
+    request.headers.set("origin", origin);
+    expect((await mcp(request)).status).toBe(200);
+    expect(() => guard(request, "account-origin-check")).toThrow(OriginRejectedError);
+  },
+);
+it.each(["https://untrusted.example", "https://chatgpt.com.attacker.example", "null", "https://chatgpt.com/untrusted"])(
+  "rejects an untrusted MCP origin %s without disguising it as a quota error",
+  async (origin) => {
+    const request = rpc("tools/list");
+    request.headers.set("origin", origin);
+    const response = await mcp(request);
+    expect(response.status).toBe(403);
+    expect(response.headers.has("Retry-After")).toBe(false);
+    expect((await response.json()).error.message).toBe("Origin not permitted");
+  },
+);
 it("official MCP transport lists anonymous public tools without exposing private projects", async () => {
   const r = await mcp(rpc("tools/list"));
   expect(r.status).toBe(200);
