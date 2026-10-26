@@ -32,6 +32,7 @@ export function parseOpenaire(raw: unknown, query: string) {
     if (!title) continue;
     const children = [
       ...array(obj(entity.children).result),
+      ...array(obj(entity.children).instance).map((instance) => ({ instance })),
       ...array(entity.instance).map((instance) => ({ instance })),
     ];
     const patentChildren = children.filter(
@@ -93,7 +94,7 @@ export function parseOpenaire(raw: unknown, query: string) {
   }
   return { patents, papers };
 }
-export async function search(query: string, page = 1) {
+export async function search(query: string, page = 1, patentsOnly = false) {
   const url = new URL(
     process.env.OPENAIRE_PUBLICATIONS_URL ||
       "https://api.openaire.eu/search/publications",
@@ -104,6 +105,8 @@ export async function search(query: string, page = 1) {
     size: "8",
     page: String(page),
   }).forEach(([k, v]) => url.searchParams.set(k, v));
+  // The official publication-type vocabulary uses the case-sensitive term Patent.
+  if (patentsOnly) url.searchParams.set("instancetype", "Patent");
   return parseOpenaire(
     JSON.parse(await request("openaire", url.toString())),
     query,

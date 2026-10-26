@@ -1,7 +1,7 @@
 import type { SearchEvent } from "./orchestrator";
-export async function readSearchStream(
+export async function readJsonLines<T>(
   body: ReadableStream<Uint8Array>,
-  onEvent: (event: SearchEvent) => void,
+  onEvent: (event: T) => void,
 ) {
   const reader = body.getReader(),
     decoder = new TextDecoder();
@@ -22,4 +22,8 @@ export async function readSearchStream(
   } finally {
     reader.releaseLock();
   }
+}
+
+export function readSearchStream(body: ReadableStream<Uint8Array>, onEvent: (event: SearchEvent) => void) {
+  return readJsonLines<SearchEvent>(body, onEvent);
 }

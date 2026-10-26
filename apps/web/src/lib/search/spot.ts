@@ -7,7 +7,7 @@ import { passageSource } from "../intelligence/evidence";
 import { deduplicate } from "../normalize";
 import { lookup } from "../providers/epo-publication";
 import { sourceRun } from "./source-runs";
-import type { SourceRun } from "./audit";
+import type { SourceRun, SearchTrace } from "./audit";
 import { withSearchSignal } from "./scope";
 import { withRequestTrace } from "./request-trace";
 
@@ -23,11 +23,12 @@ export type SpotMatch = {
 };
 export type SpotResult = {
   identity: PatentDocumentIdentity; profile: Profile; matches: SpotMatch[];
-  coverage: { indexedPatentCount: number; queriedSources: string[]; mode: "reference-index" | "reference-index-and-live-lookup"; limitations: string[] };
+  coverage: { indexedPatentCount: number; queriedSources: string[]; mode: "reference-index" | "reference-index-and-live-lookup" | "reference-index-and-live-search"; limitations: string[] };
   lookupTraces: SourceRun[]; warnings: string[];
+  liveSearch?: { query: string; patentsRetrieved: number; papersRetrieved: number | null; trace: SearchTrace };
 };
 export type SpotEvent = { type: "indexed-results" | "lookup-started" | "lookup-finished" | "completed"; matches?: SpotMatch[]; lookupTrace?: SourceRun };
-export type SpotInput = { pages: PatentIdentityPage[]; profile?: Profile; consentToPublicLookup?: boolean; signal?: AbortSignal };
+export type SpotInput = { pages: PatentIdentityPage[]; profile?: Profile; consentToPublicLookup?: boolean; signal?: AbortSignal; additionalRecords?: PatentRecord[] };
 
 const generic = new Set("claim claims claimed wherein comprising comprises thereof therewith said present invention inventions description described according least first second third fourth apparatus device devices method methods system systems application publication patent document number figure figures drawing drawings feature features section reference references technical embodiment embodiments invention including includes include provided provides having plurality further respectively therefore thereby suitable used use such also well another each more may might should could would other only into onto example examples without within between shown means associated substantially particular particularly based relates relate consists consisting together through these those while whether about their which been being have after before under over during same than both either neither and the for with from that this are was were will can has its not any one two all our you your purpose following comprises provide form forms among accordance respectively".split(/\s+/));
 const meaningful = (text: string) => tokens(text).filter(term => !generic.has(term) && !/\d/.test(term));
@@ -137,11 +138,11 @@ function rankReferences(records: PatentRecord[], pages: PatentIdentityPage[], id
     }
     matches.push({ patent, matchType: fromHeader || recognizedText ? "same-publication" : "technical-overlap", relevance: fromHeader || recognizedText ? 100 : technicalScore,
       evidence, explanation: fromHeader ? "A publication number read from the actual front page matches a retrieved or indexed public patent record. This identifies the document; it is not a technical conflict score."
-        : recognizedText ? "Multiple substantial source passages reproduce wording from distinct indexed abstract/claim sections. This recognizes existing publication text, not semantic novelty or infringement."
-          : "Shared technical terms occur in the uploaded passages and the indexed patent evidence. Ranking is lexical, not semantic or a legal conclusion.",
-      limitations: ["This is a bounded reference-corpus comparison, not a complete worldwide prior-art or freedom-to-operate search.",
+        : recognizedText ? "Multiple substantial source passages reproduce wording from distinct available abstract/claim sections. This recognizes existing publication text, not semantic novelty or infringement."
+          : "Shared technical terms occur in the uploaded passages and the sourced patent evidence. Ranking is lexical, not semantic or a legal conclusion.",
+      limitations: ["This is a bounded source comparison, not a complete worldwide prior-art or freedom-to-operate search.",
         ...(fromHeader ? ["Publication identity is extracted metadata; an exact-file or complete-document identity check was not performed."] : []),
-        ...(patent.claims?.length ? [patent.claimsScope === "excerpts" ? "Only indexed claim excerpts were compared." : "Claims must be interpreted and legal status checked separately."] : ["Claims unavailable: comparison uses abstract or title only."])] });
+        ...(patent.claims?.length ? [patent.claimsScope === "excerpts" ? "Only available claim excerpts were compared." : "Claims must be interpreted and legal status checked separately."] : ["Claims unavailable: comparison uses abstract or title only."])] });
   }
   return { matches: matches.sort((a, b) => Number(b.matchType === "same-publication") - Number(a.matchType === "same-publication") || b.relevance - a.relevance).slice(0, 10), passages, vocabulary };
 }
@@ -162,6 +163,7 @@ export async function spotDocument(input: SpotInput, onUpdate?: (event: SpotEven
   const identity = identifyPatentDocument(pages);
   let records = deduplicate(publicReferencePatents().filter(record => !record.synthetic));
   const indexedPatentCount = records.length;
+  records = deduplicate([...records, ...(input.additionalRecords || []).filter(record => !record.synthetic)]);
   let ranked = rankReferences(records, pages, identity);
   const profile = input.profile ? ProfileSchema.parse(input.profile) : ProfileSchema.parse({ title: (identity.primary?.title || "Uploaded technical document").slice(0, 200),
     domain: "Review required — extracted source passages", operatingPrinciple: ranked.passages[0]?.quote.slice(0, 1500) || pages[0].text.slice(0, 1500),

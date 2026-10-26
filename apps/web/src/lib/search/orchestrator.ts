@@ -92,7 +92,7 @@ export function plan(input: SearchInput): {
     };
   const paper = (name: string, fn: () => Promise<Paper[]>) =>
     jobs.push({ name, run: async () => ({ papers: await fn(), patents: [] }) });
-  jobs.push({ name: "OpenAIRE Graph", run: () => openaire.search(query) });
+  jobs.push({ name: "OpenAIRE Graph", run: () => openaire.search(query, 1, true) });
   paper("DataCite", () => extra.datacite(query));
   paper("HAL", () => extra.hal(query));
   paper("arXiv", () => extra.arxiv(query));
