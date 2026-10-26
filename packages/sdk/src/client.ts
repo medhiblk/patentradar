@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { SearchInput, LookupInput, CompareInput, ReportSchema, PatentSchema, SearchTraceSchema, SourceRunSchema } from "@formaproof/contracts";
+import { SearchInput, LookupInput, CompareInput, ReportSchema, PatentSchema, SourceQueryInput, SourceQueryResult, SearchTraceSchema, SourceRunSchema } from "@formaproof/contracts";
 export type SearchQuery = z.input<typeof SearchInput>;
+export type SourceQuery = z.input<typeof SourceQueryInput>;
 export type PatentLookupQuery = z.input<typeof LookupInput>;
 export type ComparisonQuery = z.input<typeof CompareInput>;
 const EventSchema = z.object({
@@ -76,6 +77,11 @@ export class FormaProofClient {
   }
   async search(input: SearchQuery, signal?: AbortSignal) {
     return ReportSchema.parse(await this.request("api/v1/search", this.searchInput(input), signal));
+  }
+  async querySource(input: SourceQuery, signal?: AbortSignal) {
+    const parsed = SourceQueryInput.parse(input);
+    if (!parsed.consent) throw new FormaProofApiError("Set consent=true to share reviewed concepts with the selected public source.", 0, "CONSENT_REQUIRED");
+    return SourceQueryResult.parse(await this.request("api/v1/sources/query", parsed, signal));
   }
   async lookupPatent(input: PatentLookupQuery, signal?: AbortSignal) {
     return z.object({ patents: z.array(PatentSchema), coverage: z.string() }).parse(

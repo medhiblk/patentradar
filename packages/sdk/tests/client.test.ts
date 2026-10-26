@@ -37,3 +37,15 @@ it("does not treat a completed marker without evidence as success", async () => 
   const fetch = vi.fn().mockResolvedValue(new Response('{"type":"completed"}\n'));
   await expect((async () => { for await (const event of new FormaProofClient({ fetch }).streamSearch({ query: "optics", shareQuery: true })) void event; })()).rejects.toThrow("validated result");
 });
+it("validates source-query consent before sending and decodes explicit source outcomes", async () => {
+  const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ provider: "lens", status: "NOT_CONFIGURED", error: "Provider disabled", retrievedAt: "2026-10-26T00:00:00Z" })));
+  const client = new FormaProofClient({ fetch });
+  await expect(client.querySource({ provider: "lens", query: "optical sensor" })).rejects.toMatchObject({ code: "CONSENT_REQUIRED" });
+  expect(fetch).not.toHaveBeenCalled();
+  expect(await client.querySource({ provider: "lens", query: "optical sensor", consent: true })).toMatchObject({ status: "NOT_CONFIGURED" });
+  expect(String(fetch.mock.calls[0][0])).toContain("/api/v1/sources/query");
+});
+it("rejects source results claiming success without records", async () => {
+  const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ provider: "ror", status: "HEALTHY", retrievedAt: "2026-10-26T00:00:00Z", page: 1, category: "organization", latencyMs: 1, warnings: [] })));
+  await expect(new FormaProofClient({ fetch }).querySource({ provider: "ror", query: "Oxford", consent: true })).rejects.toThrow();
+});

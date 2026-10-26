@@ -1,3 +1,4 @@
+import { querySource, SourceQueryInput } from "@/lib/api/source-query";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
@@ -83,6 +84,22 @@ export async function POST(req: Request) {
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async () => output({ providers: registry() }),
+  );
+  server.registerTool(
+    "query_source",
+    {
+      description: "Query one configured public source using reviewed short concepts or identifiers. Requires consent=true. Reports disabled, unsupported and unavailable sources explicitly. No private documents, local account database or legal clearance.",
+      inputSchema: SourceQueryInput,
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await querySource(args, req.signal);
+        return { ...output(result), ...(result.status === "HEALTHY" ? {} : { isError: true }) };
+      } catch {
+        return { ...output({ error: "Source query rejected. Check explicit consent and documented input limits." }), isError: true };
+      }
+    },
   );
   server.registerTool(
     "search_patents",

@@ -38,6 +38,7 @@ it("official MCP transport lists anonymous public tools without exposing private
   const data = await r.json();
   const names = data.result.tools.map((t: { name: string }) => t.name);
   expect(names).toContain("search_patents");
+  expect(names).toContain("query_source");
   expect(names).toContain("spot_patent_text");
   expect(names).toContain("lookup_patent");
   expect(names).toContain("component_library");

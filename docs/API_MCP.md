@@ -10,7 +10,6 @@ A bounded, read-only SDK connectivity check that performs no third-party patent 
 PATENTRADAR_URL=https://patentradar-puce.vercel.app node --use-env-proxy scripts/verify-mcp-connection.mjs
 ```
 
-
 Base URL (public deployment): `https://patentradar-puce.vercel.app`
 
 - Developer portal: `/developers`
@@ -20,6 +19,18 @@ Base URL (public deployment): `https://patentradar-puce.vercel.app`
 - Health: `/api/v1/health`; source configuration: `/api/v1/providers`
 
 Public research tools are anonymous and use actual provider records. Coverage is partial; an empty response is not clearance. Keyword search queries are sent externally only when `shareQuery=true`. The document-matching tool has a separate, opt-in exact-publication verification flag described below. Send short, reviewed public concepts, not confidential descriptions. Provider quotas and the application rate limit apply; respect HTTP429 and Retry-After. No paid OpenAI tool is exposed anonymously. All server-side credentials stay server-side.
+
+## Query one public source
+
+`POST /api/v1/sources/query`, MCP `query_source` and SDK `querySource()` share one dispatcher and input contract. Set `consent=true` only for approved short public concepts. Inspect the returned `status` even on HTTP 200; unconfigured, unsupported and unavailable sources return explicit outcomes. This public dispatcher does not query the local account/index database or perform AI document processing.
+
+```bash
+curl -X POST https://patentradar-puce.vercel.app/api/v1/sources/query \
+  -H 'Content-Type: application/json' \
+  --data '{"provider":"ror","query":"Oxford","consent":true}'
+```
+
+Use the origin of a deployment containing this change. Publishing source to GitHub alone does not prove that the hosted endpoint has been deployed. See [the source-query guide](SOURCE_QUERY.md) for provider operations, response states and SDK examples.
 
 ## HTTP examples
 
@@ -71,16 +82,16 @@ Official SDK transport, stateless JSON responses, protocol negotiation and valid
 
 ### Public tools
 
-| Tool | Input | Behavior |
-|---|---|---|
-| `provider_status` | `{}` | Configuration and observed source health; UNTESTED is not healthy |
-| `search_patents` | `{query,shareQuery,sources?,seeds?}` | Actual parallel patent/research retrieval; explicit external-query sharing |
-| `spot_patent_text` | `{text,approveProcessing:true,verifyPublication?:false}` | Match approved text against the actual indexed public corpus; optional detected EP-number verification, no external AI |
-| `lookup_patent` | `{publicationNumber,publicationDate}` | Real EP A/B XML retrieval and available claim text |
-| `compare_patent_features` | `{profile,patents}` | Lexical, explained comparison of supplied records |
-| `extract_technical_profile` | `{text}` | Local literal extraction, no OpenAI call or external document transmission |
-| `component_library` | `{}` | Starter templates and manufacturer footprint references, no live supplier retrieval |
-| `inspect_assembly` | Assembly schema | Missing geometry, housing-envelope checks, known user-entered costs and unverified rights evidence; no external calls or patent clearance |
+| Tool                        | Input                                                    | Behavior                                                                                                                                  |
+| --------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider_status`           | `{}`                                                     | Configuration and observed source health; UNTESTED is not healthy                                                                         |
+| `search_patents`            | `{query,shareQuery,sources?,seeds?}`                     | Actual parallel patent/research retrieval; explicit external-query sharing                                                                |
+| `spot_patent_text`          | `{text,approveProcessing:true,verifyPublication?:false}` | Match approved text against the actual indexed public corpus; optional detected EP-number verification, no external AI                    |
+| `lookup_patent`             | `{publicationNumber,publicationDate}`                    | Real EP A/B XML retrieval and available claim text                                                                                        |
+| `compare_patent_features`   | `{profile,patents}`                                      | Lexical, explained comparison of supplied records                                                                                         |
+| `extract_technical_profile` | `{text}`                                                 | Local literal extraction, no OpenAI call or external document transmission                                                                |
+| `component_library`         | `{}`                                                     | Starter templates and manufacturer footprint references, no live supplier retrieval                                                       |
+| `inspect_assembly`          | Assembly schema                                          | Missing geometry, housing-envelope checks, known user-entered costs and unverified rights evidence; no external calls or patent clearance |
 
 Tool inputs are bounded and untrusted. No arbitrary SQL, URLs, Python, MCP tool forwarding or paid AI calls are accepted. The server supplies actual source provenance and avoids legal infringement conclusions.
 
@@ -147,7 +158,6 @@ See [storage setup and limits](PRIVATE_STORAGE.md). Native CAD, the sourced SQLi
 ### Search provenance
 
 Search results include optional `searchTrace` with per-run provider states/counts/queries, observed network or cache access, sanitized endpoint paths and actually observed HTTP statuses. Streaming search also emits `searchTrace` on `started` and `providerRun` updates on provider events. These fields are additive; existing publication/source fields remain unchanged. No secret-bearing query strings or headers are exposed. See [search and evidence semantics](SEARCH_EVIDENCE.md).
-
 
 ## Document-to-patent matching: HTTP and MCP
 

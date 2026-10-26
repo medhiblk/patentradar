@@ -262,11 +262,11 @@ export function registry(): Provider[] {
     entry(
       "lens",
       "Lens",
-      [],
+      ["patent-search"],
       "Approved API token",
       "https://docs.api.lens.org/",
-      "Authorized search adapter pending.",
-      false,
+      "Bounded search adapter; approved token required. Authenticated live availability is not established by configuration.",
+      true,
       !!process.env.LENS_API_TOKEN,
     ),
     entry(

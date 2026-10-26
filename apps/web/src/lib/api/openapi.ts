@@ -1,3 +1,4 @@
+import { SourceQueryInput, SourceQueryResult } from "@formaproof/contracts";
 import { attachmentPaths } from "./attachment-contract";
 import { z } from "zod";
 import { SearchInput, LookupInput, CompareInput } from "./public";
@@ -95,6 +96,17 @@ export const openapi = {
         },
       },
     },
+    "/api/v1/sources/query": post(
+      "querySource", "Query a selected public source with explicit consent; inspect result status even on HTTP 200",
+      SourceQueryInput,
+      { responses: {
+        "200": { description: "Source outcome, including disabled, unsupported and unavailable states. HEALTHY means adapter completed, not exhaustive coverage.", content: { "application/json": { schema: z.toJSONSchema(SourceQueryResult) } } },
+        "400": { description: "Invalid request or missing consent" },
+        "403": { description: "Origin rejected" },
+        "413": { description: "Body exceeds 256 KiB" },
+        "429": { description: "Request rate limit exceeded" },
+      } },
+    ),
     "/api/v1/search": post(
       "searchPatents",
       "Search public patent and research sources using approved concepts",

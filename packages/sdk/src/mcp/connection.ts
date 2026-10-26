@@ -11,6 +11,11 @@ export const MCP_CONNECTION = {
 } as const;
 export const PUBLIC_MCP_TOOLS = [
   {
+    name: "query_source",
+    title: "Query a specific source",
+    detail: "Query one public provider with explicit consent and inspect its outcome and source attribution.",
+  },
+  {
     name: "provider_status",
     title: "Check source coverage",
     detail: "See available providers and their reported capabilities.",

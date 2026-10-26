@@ -28,7 +28,7 @@ it("checks the actual MCP handshake without cookies or provider search", async (
     "https://example.test/api/mcp",
     new AbortController().signal,
   );
-  expect(result.tools).toHaveLength(8);
+  expect(result.tools).toHaveLength(PUBLIC_MCP_TOOLS.length);
   expect(result.tools).toContain("spot_patent_text");
   const calls = request.mock.calls.map(([, init]) => ({
     credentials: init.credentials,

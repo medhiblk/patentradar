@@ -68,6 +68,7 @@ export default function Developers() {
             </p>
             <ul>
               <li>POST /api/v1/search/stream — progressive NDJSON</li>
+              <li>POST /api/v1/sources/query — one approved public source</li>
               <li>POST /api/v1/patents/lookup — exact EP number + date</li>
               <li>POST /api/v1/compare — lexical evidence comparison</li>
               <li>GET /api/v1/providers — source capabilities</li>

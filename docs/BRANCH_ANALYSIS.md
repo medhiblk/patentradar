@@ -50,6 +50,10 @@ The branch contains a website/display-name change to “Format Proof” followed
 
 The branch's `docs/PROVIDER_CHANGES.md` says Lens is unimplemented, while its tip contains a Lens adapter and `SOURCE_CONFIGURATION.md` describes it. This is stale documentation within the branch; adapter presence is not proof of successful authenticated live access.
 
+## Follow-up implementation
+
+The source-query follow-up adapts the explicit HTTP/MCP dispatcher, bounded Lens adapter and regression checks to the current monorepo, with shared contracts and an SDK method. It preserves current origin checks and keeps the public dispatcher out of the local index. See [SOURCE_QUERY.md](SOURCE_QUERY.md). The table above records the original inspection baseline; it does not describe these follow-up changes as missing forever. Additional aggregate NASA/DOE/INSPIRE integration, HAL endpoint migration and old setup/catalogue modules remain separate from this port.
+
 ## Validation and scope
 
 This review fetched all three remote heads, resolved merge bases, counted unique commits, compared source files and checked patch equivalence. Patch-equivalence checks alone did not identify the film as integrated; identical file-object comparisons established that result.

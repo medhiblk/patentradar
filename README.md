@@ -92,6 +92,8 @@ Background monitoring and email delivery are not enabled. Similarity signals are
 
 ### APIs and integrations
 
+Query a specific public provider through `POST /api/v1/sources/query`, the MCP `query_source` tool or SDK `querySource()`. Each requires explicit query-sharing consent and returns a source outcome with coverage limits. [Source-query guide](docs/SOURCE_QUERY.md).
+
 The full web application can be used on its own. For other workflows, the project also provides versioned HTTP endpoints, OpenAPI documentation, shared schemas, an integration SDK and a remote MCP server for public research and component inspection. ChatGPT is one supported connection path; it is not required to use the application.
 
 SDK packages can be packed locally and are not currently published npm packages. The public MCP tools do not expose private uploaded files.
